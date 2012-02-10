@@ -12,18 +12,18 @@ public class GlobalHeaderView extends LinearLayout {
 
 	// Constructor from XML files
 	public GlobalHeaderView(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	super(context, attrs);
 
 
 		
-		// Expand global_header xml into content.
+	// Expand global_header xml into content.
 		
-	   LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	   View view=layoutInflater.inflate(R.layout.global_header,this);
+	LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	View view=layoutInflater.inflate(R.layout.global_header,this);
 
-       // Generate Categories
-       // http://developer.android.com/resources/tutorials/views/hello-spinner.html
-       
+    // Generate Categories
+    // http://developer.android.com/resources/tutorials/views/hello-spinner.html
+
 	}
 
 }
