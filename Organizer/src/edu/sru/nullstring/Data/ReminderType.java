@@ -16,7 +16,7 @@ public class ReminderType {
 	}
 	
 	public ReminderState State = ReminderState.Loading;
-	public Object Category;
+	public CategoryType Category;
 	public String ReminderTitle;
 	public boolean UseLocation;
 	public MarkerType Location;
