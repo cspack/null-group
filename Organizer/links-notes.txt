@@ -1,0 +1,32 @@
+
+
+Relational Databases...
+The way to create a database off objects
+
+Possibly best option, but may be complicated:
+http://ormlite.com/
+
+Easy, but may be too heavy [adds 1mb to app:] 
+http://www.db4o.com/Android/deAfault.aspx
+
+Research articles:
+
+http://stackoverflow.com/questions/296587/light-weight-alternative-to-hibernate
+http://stackoverflow.com/questions/4257374/is-hibernate-an-overkill-for-an-android-application	
+http://stackoverflow.com/questions/371538/any-good-orm-tools-for-android-development
+
+
+--------------------
+
+Activity <-> Service Synchronization
+http://stackoverflow.com/questions/2947841/sync-between-local-service-with-a-thread-and-an-activity
+
+--------------------
+
+GPS Performance / Battery Life
+http://www.backcountrynavigator.com/content/android-gps-apps-and-battery-life
+
+---------------------
+
+AIDL - "not unless absolutely necessary"
+http://developer.android.com/guide/developing/tools/aidl.html

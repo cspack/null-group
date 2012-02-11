@@ -21,6 +21,6 @@ public class ReminderType {
 	public boolean UseLocation;
 	public MarkerType Location;
 	public GregorianCalendar EventTime;
-	public Object Note;
+	public NoteType Note;
 	
 }

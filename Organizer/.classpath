@@ -4,5 +4,8 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="lib" path="/home/chris/workspace/Organizer/ormlite/ormlite-android-4.33.jar"/>
+	<classpathentry kind="lib" path="/home/chris/workspace/Organizer/ormlite/ormlite-core-4.33.jar"/>
+	<classpathentry kind="lib" path="/home/chris/workspace/Organizer/ormlite/ormlite-jdbc-4.33.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
