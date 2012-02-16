@@ -2,8 +2,10 @@ package edu.sru.nullstring.Data;
 
 import java.util.ArrayList;
 
-public class DataProvider {
+// This class works with the database for specific category.
 
+public class DataProvider {
+	
 	private ArrayList<CategoryType> m_Categories = new ArrayList<CategoryType>();
 	
 	public enum ProviderType
@@ -24,7 +26,7 @@ public class DataProvider {
 		
 		return m_Categories;
 	}
-	
+
 	public ProviderResult UpdateMarker(MarkerType m)
 	{
 		return ProviderResult.Failed;
@@ -36,6 +38,24 @@ public class DataProvider {
 	}
 	
 	public ProviderResult AddMarker(MarkerType m)
+	{
+		return ProviderResult.Failed;
+	}
+	
+	
+	
+
+	public ProviderResult UpdateChecklist(ChecklistType m)
+	{
+		return ProviderResult.Failed;
+	}
+	
+	public ProviderResult DeleteChecklist(ChecklistType m)
+	{
+		return ProviderResult.Failed;
+	}
+	
+	public ProviderResult AddChecklist(ChecklistType m)
 	{
 		return ProviderResult.Failed;
 	}
