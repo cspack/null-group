@@ -1,15 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:background="#484848"
+    >
     
-    <edu.sru.nullstring.GlobalHeaderView 
+    <edu.sru.nullstring.UI.GlobalHeaderView 
         android:id="@+id/topBanner"
         android:layout_width = "fill_parent"
         android:layout_height = "50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
          />
+    
+    <Button 
+        android:id="@+id/notebookIcon"
+        android:drawableTop="@drawable/notebook_48" 
+        android:layout_width="100dp"
+        android:layout_height="100dp" 
+        android:layout_below="@id/topBanner"
+        android:layout_alignParentLeft="true"
+
+        android:layout_margin="25dp"
+        
+        android:textColor="#000000"
+        android:paddingTop="20sp"
+        android:text="Notes"
+        
+         />
+    
+    
+    <Button 
+        android:id="@+id/checklistIcon"
+        android:drawableTop="@drawable/checklist_48" 
+        android:layout_width="100dp"
+        android:layout_height="100dp" 
+        android:layout_below="@id/topBanner"
+        android:layout_alignParentRight="true"
+        
+        android:layout_margin="25dp"
+        
+        android:textColor="#000000"
+        android:paddingTop="20sp"
+        android:text="Checklists"
+        
+         />
+    
+    
+    
+    
+    <Button 
+        android:id="@+id/reminderIcon"
+        android:drawableTop="@drawable/bell_48" 
+        android:layout_width="100dp"
+        android:layout_height="100dp" 
+        android:layout_below="@id/notebookIcon"
+        android:layout_alignParentLeft="true"
+
+        android:layout_margin="25dp"
+
+        android:textColor="#000000"
+        android:paddingTop="20sp"
+        android:text="Reminders"
+
+         />
+    
+    
+    <Button 
+        android:id="@+id/markerIcon"
+        android:drawableTop="@drawable/map_48" 
+        android:layout_width="100dp"
+        android:layout_height="100dp" 
+        android:layout_below="@id/checklistIcon"
+        android:layout_alignParentRight="true"
+
+        android:layout_margin="25dp"
+
+        android:textColor="#000000"
+        android:paddingTop="20sp"
+        android:text="Markers"
+
+         />
+    
+    
+    
+    
     
     
 </RelativeLayout>
