@@ -10,10 +10,10 @@ import android.view.Window;
 import android.widget.Button;
 
 public class HomeActivity extends Activity {
-    /** Called when the activity is first created. */
+    /** Called when the activity is first created. **/
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	
+
     	//Remove title bar
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	
@@ -36,7 +36,7 @@ public class HomeActivity extends Activity {
                 Intent myIntent = new Intent(v.getContext(), ChecklistMainActivity.class);
                 startActivityForResult(myIntent, 0);
 			}
-		});        
+		});
 
         
         button = (Button)this.findViewById(R.id.reminderIcon);
@@ -54,7 +54,7 @@ public class HomeActivity extends Activity {
                 Intent myIntent = new Intent(v.getContext(), MarkerMainActivity.class);
                 startActivityForResult(myIntent, 0);
 			}
-		});        
+		});
 
         
     }

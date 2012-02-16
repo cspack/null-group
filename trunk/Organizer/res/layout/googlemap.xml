@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.maps.MapView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mapview"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    
- <com.google.android.maps.MapView
- 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:apiKey="0NMzhV1ZArJDRzdE83q2kW1pmXJafwTUJpSuEgQ"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+	android:apiKey="0NMzhV1ZArJCN_i8eDTFn7LXzKSA8MPWGZlTSJQ"
 />
-    
-</RelativeLayout>
+
+
+	<!--  
+	for builds using the keystore:  
+	android:apiKey="0NMzhV1ZArJDRzdE83q2kW1pmXJafwTUJpSuEgQ"
+	
+	for debug:
+	android:apiKey="0NMzhV1ZArJCN_i8eDTFn7LXzKSA8MPWGZlTSJQ"
+	-->
