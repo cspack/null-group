@@ -22,7 +22,6 @@ public class GlobalHeaderView extends LinearLayout {
 	super(context, attrs);
 
 
-		
 	// Expand global_header xml into content.
 		
 	LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
