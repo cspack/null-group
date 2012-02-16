@@ -35,26 +35,25 @@ public class ChecklistMainActivity extends ListActivity{
 		"Phablet"
 		};
 	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.layout.checklist_main, menu);
-	    return true;
-	}
-    
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	        case R.id.text:     Toast.makeText(this, "You pressed the text!", Toast.LENGTH_LONG).show();
-	                            break;
-	    }
-	    return true;
-	}
-	
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		Object o = this.getListAdapter().getItem(position);
 		String pen = o.toString();
 		Toast.makeText(this, "You have chosen: " + " " + pen, Toast.LENGTH_LONG).show();
 		}
+    
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.layout.checklist_menu, menu);
+        return true;        
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.text:     Toast.makeText(this, "You pressed Jeb!", Toast.LENGTH_LONG).show();
+                                break;
+        }
+        return true;
+    }	
 }
