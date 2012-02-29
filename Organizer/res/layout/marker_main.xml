@@ -10,13 +10,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:padding="5dp">
-  <!--      
+
         <edu.sru.nullstring.UI.GlobalHeaderView 
         android:id="@+id/topBanner"
         android:layout_width = "fill_parent"
         android:layout_height = "50dp"
          />
-    -->
+    
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"

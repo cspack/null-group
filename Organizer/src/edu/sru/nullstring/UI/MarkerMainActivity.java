@@ -17,7 +17,6 @@ public class MarkerMainActivity extends TabActivity {
     	
         super.onCreate(savedInstanceState);
         
-
     	//Remove title bar
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	
