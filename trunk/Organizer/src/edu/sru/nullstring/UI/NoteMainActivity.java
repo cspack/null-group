@@ -13,8 +13,6 @@ public class NoteMainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_main);
-        
-        
     }
     
     private static final int CREATE_MENU_ID = Menu.FIRST;

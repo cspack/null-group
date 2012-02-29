@@ -5,7 +5,6 @@ import android.app.Application;
 public class LocadexApplication extends Application {
 
 	
-	
 	// Singletons go here!
 	// We will need to make some
 	// for the DB and Cached data.
