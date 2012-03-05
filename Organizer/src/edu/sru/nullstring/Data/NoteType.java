@@ -7,12 +7,24 @@ import java.util.List;
 
 import android.util.Log;
 
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.misc.BaseDaoEnabled;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName="notes")
-public class NoteType {
+public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 
+	NoteType()
+	{
+		// ormlite
+	}
+	
+	public NoteType(Dao<NoteType, Integer> dao)
+	{
+		this.setDao(dao);
+	}
+	
 	@DatabaseField(generatedId = true)
 	private int id;
 	

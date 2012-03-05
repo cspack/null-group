@@ -28,6 +28,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private Dao<AttachmentType, Integer> attachmentDao = null;
 	private Dao<CategoryType, Integer> categoryDao = null;
 	private Dao<ChecklistType, Integer> checklistDao = null;
+	private Dao<ChecklistItemType, Integer> checklistItemsDao = null;
 	private Dao<MarkerType, Integer> markerDao = null;
 	private Dao<NoteType, Integer> noteDao = null;
 	private Dao<ReminderType, Integer> reminderDao = null;
@@ -110,12 +111,19 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		}
 		return categoryDao;
 	}
-	
+
 	public Dao<ChecklistType, Integer> getChecklistDao() throws SQLException {
 		if (checklistDao == null) {
 			checklistDao = getDao(ChecklistType.class);
 		}
 		return checklistDao;
+	}
+	
+	public Dao<ChecklistItemType, Integer> getChecklistItemDao() throws SQLException {
+		if (checklistItemsDao == null) {
+			checklistItemsDao = getDao(ChecklistItemType.class);
+		}
+		return checklistItemsDao;
 	}
 
 	public Dao<MarkerType, Integer> getMarkerDao() throws SQLException {

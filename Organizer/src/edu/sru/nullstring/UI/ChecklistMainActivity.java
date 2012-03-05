@@ -1,8 +1,14 @@
 package edu.sru.nullstring.UI;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import edu.sru.nullstring.LocadexApplication;
 import edu.sru.nullstring.R;
+import edu.sru.nullstring.Data.*;
 import edu.sru.nullstring.R.layout;
 import android.app.Activity;
+import android.app.Application;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,8 +24,30 @@ public class ChecklistMainActivity extends ListActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        setListAdapter(new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, PENS));
+		try {
+
+	        // connect to DAO helper, ugly but it works flawlessly.
+	        DatabaseHelper helper = ((LocadexApplication)this.getApplication()).getDatabaseHelper();
+	        
+	        // Query for all into a list
+	        List<ChecklistType> results;
+			
+			// create a new checklist, pass DAO into it.
+			ChecklistType data = new ChecklistType(helper.getChecklistDao());
+			data.setTitle("My name is Jeb!");
+			data.create(); // add to database
+
+			// pull all checklists from database, no category
+			results = helper.getChecklistDao().queryForAll();
+	        
+			// apply to list adapter.
+			setListAdapter(new ArrayAdapter<ChecklistType>(this,
+	                android.R.layout.simple_list_item_1, results));
+	        	        
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         getListView().setTextFilterEnabled(true);
         
     }

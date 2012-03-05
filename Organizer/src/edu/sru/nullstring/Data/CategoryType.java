@@ -8,11 +8,22 @@ import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.misc.BaseDaoEnabled;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "categories")
-public class CategoryType {
+public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 
+	CategoryType()
+	{
+		// constructor for ormlite
+	}
+
+	public CategoryType(Dao<CategoryType, Integer> dao)
+	{
+		this.setDao(dao);
+	}
+	
 	@DatabaseField(generatedId = true)
 	private int id;
 	
@@ -20,11 +31,6 @@ public class CategoryType {
 	@DatabaseField(index = true)
 	private String categoryName;
 	
-	CategoryType()
-	{
-		// required by ormlite
-	}
-
 	public List<ChecklistType> getChecklists(DatabaseHelper helper)
 	{
 		try {
