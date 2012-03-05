@@ -42,10 +42,4 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 		return Integer.toString(this.catid);
 	}
 
-	
-	public String toString()
-	{
-		return title;
-	}
-
 }
