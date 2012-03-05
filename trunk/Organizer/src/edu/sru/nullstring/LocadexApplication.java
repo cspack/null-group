@@ -1,5 +1,6 @@
 package edu.sru.nullstring;
 
+import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Application;
 
 public class LocadexApplication extends Application {
@@ -22,6 +23,15 @@ public class LocadexApplication extends Application {
         return mServiceQueue;
     }
 	 */
+	
+
+	private DatabaseHelper mDatabaseHelper;
+    public final synchronized DatabaseHelper getDatabaseHelper() {
+        if (mDatabaseHelper == null) {
+        	mDatabaseHelper = new DatabaseHelper(this);
+        }
+        return mDatabaseHelper;
+    }
 	
 	
 }

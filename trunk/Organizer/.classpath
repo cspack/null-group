@@ -2,17 +2,16 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="ormlite/ormlite-android-4.35.jar" sourcepath="ormlite/ormlite-android-4.35-sources.jar">
+	<classpathentry exported="true" kind="lib" path="ormlite/ormlite-android-4.35.jar" sourcepath="ormlite/ormlite-android-4.35-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/Organizer/ormlite/ormlite-android-4.35-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="ormlite/ormlite-core-4.35.jar" sourcepath="ormlite/ormlite-core-4.35-sources.jar">
+	<classpathentry exported="true" kind="lib" path="ormlite/ormlite-core-4.35.jar" sourcepath="ormlite/ormlite-core-4.35-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/Organizer/ormlite/ormlite-core-4.35-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

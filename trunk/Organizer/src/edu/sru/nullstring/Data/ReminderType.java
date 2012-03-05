@@ -3,13 +3,19 @@ package edu.sru.nullstring.Data;
 import java.util.GregorianCalendar;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.misc.BaseDaoEnabled;
 import com.j256.ormlite.table.DatabaseTable;
 
 
 import android.location.Location;
 
 @DatabaseTable (tableName="reminders")
-public class ReminderType {
+public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
+	
+	public ReminderType()
+	{
+		
+	}
 	
 	public static enum ReminderState 
 	{

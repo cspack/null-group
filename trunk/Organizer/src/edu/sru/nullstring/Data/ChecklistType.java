@@ -1,10 +1,12 @@
 package edu.sru.nullstring.Data;
 
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.misc.BaseDaoEnabled;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "checklists")
-public class ChecklistType {
+public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 
 	@DatabaseField(generatedId = true)
 	private int id;
@@ -15,9 +17,24 @@ public class ChecklistType {
 	@DatabaseField
 	private String title;
 	
+	public ChecklistType(Dao<ChecklistType, Integer> dao)
+	{
+		this.setDao(dao);
+	}
+	
 	ChecklistType()
 	{
 		// ormlite
+	}
+	
+	public void setTitle(String newtitle)
+	{
+		this.title = newtitle;
+	}
+	
+	public String toString()
+	{
+		return title;
 	}
 
 }
