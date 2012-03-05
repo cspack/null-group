@@ -1,9 +1,8 @@
-package edu.sru.nullstring.UI;
+package edu.sru.nullstring.Data;
 
 import java.util.List;
 
 import edu.sru.nullstring.R;
-import edu.sru.nullstring.Data.ChecklistType;
 
 import android.content.Context;
 import android.view.LayoutInflater;

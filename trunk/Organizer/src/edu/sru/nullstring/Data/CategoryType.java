@@ -27,9 +27,19 @@ public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 	@DatabaseField(generatedId = true)
 	private int id;
 	
-	
 	@DatabaseField(index = true)
-	private String categoryName;
+	private String title;
+
+	public void setTitle(String newtitle)
+	{
+		this.title = newtitle;
+	}
+
+	public String getTitle()
+	{
+		return this.title;
+	}
+	
 	
 	public List<ChecklistType> getChecklists(DatabaseHelper helper)
 	{
@@ -72,10 +82,4 @@ public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 		}
 	}
 	
-	
-	// possibly link to int IDs and make accessor methods for this?
-	//List<MarkerType> markerCollection;
-	//List<NoteType> reminderCollection;
-	//List<NoteType> notes;
-
 }
