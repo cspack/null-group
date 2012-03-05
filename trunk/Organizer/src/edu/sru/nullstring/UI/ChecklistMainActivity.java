@@ -15,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,17 +30,20 @@ public class ChecklistMainActivity extends ListActivity{
 	        
 	        // Query for all into a list
 	        List<ChecklistType> results;
-			
+			 	
 			// create a new checklist, pass DAO into it.
-			ChecklistType data = new ChecklistType(helper.getChecklistDao());
+
+	        /*
+	        ChecklistType data = new ChecklistType(helper.getChecklistDao());
 			data.setTitle("My name is Jeb!");
 			data.create(); // add to database
-
+			*/
+	        
 			// pull all checklists from database, no category
 			results = helper.getChecklistDao().queryForAll();
-	        
+
 			// apply to list adapter.
-			setListAdapter(new ArrayAdapter<ChecklistType>(this,
+			setListAdapter(new ChecklistAdapter(this,
 	                android.R.layout.simple_list_item_1, results));
 	        	        
 		} catch (SQLException e) {

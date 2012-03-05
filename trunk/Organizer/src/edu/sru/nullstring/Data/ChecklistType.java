@@ -12,10 +12,10 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 	private int id;
 	
 	@DatabaseField(index = true)
-	private int catid;
+	private int catid = 1;
 	
 	@DatabaseField
-	private String title;
+	private String title = "Unlabeled";
 	
 	public ChecklistType(Dao<ChecklistType, Integer> dao)
 	{
@@ -31,6 +31,17 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 	{
 		this.title = newtitle;
 	}
+
+	public String getTitle()
+	{
+		return this.title;
+	}
+	
+	public String getCategoryID()
+	{
+		return Integer.toString(this.catid);
+	}
+
 	
 	public String toString()
 	{

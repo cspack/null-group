@@ -33,27 +33,31 @@ public final class R {
         public static final int satellite_32=0x7f020013;
     }
     public static final class id {
-        public static final int categorySpinner=0x7f060002;
-        public static final int checklistIcon=0x7f060007;
-        public static final int homeIcon=0x7f060003;
-        public static final int mapview=0x7f060005;
-        public static final int markerIcon=0x7f060009;
-        public static final int notebookIcon=0x7f060006;
-        public static final int reminderIcon=0x7f060008;
-        public static final int satelliteIcon=0x7f060004;
-        public static final int text=0x7f060001;
-        public static final int topBanner=0x7f060000;
+        public static final int bottomtext=0x7f060002;
+        public static final int categorySpinner=0x7f060005;
+        public static final int checklistIcon=0x7f06000a;
+        public static final int homeIcon=0x7f060006;
+        public static final int icon=0x7f060000;
+        public static final int mapview=0x7f060008;
+        public static final int markerIcon=0x7f06000c;
+        public static final int notebookIcon=0x7f060009;
+        public static final int reminderIcon=0x7f06000b;
+        public static final int satelliteIcon=0x7f060007;
+        public static final int text=0x7f060004;
+        public static final int topBanner=0x7f060003;
+        public static final int toptext=0x7f060001;
     }
     public static final class layout {
-        public static final int checklist_main=0x7f030000;
-        public static final int checklist_menu=0x7f030001;
-        public static final int global_header=0x7f030002;
-        public static final int googlemap=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int marker_list=0x7f030005;
-        public static final int marker_main=0x7f030006;
-        public static final int note_main=0x7f030007;
-        public static final int reminder_main=0x7f030008;
+        public static final int checklist_list_row=0x7f030000;
+        public static final int checklist_main=0x7f030001;
+        public static final int checklist_menu=0x7f030002;
+        public static final int global_header=0x7f030003;
+        public static final int googlemap=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int marker_list=0x7f030006;
+        public static final int marker_main=0x7f030007;
+        public static final int note_main=0x7f030008;
+        public static final int reminder_main=0x7f030009;
     }
     public static final class raw {
         public static final int ormlite_config=0x7f040000;
