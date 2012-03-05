@@ -2,9 +2,13 @@ package edu.sru.nullstring.Data;
 
 import java.util.GregorianCalendar;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 
 import android.location.Location;
 
+@DatabaseTable (tableName="reminders")
 public class ReminderType {
 	
 	public static enum ReminderState 
@@ -15,12 +19,26 @@ public class ReminderType {
 		Disabled
 	}
 	
-	public ReminderState State = ReminderState.Loading;
-	public CategoryType Category;
-	public String ReminderTitle;
-	public boolean UseLocation;
-	public MarkerType Location;
-	public GregorianCalendar EventTime;
-	public NoteType Note;
+	public static enum ReminderTypes
+	{
+		Location,
+		Quick,
+		Advanced
+	}
+	
+	@DatabaseField(generatedId = true)
+	private int id;
+	
+	@DatabaseField(index = true)
+	private int catid;
+	
+	@DatabaseField
+	private String title;
+	
+	@DatabaseField
+	private ReminderState state = ReminderState.Loading;
+
+	
+
 	
 }
