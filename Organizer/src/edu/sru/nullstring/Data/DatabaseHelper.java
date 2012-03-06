@@ -19,7 +19,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	// name of the database file for your application -- change to something appropriate for your app
 	private static final String DATABASE_NAME = "locadex.db";
 	// any time you make changes to your database objects, you may have to increase the database version
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	// the DAO object we use to access the SimpleData table
 	//private Dao<SimpleData, Integer> simpleDao = null;
@@ -37,8 +37,30 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
 	}
 	
-	// TODO: Convert into singleton [with context param]
 
+	private void CreateAllTables() throws SQLException
+	{
+		TableUtils.createTable(connectionSource, AttachmentType.class);
+		TableUtils.createTable(connectionSource, CategoryType.class);
+		TableUtils.createTable(connectionSource, ChecklistType.class);
+		TableUtils.createTable(connectionSource, ChecklistItemType.class);
+		TableUtils.createTable(connectionSource, MarkerType.class);
+		TableUtils.createTable(connectionSource, NoteType.class);
+		TableUtils.createTable(connectionSource, ReminderType.class);
+	}
+	
+	private void DropAllTables() throws SQLException
+	{
+		TableUtils.dropTable(connectionSource, AttachmentType.class, true);
+		TableUtils.dropTable(connectionSource, CategoryType.class, true);
+		TableUtils.dropTable(connectionSource, ChecklistType.class, true);
+		TableUtils.dropTable(connectionSource, ChecklistItemType.class, true);
+		TableUtils.dropTable(connectionSource, MarkerType.class, true);
+		TableUtils.dropTable(connectionSource, NoteType.class, true);
+		TableUtils.dropTable(connectionSource, ReminderType.class, true);
+	}
+	
+	
 	/**
 	 * This is called when the database is first created. Usually you should call createTable statements here to create
 	 * the tables that will store your data.
@@ -47,12 +69,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onCreate");
-			TableUtils.createTable(connectionSource, CategoryType.class);
-			TableUtils.createTable(connectionSource, ChecklistType.class);
-			TableUtils.createTable(connectionSource, MarkerType.class);
-			TableUtils.createTable(connectionSource, NoteType.class);
-			TableUtils.createTable(connectionSource, ReminderType.class);
-
+			CreateAllTables();
 		} catch (SQLException e) {
 			Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
 			throw new RuntimeException(e);
@@ -82,7 +99,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			
 			// So far we don't need to modify the data at all....
 			// TODO: Read more into querying DAO of an out of date database
-						
+			
+			DropAllTables();
+			CreateAllTables();
+			
 			/*
 			TableUtils.dropTable(connectionSource, CategoryType.class, true);
 			TableUtils.dropTable(connectionSource, ChecklistType.class, true);
@@ -145,6 +165,32 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 			reminderDao = getDao(ReminderType.class);
 		}
 		return reminderDao;
+	}
+	
+	
+	public String getCategoryString(CategoryType c)
+	{
+		return c == null ? "Unknown" : c.getTitle();
+	}
+
+	public String getCategoryString(ChecklistType c)
+	{
+		return getCategoryString(c.getCategory(this));
+	}
+
+	public String getCategoryString(MarkerType c)
+	{
+		return getCategoryString(c.getCategory(this));
+	}
+
+	public String getCategoryString(NoteType c)
+	{
+		return getCategoryString(c.getCategory(this));
+	}
+
+	public String getCategoryString(ReminderType c)
+	{
+		return getCategoryString(c.getCategory(this));
 	}
 
 	/**

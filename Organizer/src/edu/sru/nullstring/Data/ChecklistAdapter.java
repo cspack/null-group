@@ -2,6 +2,7 @@ package edu.sru.nullstring.Data;
 
 import java.util.List;
 
+import edu.sru.nullstring.LocadexApplication;
 import edu.sru.nullstring.R;
 
 import android.content.Context;
@@ -41,7 +42,11 @@ public class ChecklistAdapter extends ArrayAdapter<ChecklistType> {
                           tt.setText("Title: "+o.getTitle());
                     }
                     if(bt != null){
-                          bt.setText("Category: "+ o.getCategoryID());
+                    	DatabaseHelper h = ((LocadexApplication)(this.getContext().getApplicationContext())).getDatabaseHelper();
+
+                    	CategoryType cat = o.getCategory(h);
+                     	String cattitle = cat == null ? "Unknown" : cat.getTitle();
+                    	bt.setText("Category: "+ cattitle);
                     }
             }
             

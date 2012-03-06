@@ -2,7 +2,6 @@ package edu.sru.nullstring.Data;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.util.Log;
@@ -19,7 +18,6 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	{
 		// ormlite
 	}
-	
 	public NoteType(Dao<NoteType, Integer> dao)
 	{
 		this.setDao(dao);
@@ -28,7 +26,8 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	@DatabaseField(generatedId = true)
 	private int id;
 	
-	//public CategoryType Category;
+	@DatabaseField(index = true)
+	private int catid;
 	
 	@DatabaseField(index = true)
 	public String title;
@@ -51,5 +50,23 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	
 	//public GregorianCalendar CreationDate;
 	//public GregorianCalendar ModifiedDate;
-	
+
+	public CategoryType getCategory(DatabaseHelper h)
+	{
+		CategoryType result = null;
+		try {
+			List<CategoryType> allres;
+			allres = h.getCategoryDao().queryForEq("id", this.catid);
+
+			if(allres.size() > 0)
+			{
+				result = allres.get(0);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }
