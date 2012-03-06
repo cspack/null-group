@@ -17,6 +17,8 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
     
     public CategoryAdapter(Context context, int textViewResourceId, List<CategoryType> items) {
             super(context, textViewResourceId, items);
+            // Add all and unsorted?
+            
             this.items = items;
             this.context = context;
     }

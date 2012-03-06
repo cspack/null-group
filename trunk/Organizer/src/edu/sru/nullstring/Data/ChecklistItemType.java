@@ -26,7 +26,7 @@ public class ChecklistItemType extends BaseDaoEnabled<ChecklistItemType,Integer>
 	private int listid;
 
 	@DatabaseField
-	private String itemName;
+	private String text;
 
 	@DatabaseField
 	private Boolean checked;

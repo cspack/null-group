@@ -40,6 +40,48 @@ public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 		return this.title;
 	}
 	
+	@DatabaseField(index = true)
+	private Boolean current;
+
+	public void setCurrent(Boolean current)
+	{
+		Boolean isSet = false;
+		try {
+			if(current == true)
+			{
+				// clear all other currents
+				List<CategoryType> res = this.dao.queryForEq("current", true);
+				for(CategoryType c : res)
+				{
+					if(c.id != this.id)
+					{
+						c.setCurrent(false);
+						c.update();
+					}
+					else
+					{
+						// already set; don't set again
+						isSet = true;
+					}
+				}
+			}
+
+			if (!isSet)
+			{
+				this.current = current;
+				this.update();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+}
+
+	public Boolean getCurrent()
+	{
+		return this.current;
+	}
 	
 	public List<ChecklistType> getChecklists(DatabaseHelper helper)
 	{
@@ -50,7 +92,6 @@ public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 			return new ArrayList<ChecklistType>();
 		}
 	}
-
 	public List<MarkerType> getMarkers(DatabaseHelper helper)
 	{
 		try {
@@ -60,7 +101,6 @@ public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 			return new ArrayList<MarkerType>();
 		}
 	}
-
 	public List<NoteType> getNotes(DatabaseHelper helper)
 	{
 		try {
@@ -70,8 +110,6 @@ public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 			return new ArrayList<NoteType>();
 		}
 	}
-	
-
 	public List<ReminderType> getReminders(DatabaseHelper helper)
 	{
 		try {

@@ -7,11 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable
 public class AttachmentType extends BaseDaoEnabled<AttachmentType, Integer> {
-	AttachmentType()
-	{
-		
-	}
-
+	AttachmentType(){}
 
 	public AttachmentType(Dao<AttachmentType, Integer> dao)
 	{
@@ -30,12 +26,44 @@ public class AttachmentType extends BaseDaoEnabled<AttachmentType, Integer> {
 	
 	@DatabaseField
 	private String title;
+	public void setTitle(String newtitle)
+	{
+		this.title = newtitle;
+	}
+
+	public String getTitle()
+	{
+		return this.title;
+	}
+	
+	
 	
 	@DatabaseField
-	private String fileName;
+	private String fileName = "";
+	
+	public void setFileName(String newfilename)
+	{
+		this.fileName = newfilename;
+	}
+
+	public String getFileName()
+	{
+		return this.fileName;
+	}
+	
 	
 	@DatabaseField
 	private String filePath;
+	
+	public void setFilePath(String newfilepath)
+	{
+		this.filePath = newfilepath;
+	}
+
+	public String getFilePath()
+	{
+		return this.filePath;
+	}
 	
 	
 }
