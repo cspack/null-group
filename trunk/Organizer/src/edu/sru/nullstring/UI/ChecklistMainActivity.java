@@ -11,17 +11,30 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Toast;
+import android.widget.ListView;
 
 public class ChecklistMainActivity extends ListActivity{
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        //Remove title bar
+    	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+    	
+        ListView lv = getListView();
+        LayoutInflater inflater = getLayoutInflater();
+        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.global_header, lv, false);
+        lv.addHeaderView(header, null, false);
+
         
 		try {
 
@@ -33,11 +46,11 @@ public class ChecklistMainActivity extends ListActivity{
 			 	
 			// create a new checklist, pass DAO into it.
 
-	        /*
+	        
 	        ChecklistType data = new ChecklistType(helper.getChecklistDao());
-			data.setTitle("My name is Jeb!");
+			data.setTitle("Hamer loves Androids!");
 			data.create(); // add to database
-			*/
+			
 	        
 			// pull all checklists from database, no category
 			results = helper.getChecklistDao().queryForAll();
@@ -67,9 +80,8 @@ public class ChecklistMainActivity extends ListActivity{
 	
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		Object o = this.getListAdapter().getItem(position);
-		String pen = o.toString();
-		Toast.makeText(this, "You have chosen: " + " " + pen, Toast.LENGTH_LONG).show();
+		ChecklistType o = (ChecklistType)this.getListAdapter().getItem(position);
+		Toast.makeText(this, "You have chosen list: " + o.getTitle(), Toast.LENGTH_LONG).show();
 		}
     
 	@Override
