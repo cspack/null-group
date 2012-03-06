@@ -10,7 +10,7 @@
         android:layout_height="50dip"
         android:layout_gravity="top"
         android:layout_weight="0.7"
-        android:layout_marginTop="-14dip"
+        android:layout_marginTop="0dip"
         android:prompt="@string/category_prompt"
         />
     
