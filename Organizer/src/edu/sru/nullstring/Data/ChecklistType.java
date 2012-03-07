@@ -48,7 +48,6 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 		return Integer.toString(this.catid);
 	}
 
-	
 	public List<ChecklistItemType> getItems(DatabaseHelper h)
 	{
 		try {
