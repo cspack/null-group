@@ -5,12 +5,12 @@ import java.sql.SQLException;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import edu.sru.nullstring.Data.AttachmentType;
 
 import edu.sru.nullstring.R;
 
@@ -167,12 +167,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		return reminderDao;
 	}
 	
-	
+
 	public String getCategoryString(CategoryType c)
 	{
 		return c == null ? "Unknown" : c.getTitle();
 	}
-
+	
 	public String getCategoryString(ChecklistType c)
 	{
 		return getCategoryString(c.getCategory(this));
