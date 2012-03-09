@@ -1,6 +1,7 @@
 package edu.sru.nullstring.Data;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +12,7 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import edu.sru.nullstring.Data.AttachmentType;
+import edu.sru.nullstring.Data.CategoryType.FixedTypes;
 
 import edu.sru.nullstring.R;
 
@@ -19,7 +21,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	// name of the database file for your application -- change to something appropriate for your app
 	private static final String DATABASE_NAME = "locadex.db";
 	// any time you make changes to your database objects, you may have to increase the database version
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 1;
 
 	// the DAO object we use to access the SimpleData table
 	//private Dao<SimpleData, Integer> simpleDao = null;
@@ -37,11 +39,52 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION, R.raw.ormlite_config);
 	}
 	
+	
+	private void BuildFixedCategories()
+	{
+
+		try {
+		
+		Dao<CategoryType, Integer> dao = this.getCategoryDao();	
+		
+		if(dao.queryForEq(CategoryType.FIXED_TYPE_FIELD, CategoryType.FixedTypes.All).size() == 0)
+		{
+		
+			// Generate default categories
+			CategoryType all = new CategoryType(CategoryType.FixedTypes.All);
+			all.setTitle("All Categories"); // TODO: Make string literal
+			dao.create(all);
+			
+		}
+
+		if(dao.queryForEq(CategoryType.FIXED_TYPE_FIELD, CategoryType.FixedTypes.Unsorted).size() == 0)
+		{
+		
+			// Generate default categories
+			CategoryType uns = new CategoryType(CategoryType.FixedTypes.Unsorted);
+			uns.setTitle("Unsorted"); // TODO: Make string literal
+			dao.create(uns);
+			
+		}
+		
+		} catch (SQLException e) {
+			Log.e("Locadex","Generation of fixed categories failed.");
+			e.printStackTrace();
+		}
+
+
+	}
+	
 
 	private void CreateAllTables() throws SQLException
 	{
 		TableUtils.createTable(connectionSource, AttachmentType.class);
+
+		
+		// -- CATEGORY --
 		TableUtils.createTable(connectionSource, CategoryType.class);
+
+		
 		TableUtils.createTable(connectionSource, ChecklistType.class);
 		TableUtils.createTable(connectionSource, ChecklistItemType.class);
 		TableUtils.createTable(connectionSource, MarkerType.class);
@@ -60,13 +103,28 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		TableUtils.dropTable(connectionSource, ReminderType.class, true);
 	}
 	
-	
+	// Override the on db open to make sure null category exists.
+	/*
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		// TODO Auto-generated method stub
+		super.onOpen(db);
+		
+		// Verify fixed categories are created
+		// BuildFixedCategories();
+		
+	}
+*/
+
 	/**
 	 * This is called when the database is first created. Usually you should call createTable statements here to create
 	 * the tables that will store your data.
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db, ConnectionSource connectionSource) {
+		
+		Log.e("Locadex","Creating database for the first time.");
+		
 		try {
 			Log.i(DatabaseHelper.class.getName(), "onCreate");
 			CreateAllTables();
@@ -128,7 +186,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	public Dao<CategoryType, Integer> getCategoryDao() throws SQLException {
 		if (categoryDao == null) {
 			categoryDao = getDao(CategoryType.class);
+			BuildFixedCategories(); // make sure fixed categories exist.
 		}
+		
 		return categoryDao;
 	}
 
@@ -206,4 +266,28 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		noteDao = null;
 		reminderDao = null;
 	}
+
+
+	public CategoryType getCurrentCategory() {
+		
+		try {
+			List<CategoryType> sel = this.categoryDao.queryForEq(CategoryType.IS_CURRENT_FIELD, true);
+			if(sel.size() > 0)
+			{
+				return sel.get(0);
+			}
+			else
+			{
+
+				sel = this.categoryDao.queryForEq(CategoryType.FIXED_TYPE_FIELD, FixedTypes.Unsorted);
+				CategoryType unsorted = sel.get(0);
+				unsorted.setCurrent(true);
+				return unsorted;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+
+	}
+	
 }

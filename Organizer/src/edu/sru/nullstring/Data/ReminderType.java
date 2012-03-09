@@ -25,6 +25,13 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		this.setDao(dao);
 	}
 	
+
+	public static final String REMINDER_ID_FIELD = "reminder_id";
+	public static final String CAT_ID_FIELD = "cat_id";
+	public static final String TITLE_FIELD = "title";
+	public static final String REMINDER_STATE_FIELD = "state";
+
+	
 	public static enum ReminderState 
 	{
 		Loading,
@@ -40,28 +47,38 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		Advanced
 	}
 	
-	@DatabaseField(generatedId = true)
+	@DatabaseField(generatedId = true, columnName = REMINDER_ID_FIELD)
 	private int id;
 	
-	@DatabaseField(index = true)
+	@DatabaseField(index = true, columnName = CAT_ID_FIELD)
 	private int catid;
 	
-	@DatabaseField
+	@DatabaseField(columnName = TITLE_FIELD)
 	private String title;
+	public void setTitle(String newtitle)
+	{
+		this.title = newtitle;
+	}
+
+	public String getTitle()
+	{
+		return this.title;
+	}
 	
-	@DatabaseField
+	@DatabaseField(columnName = REMINDER_STATE_FIELD)
 	private ReminderState state = ReminderState.Loading;
 
 	public String getCategoryID()
 	{
 		return Integer.toString(this.catid);
 	}
+	
 	public CategoryType getCategory(DatabaseHelper h)
 	{
 		CategoryType result = null;
 		try {
 			List<CategoryType> allres;
-			allres = h.getCategoryDao().queryForEq("id", this.catid);
+			allres = h.getCategoryDao().queryForEq(CategoryType.CAT_ID_FIELD, this.catid);
 
 			if(allres.size() > 0)
 			{

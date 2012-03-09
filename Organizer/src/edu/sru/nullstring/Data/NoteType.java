@@ -23,15 +23,31 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 		this.setDao(dao);
 	}
 	
-	@DatabaseField(generatedId = true)
+
+	public static final String NOTE_ID_FIELD = "note_id";
+	public static final String CAT_ID_FIELD = "cat_id";
+	public static final String TITLE_FIELD = "title";
+
+	
+	
+	@DatabaseField(generatedId = true, columnName = NOTE_ID_FIELD)
 	private int id;
 	
-	@DatabaseField(index = true)
+	@DatabaseField(index = true, columnName = CAT_ID_FIELD)
 	private int catid;
 	
-	@DatabaseField(index = true)
+	@DatabaseField (columnName = TITLE_FIELD)
 	public String title;
-	
+	public void setTitle(String newtitle)
+	{
+		this.title = newtitle;
+	}
+
+	public String getTitle()
+	{
+		return this.title;
+	}
+
 	//public Object NoteColor;
 	//public Object Content;
 	
@@ -40,7 +56,7 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	public List<AttachmentType> getAttachments(DatabaseHelper h)
 	{
 		try {
-			return h.getAttachmentDao().queryForEq("noteid", id);
+			return h.getAttachmentDao().queryForEq(AttachmentType.NOTE_ID_FIELD, id);
 		} catch (SQLException e) {
 			Log.i("","SQL Exception querying for Attachments for Note, sending empty list.");
 			return new ArrayList<AttachmentType>();
@@ -56,7 +72,7 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 		CategoryType result = null;
 		try {
 			List<CategoryType> allres;
-			allres = h.getCategoryDao().queryForEq("id", this.catid);
+			allres = h.getCategoryDao().queryForEq(CategoryType.CAT_ID_FIELD, this.catid);
 
 			if(allres.size() > 0)
 			{

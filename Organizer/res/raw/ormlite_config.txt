@@ -1,5 +1,5 @@
 #
-# generated on 2012/03/07 04:25:51
+# generated on 2012/03/08 08:28:11
 #
 # --table-start--
 dataClass=edu.sru.nullstring.Data.ChecklistType
@@ -7,14 +7,17 @@ tableName=checklists
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=list_id
 generatedId=true
 # --field-end--
 # --field-start--
 fieldName=catid
-indexName=checklists_catid_idx
+columnName=cat_id
+indexName=checklists_cat_id_idx
 # --field-end--
 # --field-start--
 fieldName=title
+columnName=title
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -25,20 +28,25 @@ tableName=attachmenttype
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=attach_id
 generatedId=true
 # --field-end--
 # --field-start--
 fieldName=noteid
-indexName=attachmenttype_noteid_idx
+columnName=note_id
+indexName=attachmenttype_note_id_idx
 # --field-end--
 # --field-start--
 fieldName=title
+columnName=title
 # --field-end--
 # --field-start--
 fieldName=fileName
+columnName=file_name
 # --field-end--
 # --field-start--
 fieldName=filePath
+columnName=file_path
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -49,17 +57,21 @@ tableName=reminders
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=reminder_id
 generatedId=true
 # --field-end--
 # --field-start--
 fieldName=catid
-indexName=reminders_catid_idx
+columnName=cat_id
+indexName=reminders_cat_id_idx
 # --field-end--
 # --field-start--
 fieldName=title
+columnName=title
 # --field-end--
 # --field-start--
 fieldName=state
+columnName=state
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -70,15 +82,23 @@ tableName=categories
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=cat_id
 generatedId=true
 # --field-end--
 # --field-start--
+fieldName=fixedType
+columnName=fixed_type
+indexName=categories_fixed_type_idx
+# --field-end--
+# --field-start--
 fieldName=title
+columnName=title
 indexName=categories_title_idx
 # --field-end--
 # --field-start--
 fieldName=current
-indexName=categories_current_idx
+columnName=is_current
+indexName=categories_is_current_idx
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -89,15 +109,17 @@ tableName=notes
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=note_id
 generatedId=true
 # --field-end--
 # --field-start--
 fieldName=catid
-indexName=notes_catid_idx
+columnName=cat_id
+indexName=notes_cat_id_idx
 # --field-end--
 # --field-start--
 fieldName=title
-indexName=notes_title_idx
+columnName=title
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -108,17 +130,21 @@ tableName=checklist_items
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=item_id
 generatedId=true
 # --field-end--
 # --field-start--
 fieldName=listid
-indexName=checklist_items_listid_idx
+columnName=list_id
+indexName=checklist_items_list_id_idx
 # --field-end--
 # --field-start--
 fieldName=text
+columnName=text
 # --field-end--
 # --field-start--
 fieldName=checked
+columnName=is_checked
 # --field-end--
 # --table-fields-end--
 # --table-end--
@@ -129,23 +155,29 @@ tableName=markertype
 # --table-fields-start--
 # --field-start--
 fieldName=id
+columnName=marker_id
 generatedId=true
 # --field-end--
 # --field-start--
 fieldName=catid
-indexName=markertype_catid_idx
+columnName=cat_id
+indexName=markertype_cat_id_idx
 # --field-end--
 # --field-start--
 fieldName=title
+columnName=title
 # --field-end--
 # --field-start--
 fieldName=latitude
+columnName=latitude
 # --field-end--
 # --field-start--
 fieldName=longitude
+columnName=longitude
 # --field-end--
 # --field-start--
 fieldName=locationStr
+columnName=location_str
 # --field-end--
 # --table-fields-end--
 # --table-end--

@@ -3,6 +3,11 @@ package edu.sru.nullstring.UI;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+
 import edu.sru.nullstring.LocadexApplication;
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.*;
@@ -18,28 +23,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
 import android.widget.ListView;
 
-public class ChecklistMainActivity extends ListActivity{
+public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
+	private ListView mListView;
+	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         //Remove title bar
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+    	this.setContentView(R.layout.checklist_main);
     	
-        ListView lv = getListView();
-        LayoutInflater inflater = getLayoutInflater();
-        ViewGroup header = (ViewGroup)inflater.inflate(R.layout.global_header, lv, false);
-        lv.addHeaderView(header, null, false);
-
+    	mListView = (ListView)this.findViewById(R.id.checklistView);
         
 		try {
 
 	        // connect to DAO helper, ugly but it works flawlessly.
-	        DatabaseHelper helper = ((LocadexApplication)this.getApplication()).getDatabaseHelper();
+	        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 	        
 	        // Query for all into a list
 	        List<ChecklistType> results;
@@ -47,7 +52,7 @@ public class ChecklistMainActivity extends ListActivity{
 			// create a new checklist, pass DAO into it.
 
 	        
-	        ChecklistType data = new ChecklistType(helper.getChecklistDao());
+	        ChecklistType data = new ChecklistType(helper);
 			data.setTitle("Hamer loves Androids!");
 			data.create(); // add to database
 			
@@ -56,33 +61,27 @@ public class ChecklistMainActivity extends ListActivity{
 			results = helper.getChecklistDao().queryForAll();
 
 			// apply to list adapter.
-			setListAdapter(new ChecklistAdapter(this,
+			mListView.setAdapter(new ChecklistAdapter(this,
 	                android.R.layout.simple_list_item_1, results));
 	        	        
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        getListView().setTextFilterEnabled(true);
-        
+		mListView.setTextFilterEnabled(true);
+		
+		// attach list item click
+		mListView.setOnItemClickListener(mListClickListener);        
     }
     
-	static final String[] PENS = new String[]{
-		"Jeb",
-		"32",
-		"is",
-		"playing",
-		"with",
-		"his",
-		"awesome",
-		"Phablet"
-		};
-	
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		ChecklistType o = (ChecklistType)this.getListAdapter().getItem(position);
-		Toast.makeText(this, "You have chosen list: " + o.getTitle(), Toast.LENGTH_LONG).show();
-		}
+    // Handle list clicks
+    OnItemClickListener mListClickListener = new OnItemClickListener() {
+    		public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+    		{
+    			ChecklistType o = (ChecklistType)mListView.getAdapter().getItem(position);
+    			Toast.makeText(parent.getContext(), "You have chosen list: " + o.getTitle(), Toast.LENGTH_LONG).show();
+    		}
+    };
     
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -14,18 +14,29 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "checklists")
 public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 
-	@DatabaseField(generatedId = true)
+	public static final String LIST_ID_FIELD = "list_id";
+	public static final String CAT_ID_FIELD = "cat_id";
+	public static final String TITLE_FIELD = "title";
+	
+	@DatabaseField(generatedId = true, columnName = LIST_ID_FIELD )
 	private int id;
 	
-	@DatabaseField(index = true)
+	@DatabaseField(index = true, columnName = CAT_ID_FIELD)
 	private int catid = 1;
 	
-	@DatabaseField
+	@DatabaseField(columnName = TITLE_FIELD)
 	private String title = "Unlabeled";
 	
-	public ChecklistType(Dao<ChecklistType, Integer> dao)
+	public ChecklistType(DatabaseHelper helper)
 	{
-		this.setDao(dao);
+		this.catid = helper.getCurrentCategory().getID();
+		try {
+			this.setDao(helper.getChecklistDao());
+		} catch (SQLException e) {
+			Log.e("Locadex", "Getting Checklist DAO Failed!");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	ChecklistType()
@@ -51,7 +62,7 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 	public List<ChecklistItemType> getItems(DatabaseHelper h)
 	{
 		try {
-			return h.getChecklistItemDao().queryForEq("noteid", id);
+			return h.getChecklistItemDao().queryForEq(ChecklistItemType.LIST_ID_FIELD, id);
 		} catch (SQLException e) {
 			Log.i("","SQL Exception querying for Attachments for Note, sending empty list.");
 			return new ArrayList<ChecklistItemType>();
@@ -64,7 +75,7 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 		CategoryType result = null;
 		try {
 			List<CategoryType> allres;
-			allres = h.getCategoryDao().queryForEq("id", this.catid);
+			allres = h.getCategoryDao().queryForEq(CategoryType.CAT_ID_FIELD, this.catid);
 
 			if(allres.size() > 0)
 			{

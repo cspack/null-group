@@ -43,9 +43,7 @@ public class ChecklistAdapter extends ArrayAdapter<ChecklistType> {
                     }
                     if(bt != null){
                     	DatabaseHelper h = ((LocadexApplication)(this.getContext().getApplicationContext())).getDatabaseHelper();
-
-                    	CategoryType cat = o.getCategory(h);
-                     	String cattitle = cat == null ? "Unknown" : cat.getTitle();
+                     	String cattitle = h.getCategoryString(o);
                     	bt.setText("Category: "+ cattitle);
                     }
             }
