@@ -14,17 +14,23 @@ public class AttachmentType extends BaseDaoEnabled<AttachmentType, Integer> {
 		this.setDao(dao);
 	}
 	
+	public static final String ATTACH_ID_FIELD = "attach_id";
+	public static final String NOTE_ID_FIELD = "note_id";
+	public static final String TITLE_FIELD = "title";
+	public static final String FILE_NAME_FIELD = "file_name";
+	public static final String FILE_PATH_FIELD = "file_path";
+	
 	// Handles a generic attachment
 	// handles binary files, android files, and markers
 	
 	// attachment db collection id
-	@DatabaseField(generatedId=true)
+	@DatabaseField(generatedId=true, columnName = ATTACH_ID_FIELD)
 	private int id;
 	
-	@DatabaseField(index=true)
+	@DatabaseField(index=true, columnName = NOTE_ID_FIELD)
 	private int noteid; // every attachment is attached to a note
 	
-	@DatabaseField
+	@DatabaseField(columnName = TITLE_FIELD)
 	private String title;
 	public void setTitle(String newtitle)
 	{
@@ -38,7 +44,7 @@ public class AttachmentType extends BaseDaoEnabled<AttachmentType, Integer> {
 	
 	
 	
-	@DatabaseField
+	@DatabaseField(columnName = FILE_NAME_FIELD)
 	private String fileName = "";
 	
 	public void setFileName(String newfilename)
@@ -52,7 +58,7 @@ public class AttachmentType extends BaseDaoEnabled<AttachmentType, Integer> {
 	}
 	
 	
-	@DatabaseField
+	@DatabaseField(columnName = FILE_PATH_FIELD)
 	private String filePath;
 	
 	public void setFilePath(String newfilepath)

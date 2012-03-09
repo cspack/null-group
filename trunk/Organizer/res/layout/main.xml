@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#484848"
+    android:stretchColumns="*"
     >
+    
+    <TableRow android:layout_height="50dp"
+        >
     
     <edu.sru.nullstring.UI.GlobalHeaderView 
         android:id="@+id/topBanner"
-        android:layout_width = "fill_parent"
-        android:layout_height = "50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_width="fill_parent"
+        android:layout_span="2"
          />
+    </TableRow>
     
+    <TableRow
+        android:layout_height="fill_parent"
+        android:layout_weight="1" >
+        
     <Button 
         android:id="@+id/notebookIcon"
         android:drawableTop="@drawable/notebook_48" 
-        android:layout_width="100dp"
-        android:layout_height="100dp" 
-        android:layout_below="@id/topBanner"
-        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent" 
 
-        android:layout_margin="25dp"
+        android:layout_margin="0dp"
+		android:layout_weight="1"
         
         android:textColor="#000000"
         android:paddingTop="20sp"
         android:text="Notes"
+        android:gravity="center"
         
          />
     
@@ -33,58 +40,64 @@
     <Button 
         android:id="@+id/checklistIcon"
         android:drawableTop="@drawable/checklist_48" 
-        android:layout_width="100dp"
-        android:layout_height="100dp" 
-        android:layout_below="@id/topBanner"
-        android:layout_alignParentRight="true"
         
-        android:layout_margin="25dp"
+        android:layout_height="fill_parent" 
+        
+        android:layout_margin="0dp"
         
         android:textColor="#000000"
         android:paddingTop="20sp"
         android:text="Checklists"
+        android:gravity="center"
         
          />
-    
-    
-    
-    
-    <Button 
+    </TableRow>
+
+    <TableRow android:layout_weight="1" >
+ <Button 
         android:id="@+id/reminderIcon"
         android:drawableTop="@drawable/bell_48" 
-        android:layout_width="100dp"
-        android:layout_height="100dp" 
-        android:layout_below="@id/notebookIcon"
-        android:layout_alignParentLeft="true"
-
-        android:layout_margin="25dp"
-
+        android:layout_margin="0dp"
         android:textColor="#000000"
         android:paddingTop="20sp"
         android:text="Reminders"
+        android:layout_height="fill_parent" 
+        android:gravity="center"
 
          />
-    
     
     <Button 
         android:id="@+id/markerIcon"
         android:drawableTop="@drawable/map_48" 
-        android:layout_width="100dp"
-        android:layout_height="100dp" 
-        android:layout_below="@id/checklistIcon"
-        android:layout_alignParentRight="true"
 
-        android:layout_margin="25dp"
+        android:layout_height="fill_parent" 
+
+        android:layout_margin="0dp"
+		android:layout_weight="1"
 
         android:textColor="#000000"
         android:paddingTop="20sp"
         android:text="Markers"
+        android:gravity="center"
 
          />
+    </TableRow>
+    
+    <TableRow 
+        
+        android:layout_height="100dp"
+        
+        >
+    <TextView android:id="@+id/bottomView" 
+        android:background="#ff00ff00" 
+        android:layout_span="2"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        />
+    </TableRow>
+
     
     
     
     
-    
-    
-</RelativeLayout>
+</TableLayout>

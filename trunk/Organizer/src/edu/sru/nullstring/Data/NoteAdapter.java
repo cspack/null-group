@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class MarkerAdapter extends ArrayAdapter<MarkerType> {
-    private List<MarkerType> items;
+public class NoteAdapter extends ArrayAdapter<NoteType> {
+    private List<NoteType> items;
     private Context context;
     
-    public MarkerAdapter(Context context, int textViewResourceId, List<MarkerType> items) {
+    public NoteAdapter(Context context, int textViewResourceId, List<NoteType> items) {
             super(context, textViewResourceId, items);
             this.items = items;
             this.context = context;
@@ -34,7 +34,7 @@ public class MarkerAdapter extends ArrayAdapter<MarkerType> {
             
             //TODO: Import fields from the object itself into the layout
             
-            MarkerType o = items.get(position);
+            NoteType o = items.get(position);
             if (o != null) {
                     TextView tt = (TextView) v.findViewById(R.id.toptext);
                     TextView bt = (TextView) v.findViewById(R.id.bottomtext);

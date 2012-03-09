@@ -1,7 +1,12 @@
 package edu.sru.nullstring.UI;
 
+import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
+import com.j256.ormlite.android.apptools.OrmLiteBaseTabActivity;
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.R.layout;
+import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
@@ -10,7 +15,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.widget.TabHost;
 
-public class MarkerMainActivity extends TabActivity {
+public class MarkerMainActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
