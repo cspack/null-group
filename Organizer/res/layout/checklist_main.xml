@@ -9,6 +9,13 @@
         android:layout_width = "fill_parent"
         android:layout_height = "wrap_content"
          />
+
+<edu.sru.nullstring.UI.ChecklistHeader
+        android:id="@+id/listHeader"
+        android:layout_width = "fill_parent"
+        android:layout_height = "wrap_content"
+    />
+
 <!--  create a 'header' add item bar to put here -->
 <ListView 
     android:id="@+id/checklistView"

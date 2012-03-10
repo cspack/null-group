@@ -25,6 +25,12 @@ public class HomeActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	
         setContentView(R.layout.main);
         
+        // This'll probably break it unless i put it intoonlayout
+        // Hide 'go home' button
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        Button b = (Button)head.findViewById(R.id.homeIcon);
+        b.setVisibility(View.GONE);
+        
         // attach events to buttons
         
         Button button = (Button)this.findViewById(R.id.notebookIcon);
@@ -69,7 +75,8 @@ public class HomeActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		super.onResume(); // important
 		
 		// Here is where you refresh the UI for things that may have changed:
-		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.layout.global_header);
+		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+		if(h != null) h.RefreshData();
 		
 	}
 }

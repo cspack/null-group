@@ -42,12 +42,8 @@ public class GlobalHeaderView extends LinearLayout {
 	// Expand global_header xml into content.
 		
 
-	Log.i("Locadex", "Attempting to inflate global header... ");
-	
 	LayoutInflater layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	xmlView=layoutInflater.inflate(R.layout.global_header,this);
-
-	Log.i("Locadex", "Successfully inflated global header... ");
 
 	
     // Generate Categories
@@ -56,12 +52,8 @@ public class GlobalHeaderView extends LinearLayout {
 	// Dynamic spinner
 	// http://stackoverflow.com/questions/5453580/android-dynamic-spinner-update
 
-		// Get Activity's DatabaseHelper [this sux balls.. but application context = fail]
-	
-		DatabaseHelper h = OpenHelperManager.getHelper(context, DatabaseHelper.class); 
-			//	((LocadexApplication)context.getApplicationContext()).getDatabaseHelper();
-		// 2nd performs better... but... can i use it safely??
-		// TODO: Find out if application level singletons are android activity safe
+		// requirement -- all activities that call globalheader must have the helper
+		DatabaseHelper h = OpenHelperManager.getHelper(context, DatabaseHelper.class);
 
 		try {
 			Dao<CategoryType, Integer> dao = h.getCategoryDao();

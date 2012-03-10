@@ -2,6 +2,8 @@ package edu.sru.nullstring.Data;
 
 import java.util.List;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
 import edu.sru.nullstring.LocadexApplication;
 import edu.sru.nullstring.R;
 
@@ -42,7 +44,7 @@ public class NoteAdapter extends ArrayAdapter<NoteType> {
                           tt.setText("Title: "+o.getTitle());
                     }
                     if(bt != null){
-                    	DatabaseHelper h = ((LocadexApplication)(this.getContext().getApplicationContext())).getDatabaseHelper();
+                		DatabaseHelper h = OpenHelperManager.getHelper(context, DatabaseHelper.class); 
                      	String cattitle = h.getCategoryString(o);
                     	bt.setText("Category: "+ cattitle);
 

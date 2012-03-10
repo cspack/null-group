@@ -3,4 +3,5 @@
     <string name="app_name">Locadex Notes and Reminders</string>
     <string name="service_name">Locadex Reminder Service</string>
     <string name="category_prompt">Select a Category</string>
+    <string name="lists_title">Lists</string>
 </resources>

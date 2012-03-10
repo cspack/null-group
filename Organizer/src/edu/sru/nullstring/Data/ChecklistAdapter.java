@@ -2,10 +2,13 @@ package edu.sru.nullstring.Data;
 
 import java.util.List;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
 import edu.sru.nullstring.LocadexApplication;
 import edu.sru.nullstring.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +25,22 @@ public class ChecklistAdapter extends ArrayAdapter<ChecklistType> {
             this.context = context;
     }
 
+    
+    
     @Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+		// db update goes here.. see category type.
+		
+	}
+
+
+
+	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
+    	
+    	
     	
             View v = convertView;
             if (v == null) {
@@ -32,6 +49,7 @@ public class ChecklistAdapter extends ArrayAdapter<ChecklistType> {
             }
             
             
+            Log.w("Locadex","Requerying listview!");
             //TODO: Import fields from the object itself into the layout
             
             ChecklistType o = items.get(position);
@@ -39,10 +57,10 @@ public class ChecklistAdapter extends ArrayAdapter<ChecklistType> {
                     TextView tt = (TextView) v.findViewById(R.id.toptext);
                     TextView bt = (TextView) v.findViewById(R.id.bottomtext);
                     if (tt != null) {
-                          tt.setText("Title: "+o.getTitle());
+                          tt.setText(o.getTitle());
                     }
                     if(bt != null){
-                    	DatabaseHelper h = ((LocadexApplication)(this.getContext().getApplicationContext())).getDatabaseHelper();
+                		DatabaseHelper h = OpenHelperManager.getHelper(context, DatabaseHelper.class); 
                      	String cattitle = h.getCategoryString(o);
                     	bt.setText("Category: "+ cattitle);
                     }
