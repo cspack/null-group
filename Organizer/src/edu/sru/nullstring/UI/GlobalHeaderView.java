@@ -13,14 +13,17 @@ import edu.sru.nullstring.Data.CategoryAdapter;
 import edu.sru.nullstring.Data.CategoryType;
 import edu.sru.nullstring.Data.ChecklistType;
 import edu.sru.nullstring.Data.DatabaseHelper;
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -85,9 +88,49 @@ public class GlobalHeaderView extends LinearLayout {
 		}
 		
 		mSpinner.setOnItemSelectedListener(mListSelectedListener);
-    
+		
+		Button home = (Button)findViewById(R.id.homeIcon);  
+		home.setOnClickListener(new OnClickListener() {
+		    public void onClick(View v) {
+    				if(currentActivity != null)
+    				{
+    					currentActivity.finish();
+    					
+    				}
+                	
+                }
+
+        });
+
+		/*home.setOnTouchListener(new OnTouchListener(){
+
+		public boolean onTouch(View v, MotionEvent event) {
+				
+				
+				if(currentActivity != null)
+				{
+					Toast.makeText(v.getContext(), "THIS IS SUPPOSED TO BE GONE!",  Toast.LENGTH_LONG);
+					currentActivity.finishActivity(Activity.RESULT_OK);
+					
+				}
+				else
+				{
+					Toast.makeText(v.getContext(), "WTF MAN", Toast.LENGTH_LONG);
+				}
+				
+				return true;
+			}
+			
+		});
+    */
 	}
+			
 	
+	private Activity currentActivity;
+	public void setActivity(Activity act)
+	{
+		currentActivity = act;
+	}
 
     // Handle list clicks
 	OnItemSelectedListener mListSelectedListener = new OnItemSelectedListener() {
