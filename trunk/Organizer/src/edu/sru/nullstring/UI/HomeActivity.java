@@ -28,6 +28,7 @@ public class HomeActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         // This'll probably break it unless i put it intoonlayout
         // Hide 'go home' button
         GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
         Button b = (Button)head.findViewById(R.id.homeIcon);
         b.setVisibility(View.GONE);
         

@@ -39,12 +39,15 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         super.onCreate(savedInstanceState);
         
         //Remove title bar
-    	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    	this.setContentView(R.layout.checklist_main);
+    	requestWindowFeature(Window.FEATURE_NO_TITLE);
+    	setContentView(R.layout.checklist_main);
     	
+
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
+
     	
-    	
-    	mListView = (ListView)this.findViewById(R.id.checklistView);
+    	mListView = (ListView)findViewById(R.id.checklistView);
         
 		try {
 
@@ -94,7 +97,6 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// Here is where you refresh the UI for things that may have changed:
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 		if(h != null) h.RefreshData();
-		
 	}
 	
 	

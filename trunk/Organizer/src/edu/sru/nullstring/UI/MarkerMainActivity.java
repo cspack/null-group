@@ -28,7 +28,9 @@ public class MarkerMainActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
     	
         setContentView(R.layout.marker_main);
         
-
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
+        
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
         TabHost.TabSpec spec;  // Resusable TabSpec for each tab

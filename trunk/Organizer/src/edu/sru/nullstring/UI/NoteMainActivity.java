@@ -17,6 +17,8 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.note_main);
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
     }
     
     private static final int CREATE_MENU_ID = Menu.FIRST;

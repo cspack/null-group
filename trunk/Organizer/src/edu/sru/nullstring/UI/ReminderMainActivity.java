@@ -22,6 +22,8 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	
     	
         setContentView(R.layout.reminder_main);
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
         
 
     }
