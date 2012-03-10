@@ -15,6 +15,7 @@ import edu.sru.nullstring.R.layout;
 import android.app.Activity;
 import android.app.Application;
 import android.app.ListActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +26,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ListView;
 
@@ -39,10 +42,18 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	this.setContentView(R.layout.checklist_main);
     	
+    	
+    	
     	mListView = (ListView)this.findViewById(R.id.checklistView);
         
 		try {
 
+			
+			// possible option for future refactoring / recreation
+			// http://stackoverflow.com/questions/7159816/android-cursor-with-ormlite
+			// this will make the lists of lists WAY faster, but its super complicated android code
+			// you'd have to recreate all of the adaptors to use it
+			
 	        // connect to DAO helper, ugly but it works flawlessly.
 	        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 	        
@@ -54,6 +65,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	        
 	        ChecklistType data = new ChecklistType(helper);
 			data.setTitle("Hamer loves Androids!");
+			// if category is 'all', set to unknown
 			data.create(); // add to database
 			
 	        
@@ -63,7 +75,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			// apply to list adapter.
 			mListView.setAdapter(new ChecklistAdapter(this,
 	                android.R.layout.simple_list_item_1, results));
-	        	        
+				        
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,12 +86,44 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		mListView.setOnItemClickListener(mListClickListener);        
     }
     
+
+	@Override
+	protected void onResume() {
+		super.onResume(); // important
+		
+		// Here is where you refresh the UI for things that may have changed:
+		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+		if(h != null) h.RefreshData();
+		
+	}
+	
+	
+	private View lastView = null;
     // Handle list clicks
     OnItemClickListener mListClickListener = new OnItemClickListener() {
     		public void onItemClick(AdapterView<?> parent, View v, int position, long id)
     		{
-    			ChecklistType o = (ChecklistType)mListView.getAdapter().getItem(position);
-    			Toast.makeText(parent.getContext(), "You have chosen list: " + o.getTitle(), Toast.LENGTH_LONG).show();
+    			
+    			// last view, hide remove button again
+    			if(lastView != null)
+    			{
+    			
+    				lastView.setBackgroundColor(Color.WHITE);
+    				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+    				hider.setVisibility(View.GONE);
+    			}
+
+    			// current view, make remove button visible
+    			if(v != null)
+    			{
+
+    				v.setBackgroundColor(Color.LTGRAY);
+    				Button hider = (Button)v.findViewById(R.id.listRightButtons);
+    				hider.setVisibility(View.VISIBLE);
+    				lastView = v;
+    			}
+    			//ChecklistType o = (ChecklistType)mListView.getAdapter().getItem(position);
+    			//Toast.makeText(parent.getContext(), "You have chosen list: " + o.getTitle(), Toast.LENGTH_LONG).show();
     		}
     };
     
@@ -96,5 +140,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
                                 break;
         }
         return true;
-    }	
+    }
+    
+    
 }

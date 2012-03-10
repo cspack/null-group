@@ -11,6 +11,7 @@ import android.view.Window;
 
 public class MarkerMapActivity extends MapActivity {
 
+	/* Begin required orm lite code */
 	private DatabaseHelper databaseHelper = null;
 
 	@Override
@@ -29,11 +30,15 @@ public class MarkerMapActivity extends MapActivity {
 	    }
 	    return databaseHelper;
 	}
+	/* End required orm lite code */
 	
+	/* Begin required maplist code */
 	@Override
 	protected boolean isRouteDisplayed() {
 	    return false;
 	}
+
+	/* End required maplist code */
 
 
     @Override

@@ -9,7 +9,10 @@ import android.util.Log;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.misc.BaseDaoEnabled;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.table.DatabaseTable;
+
+import edu.sru.nullstring.Data.CategoryType.FixedTypes;
 
 @DatabaseTable(tableName = "checklists")
 public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
@@ -29,14 +32,22 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 	
 	public ChecklistType(DatabaseHelper helper)
 	{
-		this.catid = helper.getCurrentCategory().getID();
+		CategoryType curCat = helper.getCurrentCategory();
 		try {
 			this.setDao(helper.getChecklistDao());
+			if(curCat.getFixedType() == FixedTypes.All)
+			{
+				// query unsorted category
+				PreparedQuery<CategoryType> unsortedCat = helper.getCategoryDao().queryBuilder().where().eq(CategoryType.FIXED_TYPE_FIELD, FixedTypes.All).prepare();
+				curCat = helper.getCategoryDao().queryForFirst(unsortedCat);
+			}
 		} catch (SQLException e) {
-			Log.e("Locadex", "Getting Checklist DAO Failed!");
+			Log.e("Locadex", "Database helper failed when creating Checklist type.");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.catid = curCat.getID();
+		
 	}
 	
 	ChecklistType()
@@ -47,6 +58,12 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 	public void setTitle(String newtitle)
 	{
 		this.title = newtitle;
+		try {
+			this.update();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String getTitle()

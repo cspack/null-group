@@ -25,4 +25,16 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         
 
     }
+    
+
+
+	@Override
+	protected void onResume() {
+		super.onResume(); // important
+		
+		// Here is where you refresh the UI for things that may have changed:
+		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+		if(h != null) h.RefreshData();
+		
+	}
 }

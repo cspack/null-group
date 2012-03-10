@@ -3,6 +3,8 @@ package edu.sru.nullstring;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
 import edu.sru.nullstring.Data.CategoryType;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Application;
@@ -28,7 +30,7 @@ public class LocadexApplication extends Application {
     }
 	 */
 	
-
+/*
 	private DatabaseHelper mDatabaseHelper;
     public final synchronized DatabaseHelper getDatabaseHelper() {
         if (mDatabaseHelper == null) {
@@ -71,6 +73,29 @@ public class LocadexApplication extends Application {
         }
         return mCurrentCategory;
     }
-
+*/
     
+	private volatile DatabaseHelper databaseHelper = null;
+
+	  @Override
+	  public void onCreate() {
+	    super.onCreate();
+	  }
+
+	  @Override
+	  public void onTerminate() {
+	    if (databaseHelper != null) {
+	      OpenHelperManager.releaseHelper();
+	      databaseHelper = null;
+	    }
+	    super.onTerminate();
+	  }
+
+	  public DatabaseHelper getHelper() {
+	    if (databaseHelper == null) {
+	      databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+	    }
+	    return databaseHelper;
+	  }
+
 }
