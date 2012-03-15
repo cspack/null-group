@@ -69,7 +69,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	        ChecklistType data = new ChecklistType(helper);
 			data.setTitle("Hamer loves Androids!");
 			// if category is 'all', set to unknown
-			data.create(); // add to database
+			//data.create(); // add to database
 			
 	        
 			// pull all checklists from database, no category

@@ -9,7 +9,10 @@ import android.util.Log;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.misc.BaseDaoEnabled;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.table.DatabaseTable;
+
+import edu.sru.nullstring.Data.CategoryType.FixedTypes;
 
 @DatabaseTable(tableName="notes")
 public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
@@ -23,6 +26,25 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 		this.setDao(dao);
 	}
 	
+
+	public NoteType(DatabaseHelper helper) {
+		CategoryType curCat = helper.getCurrentCategory();
+		try {
+			this.setDao(helper.getNoteDao());
+			if(curCat.getFixedType() == FixedTypes.All)
+			{
+				// query unsorted category
+				PreparedQuery<CategoryType> unsortedCat = helper.getCategoryDao().queryBuilder().where().eq(CategoryType.FIXED_TYPE_FIELD, FixedTypes.All).prepare();
+				curCat = helper.getCategoryDao().queryForFirst(unsortedCat);
+			}
+		} catch (SQLException e) {
+			Log.e("Locadex", "Database helper failed when creating Note type.");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.catid = curCat.getID();
+	}
+
 
 	public static final String NOTE_ID_FIELD = "note_id";
 	public static final String CAT_ID_FIELD = "cat_id";

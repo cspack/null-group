@@ -25,6 +25,14 @@ public class NoteAdapter extends ArrayAdapter<NoteType> {
     }
 
     @Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+		// db update goes here.. see category type.
+		
+	}
+    
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	
             View v = convertView;
