@@ -28,6 +28,8 @@
      	<activity android:name=".UI.MarkerMapActivity"/>
      	
 		<activity android:name=".UI.NoteMainActivity"/>
+		<activity android:name=".UI.NoteEditActivity"/>
+		
    		<activity android:name=".UI.ReminderMainActivity"/>
 			
 		<service android:name=".Service.LocadexService"
