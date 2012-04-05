@@ -108,6 +108,21 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// Here is where you refresh the UI for things that may have changed:
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 		if(h != null) h.RefreshData();
+		
+		// refresh listview
+		
+        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+		List<ChecklistType> results = null;
+		try {
+			results = helper.getChecklistDao().queryForAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        // reinit list [refresh] 
+		mListView.setAdapter(new ChecklistAdapter(this,
+                android.R.layout.simple_list_item_1, results));
+        Log.i("Locadex", "Attempting to refresh list onresume.");
 	}
 	
 	
@@ -194,7 +209,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
         Intent myIntent = new Intent(v.getContext(), ChecklistCreateActivity.class);
         startActivityForResult(myIntent, 0);   
-        
+
     	return true;
     }
     
