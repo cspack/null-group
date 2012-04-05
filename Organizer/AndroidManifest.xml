@@ -13,7 +13,8 @@
         
         <activity
             android:name=".UI.HomeActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +23,7 @@
         </activity>
         
 		<activity android:name=".UI.ChecklistMainActivity"/>
-		<activity android:name=".UI.ChecklistCreateActivity"/>
+		<activity android:name=".UI.ChecklistEditActivity"/>
 		
      	<activity android:name=".UI.MarkerMainActivity"/>
      	<activity android:name=".UI.MarkerListActivity"/>
