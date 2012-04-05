@@ -22,6 +22,7 @@
         </activity>
         
 		<activity android:name=".UI.ChecklistMainActivity"/>
+		<activity android:name=".UI.ChecklistCreateActivity"/>
 		
      	<activity android:name=".UI.MarkerMainActivity"/>
      	<activity android:name=".UI.MarkerListActivity"/>
