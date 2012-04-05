@@ -70,10 +70,15 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 	{
 		return this.title;
 	}
-	
+
 	public String getCategoryID()
 	{
 		return Integer.toString(this.catid);
+	}
+
+	public int getID()
+	{
+		return (this.id);
 	}
 
 	public List<ChecklistItemType> getItems(DatabaseHelper h)
