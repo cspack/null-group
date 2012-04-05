@@ -38,7 +38,7 @@ public class NoteAdapter extends ArrayAdapter<NoteType> {
             View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.checklist_list_row, null);
+                v = vi.inflate(R.layout.note_list_row, null);
             }
             
             
@@ -51,7 +51,8 @@ public class NoteAdapter extends ArrayAdapter<NoteType> {
                     if (tt != null) {
                           tt.setText("Title: "+o.getTitle());
                     }
-                    if(bt != null){
+                    if(bt != null)
+                    {
                 		DatabaseHelper h = OpenHelperManager.getHelper(context, DatabaseHelper.class); 
                      	String cattitle = h.getCategoryString(o);
                     	bt.setText("Category: "+ cattitle);

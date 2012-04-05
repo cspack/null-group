@@ -15,6 +15,7 @@ import edu.sru.nullstring.Data.ChecklistType;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -95,7 +96,10 @@ public class GlobalHeaderView extends LinearLayout {
     				if(currentActivity != null)
     				{
     					currentActivity.finish();
-    					
+    					// Start single top activity for home, allows home from anywhere.
+    					Intent i = new Intent(v.getContext(), HomeActivity.class);
+    				    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    				    v.getContext().startActivity(i);    					
     				}
                 	
                 }
