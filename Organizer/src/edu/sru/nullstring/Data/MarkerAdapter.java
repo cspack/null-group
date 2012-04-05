@@ -30,7 +30,7 @@ public class MarkerAdapter extends ArrayAdapter<MarkerType> {
             View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.checklist_list_row, null);
+                v = vi.inflate(R.layout.marker_list_row, null);
             }
             
             

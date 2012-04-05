@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -55,7 +56,6 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	        List<NoteType> results;
 
 	        // create a new note, pass DAO into it.
-
 	        
 	        NoteType data = new NoteType(helper);
 			data.setTitle("Google loves Play Stores!");
@@ -89,6 +89,7 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		// attach list item click
 		mListView.setOnItemClickListener(mListClickListener); 
+		mListView.setOnItemLongClickListener(mListLongClickListener); 
 		
 
 		Button addItem = (Button)findViewById(R.id.addItem);
@@ -144,6 +145,7 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		// Here is where you refresh the UI for things that may have changed:
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+		h.setActivity(this);
 		if(h != null) h.RefreshData();
 
 //        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
@@ -159,9 +161,36 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	private View lastView = null;
 	private NoteType currentNote;
-    // Handle list clicks
+    // Handle list long press clicks
     OnItemClickListener mListClickListener = new OnItemClickListener() {
     		public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+    		{
+    			Log.i("NoteMainActivity:OnItemClickListener", String.valueOf(position));
+    			// last view, hide remove button again
+    			if(lastView != null)
+    			{
+    			
+    				lastView.setBackgroundColor(Color.WHITE);
+    				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+    				hider.setVisibility(View.GONE);
+    			}
+
+    			// current view, open it
+    			if(v != null)
+    			{
+        			NoteAdapter nada = (NoteAdapter) parent.getAdapter();
+        			currentNote = nada.getItem(position);
+
+        			
+        			Intent editPage = new Intent(v.getContext(), NoteEditActivity.class);
+        			editPage.putExtra("edu.sru.nullstring.noteId", currentNote.getID());
+        			v.getContext().startActivity(editPage);
+    			}
+    		}
+    };
+    // Handle list long press clicks
+    OnItemLongClickListener mListLongClickListener = new OnItemLongClickListener() {
+    		public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
     		{
     			Log.i("NoteMainActivity:OnItemClickListener", String.valueOf(position));
     			// last view, hide remove button again
@@ -189,6 +218,8 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				hider.setVisibility(View.VISIBLE);
     				lastView = v;
     			}
+        		
+        		return true;
     		}
     };
     
@@ -212,6 +243,7 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
         NoteType data = new NoteType(helper);
 		data.setTitle("New Note!");
+		
 		try {
 			data.create(); // add to database
 			List<NoteType> results = helper.getNoteDao().queryForAll();
@@ -224,6 +256,7 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		}
 
         Intent myIntent = new Intent(v.getContext(), NoteEditActivity.class);
+        myIntent.putExtra("edu.sru.nullstring.noteId", data.getID());
         startActivityForResult(myIntent, 0);
     	return true;
     }

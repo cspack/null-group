@@ -1,21 +1,79 @@
 package edu.sru.nullstring.UI;
 
+import java.sql.SQLException;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+
+import edu.sru.nullstring.R;
+import edu.sru.nullstring.Data.DatabaseHelper;
+import edu.sru.nullstring.Data.NoteType;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 public class NoteEditActivity extends GraphicsActivity
        implements ColorPickerDialog.OnColorChangedListener {    
 
+	private DatabaseHelper helper = null;
+	private NoteType editItem = null;
+	
    @Override
    protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-       setContentView(new MyView(this));
+       setContentView(R.layout.note_edit);
+       //setContentView(new MyView(this));
+       
+
+		
+	   	// Here is where you refresh the UI for things that may have changed:
+	   	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+	   	if(h != null) h.setActivity(this);
+       
+       Bundle extras = getIntent().getExtras();        
+       if(extras != null)
+       {
+	       // Setup database helper and object early on
+	       int wantedId = extras.getInt("edu.sru.nullstring.noteId");
+	       if(wantedId != 0)
+	       {
+	    	   
+	    	   Log.i("Locadex:NoteEditActivity","Wanted id is : " + wantedId);
+	    	   
+	       helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+	       try {
+			editItem = helper.getNoteDao().queryForId(wantedId);
+			} catch (SQLException e) {
+				Log.e("Locadex", "Failed to open item for editing");
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	       
+	       // Edit UI of NoteHeader
+	       TextView noteName = (TextView) this.findViewById(R.id.text1);
+	       noteName.setText(editItem.getTitle());
+	       noteName.setTextSize(18.0f);
+	       
+	       }
+	       else
+	       {
+
+	    	   Log.i("Locadex:NoteEditActivity","Wanted id unknown.");
+	       }
+       }
+	   else
+	   {
+	
+		   Log.i("Locadex:NoteEditActivity","Bundle is null");
+	   }
+       
 
        mPaint = new Paint();
        mPaint.setAntiAlias(true);
@@ -53,7 +111,9 @@ public class NoteEditActivity extends GraphicsActivity
        public MyView(Context c) {
            super(c);
            
-           mBitmap = Bitmap.createBitmap(320, 480, Bitmap.Config.ARGB_8888);
+           Display d = getWindowManager().getDefaultDisplay(); 
+           
+           mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
            mCanvas = new Canvas(mBitmap);
            mPath = new Path();
            mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -190,4 +250,18 @@ public class NoteEditActivity extends GraphicsActivity
        }
        return super.onOptionsItemSelected(item);
    }
+
+@Override
+protected void onResume() {
+	// TODO Auto-generated method stub
+	super.onResume();
+	
+		
+	// Here is where you refresh the UI for things that may have changed:
+	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+	h.setActivity(this);
+	if(h != null) h.RefreshData();
+}
+   
+   
 }

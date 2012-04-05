@@ -16,6 +16,11 @@
         android:layout_width = "fill_parent"
         android:layout_height = "50dp"
          />
+        <edu.sru.nullstring.UI.MarkerHeaderView 
+        android:id="@+id/topBanner"
+        android:layout_width = "fill_parent"
+        android:layout_height = "50dp"
+         />
     
         <TabWidget
             android:id="@android:id/tabs"

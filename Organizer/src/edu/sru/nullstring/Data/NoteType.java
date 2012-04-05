@@ -34,7 +34,7 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 			if(curCat.getFixedType() == FixedTypes.All)
 			{
 				// query unsorted category
-				PreparedQuery<CategoryType> unsortedCat = helper.getCategoryDao().queryBuilder().where().eq(CategoryType.FIXED_TYPE_FIELD, FixedTypes.All).prepare();
+				PreparedQuery<CategoryType> unsortedCat = helper.getCategoryDao().queryBuilder().where().eq(CategoryType.FIXED_TYPE_FIELD, FixedTypes.Unsorted).prepare();
 				curCat = helper.getCategoryDao().queryForFirst(unsortedCat);
 			}
 		} catch (SQLException e) {
