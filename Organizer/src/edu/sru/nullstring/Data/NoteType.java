@@ -70,6 +70,11 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 		return this.title;
 	}
 
+	public int getID()
+	{
+		return this.id;
+	}
+
 	//public Object NoteColor;
 	//public Object Content;
 	
