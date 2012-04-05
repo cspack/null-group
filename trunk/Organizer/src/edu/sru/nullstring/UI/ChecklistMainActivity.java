@@ -8,15 +8,16 @@ import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
-import edu.sru.nullstring.LocadexApplication;
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.*;
 import edu.sru.nullstring.R.layout;
 import android.app.Activity;
 import android.app.Application;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -66,8 +68,8 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			// create a new checklist, pass DAO into it.
 
 	        
-	        ChecklistType data = new ChecklistType(helper);
-			data.setTitle("Hamer loves Androids!");
+	        //ChecklistType data = new ChecklistType(helper);
+			//data.setTitle("Hamer loves Androids!");
 			// if category is 'all', set to unknown
 			//data.create(); // add to database
 			
@@ -86,10 +88,19 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		mListView.setTextFilterEnabled(true);
 		
 		// attach list item click
-		mListView.setOnItemClickListener(mListClickListener);        
+		mListView.setOnItemClickListener(mListClickListener);
+		
+		Button addItem = (Button)findViewById(R.id.addItem);
+		addItem.setOnClickListener(new OnClickListener() {
+			public void onClick(View v)
+			{
+				addItem(v);
+			}
+		});
     }
     
 
+    
 	@Override
 	protected void onResume() {
 		super.onResume(); // important
@@ -101,11 +112,12 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	
 	
 	private View lastView = null;
+	private ChecklistType currentChecklist;
     // Handle list clicks
     OnItemClickListener mListClickListener = new OnItemClickListener() {
     		public void onItemClick(AdapterView<?> parent, View v, int position, long id)
     		{
-    			
+    			Log.i("NoteMainActivity:OnItemClickListener", String.valueOf(position));
     			// last view, hide remove button again
     			if(lastView != null)
     			{
@@ -118,14 +130,19 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     			// current view, make remove button visible
     			if(v != null)
     			{
-
+        			ChecklistAdapter clAdapt = (ChecklistAdapter) parent.getAdapter();
+        			currentChecklist = clAdapt.getItem(position);
     				v.setBackgroundColor(Color.LTGRAY);
     				Button hider = (Button)v.findViewById(R.id.listRightButtons);
+    				hider.setOnClickListener(new OnClickListener() {
+    						public void onClick(View v)
+    						{
+    							remove(currentChecklist);
+    						}
+    					});
     				hider.setVisibility(View.VISIBLE);
     				lastView = v;
     			}
-    			//ChecklistType o = (ChecklistType)mListView.getAdapter().getItem(position);
-    			//Toast.makeText(parent.getContext(), "You have chosen list: " + o.getTitle(), Toast.LENGTH_LONG).show();
     		}
     };
     
@@ -142,6 +159,43 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
                                 break;
         }
         return true;
+    }
+    
+    public boolean remove(ChecklistType checklist)
+    {
+        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+    	try {
+			helper.getChecklistDao().delete(checklist);
+			List<ChecklistType> results = helper.getChecklistDao().queryForAll();
+			mListView.setAdapter(new ChecklistAdapter(this,
+	                android.R.layout.simple_list_item_1, results));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	    	return false;
+		}
+    	return true;
+    }
+    
+    public boolean addItem(View v){/**
+        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+        ChecklistType data = new ChecklistType(helper);
+		data.setTitle("test");
+		try {
+			data.create(); // add to database
+			List<ChecklistType> results = helper.getChecklistDao().queryForAll();
+			mListView.setAdapter(new ChecklistAdapter(this,
+	                android.R.layout.simple_list_item_1, results));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	    	return false;
+		}**/
+
+        Intent myIntent = new Intent(v.getContext(), ChecklistCreateActivity.class);
+        startActivityForResult(myIntent, 0);   
+        
+    	return true;
     }
     
     
