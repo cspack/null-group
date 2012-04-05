@@ -71,7 +71,7 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 	public boolean addItem(View v){
 		DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 		ChecklistType data = new ChecklistType(helper);
-		data.setTitle("Vanere is a goose");
+		data.setTitle(title);
 		try {
 			data.create(); // add to database
 			List<ChecklistType> results = helper.getChecklistDao().queryForAll();
