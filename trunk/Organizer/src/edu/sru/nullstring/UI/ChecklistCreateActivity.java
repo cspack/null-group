@@ -44,9 +44,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper> {
-	
-	EditText name;
-	String title;
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,9 +51,8 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 
 		setContentView(R.layout.checklist_create);
        
-		name = (EditText)findViewById(R.id.entryChecklistTitle);
-		title = name.getText().toString();
-		
+
+		// adds an eventhandler to create a new checklist
 		Button addItem = (Button)findViewById(R.id.ok);
 		addItem.setOnClickListener(new OnClickListener() {
 			public void onClick(View v)
@@ -67,10 +63,22 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 				}
 			}
 		});
+		
+		Button cancelBtn = (Button)findViewById(R.id.cancel);
+		cancelBtn.setOnClickListener(new OnClickListener() {
+			public void onClick(View v)
+			{
+					finish();
+			}
+		});
 	}
 	public boolean addItem(View v){
 		DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 		ChecklistType data = new ChecklistType(helper);
+		
+		EditText name = (EditText)findViewById(R.id.entryChecklistTitle);
+		String title = name.getText().toString();
+		
 		data.setTitle(title);
 		try {
 			data.create(); // add to database
