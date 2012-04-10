@@ -51,12 +51,14 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 
 		setContentView(R.layout.checklist_create);
        
-
+		populateCatSpinner();
+		
 		// adds an eventhandler to create a new checklist
 		Button addItem = (Button)findViewById(R.id.ok);
 		addItem.setOnClickListener(new OnClickListener() {
 			public void onClick(View v)
 			{
+				
 				if (addItem(v))
 				{
 					finish();
@@ -71,18 +73,31 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 					finish();
 			}
 		});
+		
 	}
+	
+	/**
+	 * Adds an item to the checklist
+	 * @param v
+	 * @return true on success
+	 */
 	public boolean addItem(View v){
 		DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 		ChecklistType data = new ChecklistType(helper);
 		
+		// get the value from the textbox
 		EditText name = (EditText)findViewById(R.id.entryChecklistTitle);
 		String title = name.getText().toString();
 		
+		Spinner catSpin = (Spinner)findViewById(R.id.categorySpinner);
+		// + 1 makes up for the offset of the categories starting at 1 and not 0
+		int catID = catSpin.getSelectedItemPosition() + 1;
+		
+		data.setCategoryID(catID);
 		data.setTitle(title);
+
 		try {
 			data.create(); // add to database
-			List<ChecklistType> results = helper.getChecklistDao().queryForAll();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,6 +117,46 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 	    // TODO Auto-generated method stub
 	    setResult(2);
 	    super.onDestroy();
+	}
+
+	/**
+	 * Populates the category spinner with the current categories
+	 */
+	private void populateCatSpinner()
+	{
+		Spinner mSpinner;
+		
+		
+		// requirement -- all activities that call globalheader must have the helper
+		DatabaseHelper h = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+		
+		try {
+			Dao<CategoryType, Integer> dao = h.getCategoryDao();
+
+			mSpinner = (Spinner)findViewById(R.id.categorySpinner);
+			
+		    CategoryAdapter adapter = new CategoryAdapter(this,
+		    		android.R.layout.simple_spinner_item, dao);
+
+			// apply to list adapter.
+		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		    mSpinner.setAdapter(adapter);
+			mSpinner.setSelection(adapter.GetSelectedIndex(), false);
+		    // select to current category id
+			 
+		} catch (SQLException e) {
+			Log.e("Locadex", "Failed loading data into GlobalHeaderView. ");
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			
+		}
+		catch(Exception e)
+		{
+			Log.e("Locadex", "Really failed hard querying categories... ");
+			Log.e("Locadex", e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
