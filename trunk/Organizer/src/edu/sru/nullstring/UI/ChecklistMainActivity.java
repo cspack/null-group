@@ -28,6 +28,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -88,7 +89,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		mListView.setTextFilterEnabled(true);
 		
 		// attach list item click
-		mListView.setOnItemClickListener(mListClickListener);
+		mListView.setOnItemLongClickListener(mListLongClickListener);
 		
 		Button addItem = (Button)findViewById(R.id.addItem);
 		addItem.setOnClickListener(new OnClickListener() {
@@ -128,9 +129,9 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	
 	private View lastView = null;
 	private ChecklistType currentChecklist;
-    // Handle list clicks
-    OnItemClickListener mListClickListener = new OnItemClickListener() {
-    		public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+    // Handle list long press clicks
+    OnItemLongClickListener mListLongClickListener = new OnItemLongClickListener() {
+    		public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
     		{
     			Log.i("NoteMainActivity:OnItemClickListener", String.valueOf(position));
     			// last view, hide remove button again
@@ -158,6 +159,8 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				hider.setVisibility(View.VISIBLE);
     				lastView = v;
     			}
+        		
+        		return true;
     		}
     };
     
