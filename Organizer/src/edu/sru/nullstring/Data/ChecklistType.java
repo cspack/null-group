@@ -61,7 +61,6 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 		try {
 			this.update();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -74,6 +73,16 @@ public class ChecklistType extends BaseDaoEnabled<ChecklistType,Integer> {
 	public String getCategoryID()
 	{
 		return Integer.toString(this.catid);
+	}
+	
+	public void setCategoryID(int newCatID)
+	{
+		this.catid = newCatID;
+		try {
+			this.update();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public int getID()
