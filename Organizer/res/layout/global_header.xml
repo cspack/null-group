@@ -25,12 +25,13 @@
          />
         
         
-        <ToggleButton 
-        android:id="@+id/satelliteIcon"
-        android:drawableTop="@drawable/satellite_24" 
+        <ImageButton 
+        android:id="@+id/settingsButton"
+        style="@style/SpinnerAsButton"
+        android:src="@android:drawable/ic_menu_more" 
         android:layout_width="48dp"
         android:layout_height="fill_parent" 
-        android:textColor="#000000"
+        android:scaleType="fitXY"
         android:layout_marginTop="1dip"
         android:layout_marginBottom="2dip"
          />

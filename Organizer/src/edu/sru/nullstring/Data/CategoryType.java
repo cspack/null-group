@@ -107,7 +107,7 @@ public class CategoryType extends BaseDaoEnabled<CategoryType,Integer> {
 
 }
 
-	public Boolean getCurrent()
+	public Boolean isCurrent()
 	{
 		if(this.current == null)
 		{

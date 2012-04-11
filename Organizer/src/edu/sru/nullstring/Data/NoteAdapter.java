@@ -1,5 +1,6 @@
 package edu.sru.nullstring.Data;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -8,6 +9,7 @@ import edu.sru.nullstring.LocadexApplication;
 import edu.sru.nullstring.R;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,34 @@ import android.widget.TextView;
 public class NoteAdapter extends ArrayAdapter<NoteType> {
     private List<NoteType> items;
     private Context context;
+    private DatabaseHelper helper;
     
-    public NoteAdapter(Context context, int textViewResourceId, List<NoteType> items) {
-            super(context, textViewResourceId, items);
-            this.items = items;
+    
+    private void reloadNotes()
+    {
+
+    	try {
+    		
+    		CategoryType curCat = helper.getCurrentCategory();
+    		if(curCat.getFixedType() == CategoryType.FixedTypes.All)
+    		{
+    			items = helper.getNoteDao().queryForAll();
+    		}
+    		else
+    		{
+    			items = helper.getNoteDao().queryForEq(NoteType.CAT_ID_FIELD, curCat.getID());
+    		}
+    		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	    	return;
+		}
+    }
+    public NoteAdapter(Context context, int textViewResourceId, DatabaseHelper helper) {
+            super(context, textViewResourceId);
+            this.helper = helper;
+            reloadNotes();
             this.context = context;
     }
 
@@ -32,6 +58,19 @@ public class NoteAdapter extends ArrayAdapter<NoteType> {
 		
 	}
     
+
+    @Override
+	public int getCount() {
+
+    	// Add fixed items to item size.
+		return items.size();
+	}
+
+    @Override
+	public NoteType getItem(int position) {
+    	return items.get(position);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
     	
@@ -64,4 +103,13 @@ public class NoteAdapter extends ArrayAdapter<NoteType> {
     }
 
 
+
+    public void refreshData()
+    {
+
+    	reloadNotes();
+    	notifyDataSetChanged();
+    	
+    }
+    
 }

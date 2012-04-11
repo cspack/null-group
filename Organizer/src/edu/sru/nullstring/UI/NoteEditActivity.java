@@ -13,11 +13,14 @@ import android.graphics.*;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
+
 
 public class NoteEditActivity extends GraphicsActivity
        implements ColorPickerDialog.OnColorChangedListener {    
@@ -29,13 +32,18 @@ public class NoteEditActivity extends GraphicsActivity
    protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.note_edit);
-       //setContentView(new MyView(this));
+       
+       // Replace stub 'page' view with a real view...
+       // It's hacky but screw it, it does the job.
+       
+       View fillThisView = findViewById(R.id.page); 
+       ViewGroup parent = (ViewGroup) fillThisView.getParent();
+       int index = parent.indexOfChild(fillThisView);
+       parent.removeView(fillThisView);
+       parent.addView(new MyView(this), index);
        
 
 		
-	   	// Here is where you refresh the UI for things that may have changed:
-	   	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
-	   	if(h != null) h.setActivity(this);
        
        Bundle extras = getIntent().getExtras();        
        if(extras != null)
@@ -73,6 +81,15 @@ public class NoteEditActivity extends GraphicsActivity
 	
 		   Log.i("Locadex:NoteEditActivity","Bundle is null");
 	   }
+       
+       setContentView(R.layout.note_edit);
+       //setContentView(new MyView(this));
+       
+
+		
+	   	// Here is where you refresh the UI for things that may have changed:
+	   	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+	   	if(h != null) h.setActivity(this);
        
 
        mPaint = new Paint();
@@ -260,8 +277,9 @@ protected void onResume() {
 	// Here is where you refresh the UI for things that may have changed:
 	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 	h.setActivity(this);
-	if(h != null) h.RefreshData();
+	if(h != null) h.refreshData();
 }
+   
    
    
 }

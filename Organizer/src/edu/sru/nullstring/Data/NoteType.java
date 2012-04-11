@@ -77,7 +77,15 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 
 	//public Object NoteColor;
 	//public Object Content;
-	
+
+	public int getCategoryID()
+	{
+		return this.catid;
+	}
+	public void setCategory(int cat)
+	{
+		this.catid = cat;
+	}
 
 	// Attachments are many to one note, generate with a query in real time
 	public List<AttachmentType> getAttachments(DatabaseHelper h)

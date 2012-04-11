@@ -28,6 +28,7 @@ class GraphicsActivity extends Activity {
         super.onCreate(savedInstanceState);
     }
 
+   
     @Override
     public void setContentView(View view) {        
         super.setContentView(view);
