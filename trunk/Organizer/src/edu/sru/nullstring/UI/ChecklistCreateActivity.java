@@ -135,11 +135,14 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 
 			mSpinner = (Spinner)findViewById(R.id.categorySpinner);
 			
-			// ChecklistType data = null;
+			ChecklistType data = null;
 
 			// this is requiring adapter
-		    CategoryAdapter adapter = new CategoryAdapter(this,
-		    		android.R.layout.simple_spinner_item, h);
+		    //CategoryAdapter adapter = new CategoryAdapter(this,
+		    //		android.R.layout.simple_spinner_item, h);
+		    
+		 	CategoryAdapter adapter = new CategoryAdapter(this, android.R.layout.simple_spinner_item, 
+		 			h, CategoryAdapter.SubCategoryType.Marker, data);
 		    		// , CategoryAdapter.SubCategoryType.Checklist, data);
 
 			// apply to list adapter.

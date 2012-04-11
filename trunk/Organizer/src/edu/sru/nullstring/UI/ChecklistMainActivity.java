@@ -128,6 +128,12 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				hider.setOnClickListener(new OnClickListener() {
     						public void onClick(View v)
     						{
+    			    			if(lastView != null)
+    			    			{
+    			    				lastView.setBackgroundColor(Color.WHITE);
+    			    				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+    			    				hider.setVisibility(View.GONE);
+    			    			};
     							remove(currentChecklist);
     						}
     					});
