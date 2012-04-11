@@ -11,6 +11,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import edu.sru.nullstring.Data.*;
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.R.layout;
+import edu.sru.nullstring.UI.GlobalHeaderView.OnCategoryChangeListener;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Activity;
 import android.content.Intent;
@@ -37,9 +38,6 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         //Remove title bar
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.note_main);
-        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
-        head.setActivity(this);
-        
         mListView = (ListView)findViewById(R.id.noteView);
 		try {
 
@@ -56,21 +54,19 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	        List<NoteType> results;
 
 	        // create a new note, pass DAO into it.
-	        
-	        NoteType data = new NoteType(helper);
-			data.setTitle("Google loves Play Stores!");
-			
+	        // NoteType data = new NoteType(helper);
+			// data.setTitle("Google loves Play Stores!");
+
+	        // spack says NO --> category fixes are handled in NoteType's constructor. DROP THIS SHIT
+			/*
 			if(data.getCategory(helper).getFixedType()==CategoryType.FixedTypes.All){
 				// if category is 'all', set to unknown
 				// "This condition works, but I don't know how to set data's category" -Eric
 				// Debugging - remove this line //data.setTitle(data.getCategory(helper).getFixedType().toString());
-			}
+			}*/
 			
 			//data.create(); // add to database
 			
-	        
-			// pull all note from database, no category
-			results = helper.getNoteDao().queryForAll();
 			
 			//the following removes resulting notes from the database
 			//helper.getNoteDao().delete(results);
@@ -79,9 +75,9 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 			// apply to list adapter.
 			mListView.setAdapter(new NoteAdapter(this,
-	                android.R.layout.simple_list_item_1, results));
+	                android.R.layout.simple_list_item_1, helper));
 			
-		}catch (SQLException e) {
+		}catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -92,6 +88,14 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		mListView.setOnItemLongClickListener(mListLongClickListener); 
 		
 
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
+        head.setOnCategoryChange(new OnCategoryChangeListener(){
+			public void onCategoryChanged() {
+				((NoteAdapter)mListView.getAdapter()).refreshData();
+			}
+        });
+        
 		Button addItem = (Button)findViewById(R.id.addItem);
 		addItem.setOnClickListener(new OnClickListener() {
 			public void onClick(View v)
@@ -146,7 +150,7 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// Here is where you refresh the UI for things that may have changed:
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 		h.setActivity(this);
-		if(h != null) h.RefreshData();
+		if(h != null) h.refreshData();
 
 //        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
 //		try {
@@ -181,10 +185,7 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         			NoteAdapter nada = (NoteAdapter) parent.getAdapter();
         			currentNote = nada.getItem(position);
 
-        			
-        			Intent editPage = new Intent(v.getContext(), NoteEditActivity.class);
-        			editPage.putExtra("edu.sru.nullstring.noteId", currentNote.getID());
-        			v.getContext().startActivity(editPage);
+        			openEditorActivity(currentNote);
     			}
     		}
     };
@@ -202,6 +203,7 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				hider.setVisibility(View.GONE);
     			}
 
+
     			// current view, make remove button visible
     			if(v != null)
     			{
@@ -212,6 +214,12 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				hider.setOnClickListener(new OnClickListener() {
     						public void onClick(View v)
     						{
+    			    			if(lastView != null)
+    			    			{
+    			    				lastView.setBackgroundColor(Color.WHITE);
+    			    				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+    			    				hider.setVisibility(View.GONE);
+    			    			};
     							remove(currentNote);
     						}
     					});
@@ -225,12 +233,11 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     
     public boolean remove(NoteType note)
     {
-        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
     	try {
-			helper.getNoteDao().delete(note);
-			List<NoteType> results = helper.getNoteDao().queryForAll();
-			mListView.setAdapter(new NoteAdapter(this,
-	                android.R.layout.simple_list_item_1, results));
+    		// delete item
+			note.delete();
+			// Refresh list
+			((NoteAdapter)mListView.getAdapter()).refreshData();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -238,7 +245,15 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		}
     	return true;
     }
-    
+
+	
+	public void openEditorActivity(NoteType item)
+	{
+        Intent myIntent = new Intent(this, NoteEditActivity.class);
+        myIntent.putExtra("edu.sru.nullstring.noteId", item.getID());
+        startActivityForResult(myIntent, 0);
+	}
+	
     public boolean addItem(View v){
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
         NoteType data = new NoteType(helper);
@@ -246,18 +261,16 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		try {
 			data.create(); // add to database
-			List<NoteType> results = helper.getNoteDao().queryForAll();
-			mListView.setAdapter(new NoteAdapter(this,
-	                android.R.layout.simple_list_item_1, results));
+			// Refresh list
+			((NoteAdapter)mListView.getAdapter()).refreshData();
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 	    	return false;
 		}
 
-        Intent myIntent = new Intent(v.getContext(), NoteEditActivity.class);
-        myIntent.putExtra("edu.sru.nullstring.noteId", data.getID());
-        startActivityForResult(myIntent, 0);
+        openEditorActivity(data);
     	return true;
     }
 }

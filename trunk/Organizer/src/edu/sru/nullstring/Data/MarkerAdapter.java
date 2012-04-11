@@ -1,5 +1,6 @@
 package edu.sru.nullstring.Data;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -17,12 +18,70 @@ import android.widget.TextView;
 public class MarkerAdapter extends ArrayAdapter<MarkerType> {
     private List<MarkerType> items;
     private Context context;
+    private DatabaseHelper helper;
     
-    public MarkerAdapter(Context context, int textViewResourceId, List<MarkerType> items) {
-            super(context, textViewResourceId, items);
-            this.items = items;
+    public MarkerAdapter(Context context, int textViewResourceId, DatabaseHelper helper) {
+            super(context, textViewResourceId);
+            this.helper = helper;
+            reloadMarkers();
             this.context = context;
     }
+    
+
+    
+    private void reloadMarkers()
+    {
+
+    	try {
+    		
+    		CategoryType curCat = helper.getCurrentCategory();
+    		if(curCat.getFixedType() == CategoryType.FixedTypes.All)
+    		{
+    			items = helper.getMarkerDao().queryForAll();
+    		}
+    		else
+    		{
+    			items = helper.getMarkerDao().queryForEq(MarkerType.CAT_ID_FIELD, curCat.getID());
+    		}
+    		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	    	return;
+		}
+    }
+
+    @Override
+	public void notifyDataSetChanged() {
+		// TODO Auto-generated method stub
+		super.notifyDataSetChanged();
+		// db update goes here.. see category type.
+		
+	}
+    
+
+    @Override
+	public int getCount() {
+
+    	// Add fixed items to item size.
+		return items.size();
+	}
+
+    
+
+    public void refreshData()
+    {
+
+    	reloadMarkers();
+    	notifyDataSetChanged();
+    	
+    }
+    
+    @Override
+	public MarkerType getItem(int position) {
+    	return items.get(position);
+    }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

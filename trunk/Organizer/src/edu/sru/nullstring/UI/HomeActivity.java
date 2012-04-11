@@ -77,7 +77,7 @@ public class HomeActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		// Here is where you refresh the UI for things that may have changed:
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
-		if(h != null) h.RefreshData();
+		if(h != null) h.refreshData();
 		
 	}
 }

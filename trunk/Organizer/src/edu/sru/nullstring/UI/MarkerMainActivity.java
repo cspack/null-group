@@ -1,5 +1,9 @@
 package edu.sru.nullstring.UI;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.j256.ormlite.android.apptools.OrmLiteBaseTabActivity;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -7,12 +11,21 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.R.layout;
 import edu.sru.nullstring.Data.DatabaseHelper;
+import edu.sru.nullstring.Data.MarkerAdapter;
+import edu.sru.nullstring.Data.MarkerType;
+import edu.sru.nullstring.Data.NoteAdapter;
+import edu.sru.nullstring.Data.NoteType;
+import edu.sru.nullstring.UI.GlobalHeaderView.OnCategoryChangeListener;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TabHost;
 
 public class MarkerMainActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
@@ -28,8 +41,20 @@ public class MarkerMainActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
     	
         setContentView(R.layout.marker_main);
         
-        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
-        head.setActivity(this);
+
+
+        
+        
+        // Attach event to add button
+
+		ImageButton addItem = (ImageButton)findViewById(R.id.addItem);
+		addItem.setOnClickListener(new OnClickListener() {
+			public void onClick(View v)
+			{
+				addItem(v);
+			}
+		});
+        
         
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
@@ -54,5 +79,112 @@ public class MarkerMainActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
 
         tabHost.setCurrentTab(0);
     	
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
+        head.setOnCategoryChange(new OnCategoryChangeListener(){
+
+			public void onCategoryChanged() {
+				tryRefreshList();
+			}
+        	
+        });
+        
+    }
+    
+    
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+			
+		// Here is where you refresh the UI for things that may have changed:
+		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+		h.setActivity(this);
+		if(h != null) h.refreshData();
+	}
+	
+	public void openEditorActivity(MarkerType item)
+	{
+        Intent myIntent = new Intent(this, MarkerEditActivity.class);
+        myIntent.putExtra("edu.sru.nullstring.markerId", item.getID());
+        startActivityForResult(myIntent, 0);
+	}
+	
+	public void tryRefreshList()
+	{
+		try
+		{
+		// Refresh
+		String tabTag = getTabHost().getCurrentTabTag(); 
+		Activity activity = getLocalActivityManager().getActivity(tabTag); 
+
+		if(activity instanceof MarkerListActivity)
+		{
+		
+			MarkerAdapter m = (MarkerAdapter)((MarkerListActivity)activity).getListView().getAdapter();
+			if(m != null) m.refreshData();
+		}
+		}catch(Exception ex)
+		{
+			// This method will fail until everythings loaded, but it's ok we don't need it immediately.
+		}
+
+	}
+	
+
+    public boolean addItem(View v){
+        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+        MarkerType data = new MarkerType(helper);
+		data.setTitle("New marker");
+		
+		try {
+			data.create(); // add to database
+
+			tryRefreshList();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	    	return false;
+		}
+
+		openEditorActivity(data);
+    	return true;
+    }
+    
+    
+
+    public boolean remove(MarkerType marker)
+    {
+        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+    	try {
+    		marker.delete();
+    		
+    		
+    		/*
+			List<NoteType> results = helper.getNoteDao().queryForAll();
+			mListView.setAdapter(new MarkerAdapter(this,
+	                android.R.layout.simple_list_item_1, results));
+	                */
+    		
+    		// Refresh
+    		String tabTag = getTabHost().getCurrentTabTag(); 
+    		Activity activity = getLocalActivityManager().getActivity(tabTag); 
+
+    		if(activity instanceof MarkerListActivity)
+    		{
+    		
+    			MarkerAdapter m = (MarkerAdapter)((MarkerListActivity)activity).getListView().getAdapter();
+    			if(m != null) m.refreshData();
+    		}
+    		
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	    	return false;
+		}
+    	return true;
     }
 }

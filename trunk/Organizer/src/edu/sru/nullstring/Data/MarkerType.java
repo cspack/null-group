@@ -6,8 +6,12 @@ import java.util.List;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.misc.BaseDaoEnabled;
+import com.j256.ormlite.stmt.PreparedQuery;
+
+import edu.sru.nullstring.Data.CategoryType.FixedTypes;
 
 import android.location.Location;
+import android.util.Log;
 
 public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 {
@@ -16,9 +20,30 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 		// constructor for ormlite
 	}
 
-	public MarkerType(Dao<MarkerType, Integer> dao)
+	public enum MarkerState
 	{
-		this.setDao(dao);
+		Unset,
+		Defined
+	}
+	
+	public MarkerType(DatabaseHelper helper)
+	{
+		
+		CategoryType curCat = helper.getCurrentCategory();
+		try {
+			this.setDao(helper.getMarkerDao());
+			if(curCat.getFixedType() == FixedTypes.All)
+			{
+				// query unsorted category
+				PreparedQuery<CategoryType> unsortedCat = helper.getCategoryDao().queryBuilder().where().eq(CategoryType.FIXED_TYPE_FIELD, FixedTypes.Unsorted).prepare();
+				curCat = helper.getCategoryDao().queryForFirst(unsortedCat);
+			}
+		} catch (SQLException e) {
+			Log.e("Locadex:MarkerType", "Database helper failed when creating MarkerType.");
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.catid = curCat.getID();
 	}
 
 
@@ -27,6 +52,7 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 	public static final String TITLE_FIELD = "title";
 	public static final String LAT_FIELD = "latitude";
 	public static final String LON_FIELD = "longitude";
+	public static final String MARKERSTATE_FIELD = "marker_state";
 	public static final String LOCSTR_FIELD = "location_str";
 	
 	@DatabaseField(generatedId = true, columnName = MARKER_ID_FIELD)
@@ -50,18 +76,26 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 	
 	@DatabaseField(columnName = LAT_FIELD)
 	private double latitude;
+
+	@DatabaseField(columnName = MARKERSTATE_FIELD)
+	private MarkerState markerState = MarkerState.Unset;
 	
 	@DatabaseField(columnName = LON_FIELD)
 	private double longitude;
 
 	@DatabaseField(columnName = LOCSTR_FIELD)
 	private String locationStr;
-	
-	public String getCategoryID()
-	{
-		return Integer.toString(this.catid);
-	}
 
+
+	public int getCategoryID()
+	{
+		return this.catid;
+	}
+	public void setCategory(int cat)
+	{
+		this.catid = cat;
+	}
+	
 	public CategoryType getCategory(DatabaseHelper h)
 	{
 		
@@ -79,6 +113,18 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public int getID() {
+		return this.id;
+	}
+
+	public MarkerState getMarkerState() {
+		return this.markerState;
+	}
+	
+	public void setMarkerState(MarkerState ms) {
+		 this.markerState = ms;
 	}
 	
 	

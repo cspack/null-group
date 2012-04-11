@@ -14,17 +14,22 @@ import edu.sru.nullstring.Data.CategoryType;
 import edu.sru.nullstring.Data.ChecklistType;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -60,30 +65,87 @@ public class GlobalHeaderView extends LinearLayout {
 		DatabaseHelper h = OpenHelperManager.getHelper(context, DatabaseHelper.class);
 
 		try {
-			Dao<CategoryType, Integer> dao = h.getCategoryDao();
 
-			
 			mSpinner = (Spinner) xmlView.findViewById(R.id.categorySpinner);
 		    
 		    CategoryAdapter adapter = new CategoryAdapter(xmlView.getContext(),
-		    		android.R.layout.simple_spinner_item, dao);
+		    		android.R.layout.simple_spinner_item, h);
 
 			// apply to list adapter.
 		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		    mSpinner.setAdapter(adapter);
-			mSpinner.setSelection(adapter.GetSelectedIndex(), false);
+			mSpinner.setSelection(adapter.getSelectedIndex(), false);
 		    // select to current category id
-			 
-		} catch (SQLException e) {
-			Log.e("Locadex", "Failed loading data into GlobalHeaderView. ");
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			
+			/*
+			String[] spinnerArray = new String[]{
+					"GPS",
+					"Create Category",
+					"Settings",
+					"About"
+			};
+			  ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this.getContext(),   
+					  android.R.layout.simple_dropdown_item_1line,spinnerArray);
+
+				Spinner settingsSpinner = (Spinner) xmlView.findViewById(R.id.satelliteIcon);
+				settingsSpinner.setAdapter(spinnerArrayAdapter);
+			  */
+			
+			
+			ImageButton settingsButton = (ImageButton)findViewById(R.id.settingsButton);
+	
+			
+			final CharSequence[] items = {"Location Reminders: ON", "Manage Categories", "Settings", "About"};
+			settingsButton.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+				    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+				    final Context context = v.getContext();
+				    builder.setItems(items, new DialogInterface.OnClickListener() {
+				        public void onClick(DialogInterface dialog, int item) {
+
+				            if(item == 0) {
+				            	// GPS Enabled
+				            } else if(item == 1) {
+				            	// Manage Categories
+				            	Intent aboutPage = new Intent(context, CategoriesActivity.class);
+				            	context.startActivity(aboutPage);
+				            } else if(item == 2) {
+				            	// Settings
+				            	Intent aboutPage = new Intent(context, SettingsActivity.class);
+				            	context.startActivity(aboutPage);
+				            }
+				            else
+				            {
+				            	// About
+				            	Intent aboutPage = new Intent(context, AboutActivity.class);
+				            	context.startActivity(aboutPage);
+				            }
+				        }
+				    });
+
+				     AlertDialog dialog = builder.create();
+				     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				     WindowManager.LayoutParams WMLP = dialog.getWindow().getAttributes();
+
+				     int[] location = new int[2];
+				    v.getLocationOnScreen(location);
+				 WMLP.x = 0;   //x position
+				 WMLP.y = -location[1];   //y position
+
+				 dialog.getWindow().setAttributes(WMLP);
+
+				 dialog.show();
+					
+				}
+				
+			});
 		}
+			
 		catch(Exception e)
 		{
-			Log.e("Locadex", "Really failed hard querying categories... ");
-			Log.e("Locadex", e.getMessage());
-			// TODO Auto-generated catch block
+			Log.e("GlobalHeaderView", "Really failed hard querying categories... ");
+			Log.e("GlobalHeaderView", e.getMessage());
 			e.printStackTrace();
 			
 		}
@@ -128,7 +190,19 @@ public class GlobalHeaderView extends LinearLayout {
 		});
     */
 	}
+	
+	public interface OnCategoryChangeListener
+	{
+		public abstract void onCategoryChanged();
+	}
 			
+	private OnCategoryChangeListener catChangedListener = null;
+	public void setOnCategoryChange(OnCategoryChangeListener change)
+	{
+		catChangedListener = change;
+	}
+	
+	
 	
 	private Activity currentActivity;
 	public void setActivity(Activity act)
@@ -143,6 +217,9 @@ public class GlobalHeaderView extends LinearLayout {
     		
     			CategoryType o = (CategoryType)mSpinner.getAdapter().getItem(position);
     			o.setCurrent(true);
+    			
+    			if(catChangedListener != null)
+    				catChangedListener.onCategoryChanged();
 
     		}
     		
@@ -152,16 +229,16 @@ public class GlobalHeaderView extends LinearLayout {
 
     };
     
-	public void RefreshData()
+	public void refreshData()
 	{
 	    Spinner spinner = (Spinner) xmlView.findViewById(R.id.categorySpinner);
 	    CategoryAdapter adapter = (CategoryAdapter)spinner.getAdapter();
 
 		// reload from database
-	    adapter.RefreshData();
+	    adapter.refreshData();
 		
 	    // reselect selected
-	    spinner.setSelection(adapter.GetSelectedIndex(), false);
+	    spinner.setSelection(adapter.getSelectedIndex(), false);
 	}
 
 	@Override

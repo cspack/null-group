@@ -11,6 +11,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.*;
 import edu.sru.nullstring.R.layout;
+import edu.sru.nullstring.UI.GlobalHeaderView.OnCategoryChangeListener;
 import android.app.Activity;
 import android.app.Application;
 import android.app.ListActivity;
@@ -46,43 +47,21 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	setContentView(R.layout.checklist_main);
     	
 
-        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
-        head.setActivity(this);
+
 
     	
     	mListView = (ListView)findViewById(R.id.checklistView);
         
 		try {
 
-			
-			// possible option for future refactoring / recreation
-			// http://stackoverflow.com/questions/7159816/android-cursor-with-ormlite
-			// this will make the lists of lists WAY faster, but its super complicated android code
-			// you'd have to recreate all of the adaptors to use it
-			
 	        // connect to DAO helper, ugly but it works flawlessly.
 	        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 	        
-	        // Query for all into a list
-	        List<ChecklistType> results;
-			 	
-			// create a new checklist, pass DAO into it.
-
-	        
-	        //ChecklistType data = new ChecklistType(helper);
-			//data.setTitle("Hamer loves Androids!");
-			// if category is 'all', set to unknown
-			//data.create(); // add to database
-			
-	        
-			// pull all checklists from database, no category
-			results = helper.getChecklistDao().queryForAll();
-
 			// apply to list adapter.
 			mListView.setAdapter(new ChecklistAdapter(this,
-	                android.R.layout.simple_list_item_1, results));
+	                android.R.layout.simple_list_item_1, helper));
 				        
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -90,6 +69,15 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		// attach list item click
 		mListView.setOnItemLongClickListener(mListLongClickListener);
+		
+
+        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
+        head.setActivity(this);
+        head.setOnCategoryChange(new OnCategoryChangeListener(){
+			public void onCategoryChanged() {
+				((ChecklistAdapter)mListView.getAdapter()).refreshData();
+			}
+        });
 		
 		Button addItem = (Button)findViewById(R.id.addItem);
 		addItem.setOnClickListener(new OnClickListener() {
@@ -108,22 +96,10 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		// Here is where you refresh the UI for things that may have changed:
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
-		if(h != null) h.RefreshData();
+		if(h != null) h.refreshData();
 		
-		// refresh listview
-		
-        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
-		List<ChecklistType> results = null;
-		try {
-			results = helper.getChecklistDao().queryForAll();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        // reinit list [refresh] 
-		mListView.setAdapter(new ChecklistAdapter(this,
-                android.R.layout.simple_list_item_1, results));
-        Log.i("Locadex", "Attempting to refresh list onresume.");
+		// refresh listview		
+		((ChecklistAdapter)mListView.getAdapter()).refreshData();
 	}
 	
 	
@@ -133,11 +109,10 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     OnItemLongClickListener mListLongClickListener = new OnItemLongClickListener() {
     		public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
     		{
-    			Log.i("NoteMainActivity:OnItemClickListener", String.valueOf(position));
+    			Log.i("ChecklistMainActivity:OnItemClickListener", String.valueOf(position));
     			// last view, hide remove button again
     			if(lastView != null)
     			{
-    			
     				lastView.setBackgroundColor(Color.WHITE);
     				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
     				hider.setVisibility(View.GONE);
@@ -184,9 +159,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
     	try {
 			helper.getChecklistDao().delete(checklist);
-			List<ChecklistType> results = helper.getChecklistDao().queryForAll();
-			mListView.setAdapter(new ChecklistAdapter(this,
-	                android.R.layout.simple_list_item_1, results));
+			((ChecklistAdapter)mListView.getAdapter()).refreshData();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -195,7 +168,8 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	return true;
     }
     
-    public boolean addItem(View v){/**
+    public boolean addItem(View v){
+    	/**
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
         ChecklistType data = new ChecklistType(helper);
 		data.setTitle("test");

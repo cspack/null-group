@@ -21,11 +21,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	// name of the database file for your application -- change to something appropriate for your app
 	private static final String DATABASE_NAME = "locadex.db";
 	// any time you make changes to your database objects, you may have to increase the database version
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	// the DAO object we use to access the SimpleData table
-	//private Dao<SimpleData, Integer> simpleDao = null;
-	//private RuntimeExceptionDao<SimpleData, Integer> simpleRuntimeDao = null;
+	// private Dao<SimpleData, Integer> simpleDao = null;
+	// private RuntimeExceptionDao<SimpleData, Integer> simpleRuntimeDao = null;
 
 	private Dao<AttachmentType, Integer> attachmentDao = null;
 	private Dao<CategoryType, Integer> categoryDao = null;
@@ -268,6 +268,43 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	}
 
 
+	public boolean MoveAllCategoryItems(int OldCatID, int NewCatID) throws SQLException
+	{
+		Dao<ChecklistType, Integer> checkDao = this.getChecklistDao();
+		List<ChecklistType> cresults = checkDao.queryForEq(ChecklistType.CAT_ID_FIELD, OldCatID);
+		for(ChecklistType t : cresults)
+		{
+			t.setCategory(NewCatID);
+			t.update();
+		}
+		
+		Dao<MarkerType, Integer> markerDao = this.getMarkerDao();
+		List<MarkerType> mresults = markerDao.queryForEq(MarkerType.CAT_ID_FIELD, OldCatID);
+		for(MarkerType t : mresults)
+		{
+			t.setCategory(NewCatID);
+			t.update();
+		}
+
+		Dao<NoteType, Integer> noteDao = this.getNoteDao();
+		List<NoteType> nresults = noteDao.queryForEq(NoteType.CAT_ID_FIELD, OldCatID);
+		for(NoteType t : nresults)
+		{
+			t.setCategory(NewCatID);
+			t.update();
+		}
+
+		Dao<ReminderType, Integer> reminderDao = this.getReminderDao();
+		List<ReminderType> rresults = reminderDao.queryForEq(ReminderType.CAT_ID_FIELD, OldCatID);
+		for(ReminderType t : rresults)
+		{
+			t.setCategory(NewCatID);
+			t.update();
+		}
+		
+		return true;		
+	}
+	
 	public CategoryType getCurrentCategory() {
 		
 		try {

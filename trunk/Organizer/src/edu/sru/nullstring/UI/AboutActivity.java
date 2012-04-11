@@ -7,28 +7,25 @@ import edu.sru.nullstring.R;
 import edu.sru.nullstring.R.layout;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 
-public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
-
+public class AboutActivity extends OrmLiteBaseActivity<DatabaseHelper> {
+    /** Called when the activity is first created. **/
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-    	
+        super.onCreate(savedInstanceState);
+        
     	//Remove title bar
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	
-    	
-        setContentView(R.layout.reminder_main);
-        GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
-        head.setActivity(this);
+        setContentView(R.layout.about);
         
-
     }
-    
-
 
 	@Override
 	protected void onResume() {

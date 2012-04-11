@@ -6,8 +6,10 @@
 
     <uses-sdk android:minSdkVersion="7" />
 
-   <uses-permission android:name="android.permission.INTERNET" />
-        
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	
     <application
         android:name=".LocadexApplication"
         android:icon="@drawable/locadex_icon"
@@ -23,12 +25,20 @@
             </intent-filter>
         </activity>
         
+		<activity android:name=".UI.AboutActivity"/>
+  		<activity android:name=".UI.CategoriesActivity"/>
+  		<activity android:name=".UI.SettingsActivity"/>
+						
+		
 		<activity android:name=".UI.ChecklistMainActivity"/>
 		<activity android:name=".UI.ChecklistCreateActivity"/>
 		
      	<activity android:name=".UI.MarkerMainActivity"/>
      	<activity android:name=".UI.MarkerListActivity"/>
      	<activity android:name=".UI.MarkerMapActivity"/>
+     	<activity android:name=".UI.MarkerEditActivity"/>
+     	<activity android:name=".UI.MarkerEditInfoActivity"/>
+     	<activity android:name=".UI.MarkerEditMapActivity"/>
      	
 		<activity android:name=".UI.NoteMainActivity"/>
 		<activity android:name=".UI.NoteEditActivity"/>

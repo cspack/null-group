@@ -68,9 +68,14 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 	@DatabaseField(columnName = REMINDER_STATE_FIELD)
 	private ReminderState state = ReminderState.Loading;
 
-	public String getCategoryID()
+
+	public int getCategoryID()
 	{
-		return Integer.toString(this.catid);
+		return this.catid;
+	}
+	public void setCategory(int cat)
+	{
+		this.catid = cat;
 	}
 	
 	public CategoryType getCategory(DatabaseHelper h)
