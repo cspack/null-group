@@ -13,14 +13,19 @@ import edu.sru.nullstring.Data.CategoryAdapter;
 import edu.sru.nullstring.Data.CategoryType;
 import edu.sru.nullstring.Data.ChecklistType;
 import edu.sru.nullstring.Data.DatabaseHelper;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -46,6 +51,12 @@ public class ReminderHeader extends LinearLayout {
 
 }
 
+	private Activity currentActivity;
+	public void setActivity(Activity act)
+	{
+		currentActivity = act;
+	}
+	
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		// TODO Auto-generated method stub
@@ -53,6 +64,6 @@ public class ReminderHeader extends LinearLayout {
 
 	}
 
-	
+
 
 }
