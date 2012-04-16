@@ -44,6 +44,7 @@
 		<activity android:name=".UI.NoteEditActivity"/>
 		
    		<activity android:name=".UI.ReminderMainActivity"/>
+   		<activity android:name=".UI.ReminderNewActivity"/>
 			
 		<service android:name=".Service.LocadexService"
 			android:label="@string/service_name" />

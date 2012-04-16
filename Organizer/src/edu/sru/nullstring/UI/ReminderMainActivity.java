@@ -7,8 +7,12 @@ import edu.sru.nullstring.R;
 import edu.sru.nullstring.R.layout;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
@@ -16,7 +20,6 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    	
     	//Remove title bar
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	
@@ -25,7 +28,14 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
         head.setActivity(this);
         
-
+    	Button addItem = (Button)findViewById(R.id.addItem);
+    	addItem.setOnClickListener(new OnClickListener() {
+    		public void onClick(View v)
+    		{
+    	        Intent myIntent = new Intent(v.getContext(), ReminderNewActivity.class);
+    	        startActivityForResult(myIntent, 0); 
+    		}
+    	});
     }
     
 
@@ -39,4 +49,5 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		if(h != null) h.refreshData();
 		
 	}
+
 }
