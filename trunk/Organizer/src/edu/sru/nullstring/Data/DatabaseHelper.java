@@ -290,7 +290,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		List<NoteType> nresults = noteDao.queryForEq(NoteType.CAT_ID_FIELD, OldCatID);
 		for(NoteType t : nresults)
 		{
-			t.setCategory(NewCatID);
+			t.setCategoryID(NewCatID);
 			t.update();
 		}
 

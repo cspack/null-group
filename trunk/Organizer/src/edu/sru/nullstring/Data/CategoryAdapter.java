@@ -304,7 +304,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
 		 			}
 		 			else if(currentItem instanceof NoteType)
 		 			{
-	 					((NoteType)currentItem).setCategory(unsortedCategories.getID());
+	 					((NoteType)currentItem).setCategoryID(unsortedCategories.getID());
 	 					((NoteType)currentItem).update();
 		 			}
 		 			else if(currentItem instanceof ReminderType)

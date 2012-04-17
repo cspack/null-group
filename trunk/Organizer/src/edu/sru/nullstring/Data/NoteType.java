@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.Bitmap;
 import android.util.Log;
+import android.graphics.*;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
@@ -50,6 +52,7 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	public static final String CAT_ID_FIELD = "cat_id";
 	public static final String TITLE_FIELD = "title";
 
+    public Bitmap noteBitmap;
 	
 	
 	@DatabaseField(generatedId = true, columnName = NOTE_ID_FIELD)
@@ -82,7 +85,7 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	{
 		return this.catid;
 	}
-	public void setCategory(int cat)
+	public void setCategoryID(int cat)
 	{
 		this.catid = cat;
 	}
