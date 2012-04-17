@@ -27,71 +27,71 @@ public class NoteEditActivity extends GraphicsActivity
 
 	private DatabaseHelper helper = null;
 	private NoteType editItem = null;
+	int noteID;
 	
    @Override
    protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
-       setContentView(R.layout.note_edit);
+       //setContentView(R.layout.note_edit);
        
        // Replace stub 'page' view with a real view...
        // It's hacky but screw it, it does the job.
        
-       View fillThisView = findViewById(R.id.page); 
-       ViewGroup parent = (ViewGroup) fillThisView.getParent();
-       int index = parent.indexOfChild(fillThisView);
-       parent.removeView(fillThisView);
-       parent.addView(new MyView(this), index);
+//       View fillThisView = findViewById(R.id.page); 
+//       ViewGroup parent = (ViewGroup) fillThisView.getParent();
+//       int index = parent.indexOfChild(fillThisView);
+//       parent.removeView(fillThisView);
+//       parent.addView(new MyView(this), index);
        
-
-		
        
        Bundle extras = getIntent().getExtras();        
        if(extras != null)
        {
 	       // Setup database helper and object early on
-	       int wantedId = extras.getInt("edu.sru.nullstring.noteId");
-	       if(wantedId != 0)
-	       {
-	    	   
-	    	   Log.i("Locadex:NoteEditActivity","Wanted id is : " + wantedId);
-	    	   
-	       helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
-	       try {
-			editItem = helper.getNoteDao().queryForId(wantedId);
-			} catch (SQLException e) {
-				Log.e("Locadex", "Failed to open item for editing");
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+	       noteID = extras.getInt("edu.sru.nullstring.noteId");
+    	   Log.i("Locadex:NoteEditActivity","Wanted id is : " + noteID);
 	       
-	       // Edit UI of NoteHeader
-	       TextView noteName = (TextView) this.findViewById(R.id.text1);
-	       noteName.setText(editItem.getTitle());
-	       noteName.setTextSize(18.0f);
-	       
-	       }
-	       else
-	       {
-
-	    	   Log.i("Locadex:NoteEditActivity","Wanted id unknown.");
-	       }
        }
-	   else
-	   {
-	
-		   Log.i("Locadex:NoteEditActivity","Bundle is null");
-	   }
-       
-       setContentView(R.layout.note_edit);
-       //setContentView(new MyView(this));
+//	       if(wantedId != 0)
+//	       {
+//	    	   
+//	    	   Log.i("Locadex:NoteEditActivity","Wanted id is : " + wantedId);
+//	    	   
+//	       helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+//	       try {
+//			editItem = helper.getNoteDao().queryForId(wantedId);
+//			} catch (SQLException e) {
+//				Log.e("Locadex", "Failed to open item for editing");
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//	       
+//	       // Edit UI of NoteHeader
+//	       TextView noteName = (TextView) this.findViewById(R.id.text1);
+//	       noteName.setText(editItem.getTitle());
+//	       noteName.setTextSize(18.0f);
+//	       
+//	       }
+//	       else
+//	       {
+//
+//	    	   Log.i("Locadex:NoteEditActivity","Wanted id unknown.");
+//	       }
+//       }
+//	   else
+//	   {
+//	
+//		   Log.i("Locadex:NoteEditActivity","Bundle is null");
+//	   }
        
 
 		
-	   	// Here is where you refresh the UI for things that may have changed:
-	   	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
-	   	if(h != null) h.setActivity(this);
-       
+//	   	// Here is where you refresh the UI for things that may have changed:
+//	   	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+//	   	if(h != null) h.setActivity(this);
 
+
+       setContentView(new MyView(this));
        mPaint = new Paint();
        mPaint.setAntiAlias(true);
        mPaint.setDither(true);
@@ -101,8 +101,7 @@ public class NoteEditActivity extends GraphicsActivity
        mPaint.setStrokeCap(Paint.Cap.ROUND);
        mPaint.setStrokeWidth(12);
        
-       mEmboss = new EmbossMaskFilter(new float[] { 1, 1, 1 },
-                                      0.4f, 6, 3.5f);
+       mEmboss = new EmbossMaskFilter(new float[] { 1, 1, 1 }, 0.4f, 6, 3.5f);
 
        mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
    }
@@ -174,6 +173,17 @@ public class NoteEditActivity extends GraphicsActivity
            mCanvas.drawPath(mPath, mPaint);
            // kill this so we don't double draw
            mPath.reset();
+           try {
+        	   NoteType openNote = helper.getNoteDao().queryForId(noteID);
+        	   openNote.noteBitmap = mBitmap;
+		   } catch (SQLException e) {
+		   	   // TODO Auto-generated catch block
+			   e.printStackTrace();
+		   } catch (NullPointerException e) {
+			   Log.e("NoteEditActivity", "save failed with id " + Integer.toString(noteID));
+			   e.printStackTrace();
+		   }
+           
        }
        
        @Override
@@ -268,17 +278,17 @@ public class NoteEditActivity extends GraphicsActivity
        return super.onOptionsItemSelected(item);
    }
 
-@Override
-protected void onResume() {
-	// TODO Auto-generated method stub
-	super.onResume();
-	
-		
-	// Here is where you refresh the UI for things that may have changed:
-	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
-	h.setActivity(this);
-	if(h != null) h.refreshData();
-}
+//@Override
+//protected void onResume() {
+//	// TODO Auto-generated method stub
+//	super.onResume();
+//	
+//		
+//	// Here is where you refresh the UI for things that may have changed:
+//	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
+//	h.setActivity(this);
+//	if(h != null) h.refreshData();
+//}
    
    
    
