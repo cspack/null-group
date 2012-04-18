@@ -3,6 +3,7 @@ package edu.sru.nullstring.Data;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.google.android.maps.GeoPoint;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.misc.BaseDaoEnabled;
@@ -87,6 +88,26 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 	private String locationStr;
 
 
+	public GeoPoint getLocation()
+	{
+		return new GeoPoint((int)(latitude * 1E6), (int)(longitude * 1E6));
+	}
+	
+
+	public void setLocation(double lat, double lon)
+	{
+		latitude = lat;
+		longitude = lon;
+		return;
+	}
+
+	public void setLocation(GeoPoint gp)
+	{
+		//latitude = gp ( );
+		//longitude = lon;
+		return;
+	}
+
 	public int getCategoryID()
 	{
 		return this.catid;
@@ -125,6 +146,14 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 	
 	public void setMarkerState(MarkerState ms) {
 		 this.markerState = ms;
+	}
+
+	public String getAddress() {
+		return this.locationStr;
+	}
+
+	public void setAddress(String addr) {
+		this.locationStr = addr;
 	}
 	
 	
