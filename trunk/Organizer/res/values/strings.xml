@@ -21,8 +21,7 @@
     <string name="marker_geocodeLocation">Search for Location from Address</string>
     
     <string name="marker_mapSelect">Move your point by long pressing on the map</string>
-    <string name="marker_noPoint">No Location is currently defined for this marker.
-        You can select a point by long pressing the map or from the Edit Point menu.</string>
+    <string name="marker_noPoint">No location is currently set.</string>
        
     <string name="marker_fromGPS">Current Location (GPS)</string>
     <string name="marker_fromGoogleAPI">Search Google Maps</string>
