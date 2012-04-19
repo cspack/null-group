@@ -135,6 +135,9 @@ public class NoteEditActivity extends GraphicsActivity
            mBitmap = editItem.getBitmap();
            Log.i("Locadex:NoteEditActivity","line 136");
            if(mBitmap == null) mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
+           // "sym-link" the bitmap objects ASAP
+           editItem.setBitmap(mBitmap);
+           
            Log.i("Locadex:NoteEditActivity","line 138");
            mCanvas = new Canvas(mBitmap);
            mPath = new Path();

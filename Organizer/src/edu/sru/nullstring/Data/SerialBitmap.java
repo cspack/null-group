@@ -11,6 +11,17 @@ public class SerialBitmap implements Serializable {
 
     public Bitmap bitmap = null;
 
+    // for ORMLite!
+    public SerialBitmap()
+    {
+    	
+    	// commented because it's ok to leave bitmap null, but not the FUCKING OBJECT
+    	
+    	// set to default screen size, can't read in this context tho.
+    	// remember: this is a raw Serializable class, not an android class
+    	// this.bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
+    }
+    
     // TODO: Finish this constructor
     public SerialBitmap(Bitmap b) {
         bitmap = b;

@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.Display;
 import android.graphics.*;
 
 import com.j256.ormlite.dao.Dao;
@@ -57,18 +58,27 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	public static final String NOTE_BITMAP_FIELD = "bitmap";
 	public static final String NOTE_CONTENT_FIELD = "content";
 
+	// always create a default object... ORMLite will replace with valid data later
 	@DatabaseField(columnName = NOTE_BITMAP_FIELD,  dataType=DataType.SERIALIZABLE)
-    private Serializable noteBitmap;
+    private Serializable noteBitmap = new SerialBitmap();
+
 	@DatabaseField(columnName = NOTE_CONTENT_FIELD)
-    public String noteContent;
+    public String noteContent = "";
 	
 	public Bitmap getBitmap()
 	{
+		// default noteBitmap... possibly pass something in?
+		// REMEMBER: don't use Display or android specific classes [directly], or else the database won't generate the type!!.
+		if(noteBitmap == null)
+		{
+			// create stub bitmap
+			noteBitmap = new SerialBitmap();
+		}
 		return ((SerialBitmap)noteBitmap).bitmap;
 	}
 	public void setBitmap(Bitmap bitmap)
 	{
-		noteBitmap = new SerialBitmap(bitmap);
+		((SerialBitmap)noteBitmap).bitmap = bitmap;
 	}
 	
 	@DatabaseField(generatedId = true, columnName = NOTE_ID_FIELD)
