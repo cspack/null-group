@@ -1,5 +1,6 @@
 package edu.sru.nullstring.Data;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.graphics.*;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.misc.BaseDaoEnabled;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -52,8 +54,22 @@ public class NoteType extends BaseDaoEnabled<NoteType, Integer> {
 	public static final String CAT_ID_FIELD = "cat_id";
 	public static final String TITLE_FIELD = "title";
 
-    public Bitmap noteBitmap;
+	public static final String NOTE_BITMAP_FIELD = "bitmap";
+	public static final String NOTE_CONTENT_FIELD = "content";
+
+	@DatabaseField(columnName = NOTE_BITMAP_FIELD,  dataType=DataType.SERIALIZABLE)
+    private Serializable noteBitmap;
+	@DatabaseField(columnName = NOTE_CONTENT_FIELD)
+    public String noteContent;
 	
+	public Bitmap getBitmap()
+	{
+		return ((SerialBitmap)noteBitmap).bitmap;
+	}
+	public void setBitmap(Bitmap bitmap)
+	{
+		noteBitmap = new SerialBitmap(bitmap);
+	}
 	
 	@DatabaseField(generatedId = true, columnName = NOTE_ID_FIELD)
 	private int id;
