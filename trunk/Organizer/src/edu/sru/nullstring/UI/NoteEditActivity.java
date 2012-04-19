@@ -7,6 +7,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import edu.sru.nullstring.Data.NoteType;
+import edu.sru.nullstring.Data.SerialBitmap;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
@@ -33,6 +34,8 @@ public class NoteEditActivity extends GraphicsActivity
    protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        //setContentView(R.layout.note_edit);
+
+       helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
        
        // Replace stub 'page' view with a real view...
        // It's hacky but screw it, it does the job.
@@ -49,43 +52,35 @@ public class NoteEditActivity extends GraphicsActivity
        {
 	       // Setup database helper and object early on
 	       noteID = extras.getInt("edu.sru.nullstring.noteId");
-    	   Log.i("Locadex:NoteEditActivity","Wanted id is : " + noteID);
-	       
+	       if(noteID != 0)
+		   {
+	
+	           try {
+				   Log.i("NoteEditActivity", "open attempt with id " + Integer.toString(noteID));
+	        	   editItem = helper.getNoteDao().queryForId(noteID);
+	        	   Log.i("Locadex", "Success opening item for editing");
+			   } catch (SQLException e) {
+			   	   // TODO Auto-generated catch block
+				   Log.e("Locadex", "Failed to open item for editing");
+				   e.printStackTrace();
+			   }
+	//	       // Edit UI of NoteHeader
+	//	       TextView noteName = (TextView) this.findViewById(R.id.text1);
+	//	       noteName.setText(editItem.getTitle());
+	//	       noteName.setTextSize(18.0f);
+	//	       
+	       }
+	       else
+	       {
+	    	   Log.i("Locadex:NoteEditActivity","Wanted id unknown.");
+	       }
        }
-//	       if(wantedId != 0)
-//	       {
-//	    	   
-//	    	   Log.i("Locadex:NoteEditActivity","Wanted id is : " + wantedId);
-//	    	   
-//	       helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
-//	       try {
-//			editItem = helper.getNoteDao().queryForId(wantedId);
-//			} catch (SQLException e) {
-//				Log.e("Locadex", "Failed to open item for editing");
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//	       
-//	       // Edit UI of NoteHeader
-//	       TextView noteName = (TextView) this.findViewById(R.id.text1);
-//	       noteName.setText(editItem.getTitle());
-//	       noteName.setTextSize(18.0f);
-//	       
-//	       }
-//	       else
-//	       {
-//
-//	    	   Log.i("Locadex:NoteEditActivity","Wanted id unknown.");
-//	       }
-//       }
-//	   else
-//	   {
-//	
-//		   Log.i("Locadex:NoteEditActivity","Bundle is null");
-//	   }
+	   else
+	   {	
+		   Log.i("Locadex:NoteEditActivity","Bundle is null");
+	   }
        
-
-		
+	   Log.i("Locadex:NoteEditActivity","line 83");
 //	   	// Here is where you refresh the UI for things that may have changed:
 //	   	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 //	   	if(h != null) h.setActivity(this);
@@ -104,6 +99,7 @@ public class NoteEditActivity extends GraphicsActivity
        mEmboss = new EmbossMaskFilter(new float[] { 1, 1, 1 }, 0.4f, 6, 3.5f);
 
        mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
+       Log.i("Locadex:NoteEditActivity","line 102");
    }
    
    private Paint       mPaint;
@@ -128,8 +124,18 @@ public class NoteEditActivity extends GraphicsActivity
            super(c);
            
            Display d = getWindowManager().getDefaultDisplay(); 
-           
-           mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
+           try {
+        	   editItem = helper.getNoteDao().queryForId(noteID);
+			  // Log.i("NoteEditActivity", "bitmap " + editItem.getBitmap().toString());
+		    } catch (SQLException e) {
+			// TODO Auto-generated catch block
+		     	e.printStackTrace();
+	     	}
+           Log.i("Locadex:NoteEditActivity","line 134");
+           //mBitmap = editItem.getBitmap();
+           Log.i("Locadex:NoteEditActivity","line 136");
+           if(mBitmap == null) mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
+           Log.i("Locadex:NoteEditActivity","line 138");
            mCanvas = new Canvas(mBitmap);
            mPath = new Path();
            mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -144,7 +150,7 @@ public class NoteEditActivity extends GraphicsActivity
        protected void onDraw(Canvas canvas) {
            canvas.drawColor(0xFFAAAAAA);
            
-           canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
+           canvas.drawBitmap(editItem.getBitmap(), 0, 0, mBitmapPaint);
            
            canvas.drawPath(mPath, mPaint);
        }
@@ -173,16 +179,14 @@ public class NoteEditActivity extends GraphicsActivity
            mCanvas.drawPath(mPath, mPaint);
            // kill this so we don't double draw
            mPath.reset();
-           try {
-        	   NoteType openNote = helper.getNoteDao().queryForId(noteID);
-        	   openNote.noteBitmap = mBitmap;
-		   } catch (SQLException e) {
-		   	   // TODO Auto-generated catch block
-			   e.printStackTrace();
-		   } catch (NullPointerException e) {
-			   Log.e("NoteEditActivity", "save failed with id " + Integer.toString(noteID));
-			   e.printStackTrace();
-		   }
+           editItem.setBitmap(mBitmap);
+           Log.i("Locadex:NoteEditActivity","line 185");
+           Log.i("Locadex:NoteEditActivity","Bitmap: " + editItem.getBitmap().toString());
+           Log.i("Locadex:NoteEditActivity","line 134");           
+           //mBitmap = editItem.getBitmap();
+           Log.i("Locadex:NoteEditActivity","line 138");
+           
+
            
        }
        
