@@ -20,9 +20,9 @@ public class LatLonPoint extends GeoPoint {
     {
     	return latitude;
     }
+    
     public double getLongitude()
     {
     	return longitude;
-    }    
-    
+    }
 }

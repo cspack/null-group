@@ -88,9 +88,9 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 	private String locationStr;
 
 
-	public GeoPoint getLocation()
+	public LatLonPoint getLocation()
 	{
-		return new GeoPoint((int)(latitude * 1E6), (int)(longitude * 1E6));
+		return new LatLonPoint(latitude, longitude);
 	}
 	
 
@@ -103,8 +103,10 @@ public class MarkerType extends BaseDaoEnabled<MarkerType, Integer>
 
 	public void setLocation(GeoPoint gp)
 	{
-		//latitude = gp ( );
-		//longitude = lon;
+		LatLonPoint g = new LatLonPoint(gp);
+		latitude = g.getLatitude();
+		longitude = g.getLongitude();
+		this.markerState = MarkerState.Defined; // set it valid!
 		return;
 	}
 

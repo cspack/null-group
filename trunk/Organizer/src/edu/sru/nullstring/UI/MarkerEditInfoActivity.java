@@ -1,8 +1,11 @@
 package edu.sru.nullstring.UI;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
 
+import com.google.android.maps.GeoPoint;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
@@ -12,12 +15,16 @@ import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.CategoryAdapter;
 import edu.sru.nullstring.Data.CategoryType;
 import edu.sru.nullstring.Data.DatabaseHelper;
+import edu.sru.nullstring.Data.LatLonPoint;
 import edu.sru.nullstring.Data.MarkerAdapter;
 import edu.sru.nullstring.Data.MarkerType;
+import edu.sru.nullstring.Data.MarkerType.MarkerState;
 import edu.sru.nullstring.Data.NoteAdapter;
 import edu.sru.nullstring.Data.NoteType;
 import android.app.Activity;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +37,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Toast;
 
 public class MarkerEditInfoActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
@@ -96,8 +104,82 @@ public class MarkerEditInfoActivity extends OrmLiteBaseActivity<DatabaseHelper> 
  	   
  	   
  	   // Associate address field with item
- 	   EditText addr = (EditText)findViewById(R.id.editAddress);
+ 	   final EditText addr = (EditText)findViewById(R.id.editAddress);
  	   addr.setText(editItem.getAddress());
+ 	 
+ 	   Button fromLoc = (Button)findViewById(R.id.geocodeAddress);
+ 	   fromLoc.setOnClickListener(new OnClickListener(){
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+
+		 	  Geocoder geocoder = new Geocoder(v.getContext(), Locale.getDefault());
+		 	  if(editItem.getMarkerState() == MarkerState.Defined)
+		 	  {
+			 	  LatLonPoint loc = editItem.getLocation();
+			 	 List<Address> addresses;
+				try {
+					addresses = geocoder.getFromLocation(loc.getLatitude(), loc.getLongitude(), 1);
+				 	 if(addresses.size() > 0)
+				 	 {
+				 		 Address address = addresses.get(0);
+				 		 String addrStr = "";
+		                    if (addresses.size() > 0) 
+		                    {
+		                        for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
+		                             i++)
+		                        	addrStr += addresses.get(0).getAddressLine(i) + "\n";
+		                    }
+				 		 addr.setText(addrStr);
+				 		 editItem.setAddress(addrStr);
+				 		 editItem.update();
+				 	 }
+				 	 else
+				 	 {
+				 		 // no results
+				 		 Toast.makeText(v.getContext().getApplicationContext(), "No Address Found.", Toast.LENGTH_SHORT);
+				 	 }
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();				 		 
+			 		Toast.makeText(v.getContext().getApplicationContext(), "Address Lookup Failed.", Toast.LENGTH_SHORT);
+
+				}
+		 	  }
+		 	  else
+		 	  {
+			 		 Toast.makeText(v.getContext().getApplicationContext(), "No Location Current is Defined.", Toast.LENGTH_SHORT);
+		 	  }
+		}});
+ 	   
+
+ 	   Button fromAddr = (Button)findViewById(R.id.geocodeLocation);
+ 	   fromAddr.setOnClickListener(new OnClickListener(){
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+
+		 	  Geocoder geocoder = new Geocoder(v.getContext(), Locale.getDefault());
+			 	 List<Address> addresses;
+				try {
+					addresses = geocoder.getFromLocationName(addr.getText().toString(), 1);
+				 	 if(addresses.size() > 0)
+				 	 {
+				 		 Address address = addresses.get(0);
+				 		 editItem.setLocation(address.getLatitude(), address.getLongitude());
+				 		 Toast.makeText(v.getContext().getApplicationContext(), "Success - Location set from Address!", Toast.LENGTH_SHORT);
+				 		 editItem.update();
+				 	 }
+				 	 else
+				 	 {
+				 		 // no results
+				 		 Toast.makeText(v.getContext().getApplicationContext(), "No Address Found.", Toast.LENGTH_SHORT);
+				 	 }
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();				 		 
+			 		Toast.makeText(v.getContext().getApplicationContext(), "Address Lookup Failed.", Toast.LENGTH_SHORT);
+
+				}
+		}});
 
     	
     }
