@@ -132,7 +132,7 @@ public class NoteEditActivity extends GraphicsActivity
 		     	e.printStackTrace();
 	     	}
            Log.i("Locadex:NoteEditActivity","line 134");
-           //mBitmap = editItem.getBitmap();
+           mBitmap = editItem.getBitmap();
            Log.i("Locadex:NoteEditActivity","line 136");
            if(mBitmap == null) mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
            Log.i("Locadex:NoteEditActivity","line 138");
@@ -150,7 +150,7 @@ public class NoteEditActivity extends GraphicsActivity
        protected void onDraw(Canvas canvas) {
            canvas.drawColor(0xFFAAAAAA);
            
-           canvas.drawBitmap(editItem.getBitmap(), 0, 0, mBitmapPaint);
+           canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
            
            canvas.drawPath(mPath, mPaint);
        }
