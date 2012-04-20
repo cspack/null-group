@@ -44,4 +44,63 @@ public class ChecklistItemType extends BaseDaoEnabled<ChecklistItemType,Integer>
 	@DatabaseField(columnName = IS_CHECKED_FIELD)
 	private Boolean checked;
 	
+	public boolean getChecked()
+	{
+		return (this.checked);
+	}
+	
+	public void setChecked(boolean newChecked)
+	{
+		this.checked = newChecked;
+		try {
+			this.update();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int getListID()
+	{
+		return (this.listid);
+	}
+	
+	public void setListID(int newListID)
+	{
+		this.listid = newListID;
+		try {
+			this.update();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int getID()
+	{
+		return (this.id);
+	}
+	
+	public void setID(int newID)
+	{
+		this.id = newID;
+		try {
+			this.update();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getText()
+	{
+		return this.text;
+	}
+	
+	public void setText(String newText)
+	{
+		this.text = newText;
+		try {
+			this.update();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
