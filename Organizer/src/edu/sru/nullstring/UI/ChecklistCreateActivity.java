@@ -91,7 +91,7 @@ public class ChecklistCreateActivity extends OrmLiteBaseActivity<DatabaseHelper>
 		
 		Spinner catSpin = (Spinner)findViewById(R.id.categorySpinner);
 		// + 1 makes up for the offset of the categories starting at 1 and not 0
-		int catID = catSpin.getSelectedItemPosition() + 1;
+		int catID = catSpin.getSelectedItemPosition();
 		
 		data.setCategoryID(catID);
 		data.setTitle(title);

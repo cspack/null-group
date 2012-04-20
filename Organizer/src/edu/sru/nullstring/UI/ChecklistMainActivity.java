@@ -46,10 +46,6 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
     	setContentView(R.layout.checklist_main);
     	
-
-
-
-    	
     	mListView = (ListView)findViewById(R.id.checklistView);
         
 		try {
@@ -67,6 +63,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		}
 		mListView.setTextFilterEnabled(true);
 		
+		mListView.setOnItemClickListener(mListClickListener);
 		// attach list item click
 		mListView.setOnItemLongClickListener(mListLongClickListener);
 		
@@ -102,7 +99,33 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		((ChecklistAdapter)mListView.getAdapter()).refreshData();
 	}
 	
+	OnItemClickListener mListClickListener = new OnItemClickListener() {
+		public void onItemClick(AdapterView<?> parent, View v, int position, long id)
+			{
+				
+				Log.i("CMainActivity:OnItemClickListener", String.valueOf(position));
+				// last view, hide remove button again
+				if(lastView != null)
+				{
+				
+					lastView.setBackgroundColor(Color.WHITE);
+					Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+					hider.setVisibility(View.GONE);
+				}
 	
+				// current view, open it
+				if(v != null)
+				{
+        			ChecklistAdapter clAdapt = (ChecklistAdapter) parent.getAdapter();
+        			currentChecklist = clAdapt.getItem(position);
+        			
+					ChecklistItemActivity item = new ChecklistItemActivity();
+			        Intent intent = new Intent(v.getContext(), item.getClass());
+			        intent.putExtra("CHECKLIST_ID", currentChecklist.getID());
+			        startActivityForResult(intent, 0);
+				}
+			}
+	};
 	private View lastView = null;
 	private ChecklistType currentChecklist;
     // Handle list long press clicks
@@ -174,7 +197,9 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	return true;
     }
     
-    public boolean addItem(View v){
+    public boolean addItem(View v)
+    {
+    	DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
     	/**
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
         ChecklistType data = new ChecklistType(helper);
@@ -190,11 +215,10 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	    	return false;
 		}**/
 
-        Intent myIntent = new Intent(v.getContext(), ChecklistCreateActivity.class);
-        startActivityForResult(myIntent, 0);   
+        Intent intent = new Intent(v.getContext(), ChecklistCreateActivity.class);
+        startActivityForResult(intent, 0);   
 
     	return true;
     }
-    
     
 }
