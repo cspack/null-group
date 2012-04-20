@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+<edu.sru.nullstring.UI.GlobalHeaderView 
+        android:id="@+id/topBanner"
+        android:layout_width = "fill_parent"
+        android:layout_height = "wrap_content"
+         />
+
+<edu.sru.nullstring.UI.ChecklistHeader
+        android:id="@+id/listHeader"
+        android:layout_width = "fill_parent"
+        android:layout_height = "wrap_content"
+    />
+
+<!--  create a 'header' add item bar to put here -->
+<ListView 
+    android:id="@+id/checklistView"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    />
+
+</LinearLayout>
