@@ -27,6 +27,11 @@ public class MarkerAdapter extends ArrayAdapter<MarkerType> {
             this.context = context;
     }
     
+    public MarkerType getMarker(int position)
+    {
+    	return items.get(position);
+    }
+    
 
     
     private void reloadMarkers()

@@ -1,10 +1,8 @@
 package edu.sru.nullstring.UI;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.MyLocationOverlay;
@@ -15,6 +13,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.CategoryAdapter;
 import edu.sru.nullstring.Data.DatabaseHelper;
+import edu.sru.nullstring.Data.MapItemization;
 import edu.sru.nullstring.Data.MarkerType;
 import edu.sru.nullstring.Data.MarkerType.MarkerState;
 import android.app.Activity;
@@ -48,34 +47,6 @@ public class MarkerEditMapActivity extends MapActivity {
 	/* End required maplist code */
 	
 	
-
-public class Itemization extends ItemizedOverlay<OverlayItem> {
-
-    private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-
-    public Itemization(Drawable defaultMarker) {
-
-        super(boundCenterBottom(defaultMarker));
-        // super(defaultMarker);
-
-    }
-
-    @Override
-    protected OverlayItem createItem(int i) {
-        return mOverlays.get(i);
-    }
-
-    public void addOverlay(OverlayItem overlay) {
-        mOverlays.add(overlay);
-        populate();
-    }
-
-    @Override
-    public int size() {
-        return mOverlays.size();
-    }
-
-}
 
 public class MapGestureDetectorOverlay extends Overlay implements OnGestureListener {
 		 private GestureDetector gestureDetector;
@@ -222,7 +193,7 @@ public class MapGestureDetectorOverlay extends Overlay implements OnGestureListe
     }
 
     
-    Itemization markerCollection = null;
+    MapItemization markerCollection = null;
     public void redrawLocationOverlay()
     {
     	if(editItem.getMarkerState() == MarkerType.MarkerState.Defined)
@@ -236,7 +207,7 @@ public class MapGestureDetectorOverlay extends Overlay implements OnGestureListe
     		GeoPoint loc = editItem.getLocation();
     		OverlayItem markerPoint = new OverlayItem(loc, "Marker Position", "This is the position");
             Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);
-            markerCollection = new Itemization(drawable);
+            markerCollection = new MapItemization(this, drawable);
             markerCollection.addOverlay(markerPoint);
     		map.getOverlays().add(markerCollection);
     	}

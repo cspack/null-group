@@ -126,6 +126,12 @@ public class MarkerMainActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
 			MarkerAdapter m = (MarkerAdapter)((MarkerListActivity)activity).getListView().getAdapter();
 			if(m != null) m.refreshData();
 		}
+		
+
+		if(activity instanceof MarkerMapActivity)
+		{
+			((MarkerMapActivity)activity).refreshMarkers();
+		}
 		}catch(Exception ex)
 		{
 			// This method will fail until everythings loaded, but it's ok we don't need it immediately.
