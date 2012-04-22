@@ -250,8 +250,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		alert.setMessage("Title:");
 
 		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);
-		
+		final EditText input = new EditText(this);		
 		// Set the text to the current title and highlight it
 		input.setText(item.getTitle());
 		input.setSelectAllOnFocus(true);
