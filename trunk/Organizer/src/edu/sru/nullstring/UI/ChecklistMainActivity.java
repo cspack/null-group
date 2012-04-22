@@ -7,6 +7,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
 import com.j256.ormlite.android.apptools.OrmLiteBaseListActivity;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
+import com.j256.ormlite.dao.Dao;
 
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.*;
@@ -37,6 +38,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ListView;
@@ -249,6 +251,11 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
+		
+		// Set the text to the current title and highlight it
+		input.setText(item.getTitle());
+		input.setSelectAllOnFocus(true);
+		
 		alert.setView(input);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
@@ -275,10 +282,106 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     
     public boolean addItem(View v)
     {
-        Intent intent = new Intent(v.getContext(), ChecklistCreateActivity.class);
-        startActivityForResult(intent, 0);   
+        //Intent intent = new Intent(v.getContext(), ChecklistCreateActivity.class);
+        //startActivityForResult(intent, 0);   
 
+		DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+		final ChecklistType item = new ChecklistType(helper);
+
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Checklist");
+		alert.setMessage("Add item:");
+
+		LinearLayout alertLayout = new LinearLayout(this);
+		alertLayout.setOrientation(LinearLayout.VERTICAL);
+		
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		final Spinner catSpin = new Spinner(this);
+		populateCatSpinner(catSpin);
+		
+		alertLayout.addView(input);
+		alertLayout.addView(catSpin);
+		
+		alert.setView(alertLayout);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				// set the id to the checklist
+				//item.setListID(checklistID);
+				String value = input.getText().toString();
+				item.setTitle(value);
+				//item.setChecked(false);
+				try
+				{
+					item.create(); // add to database
+					((ChecklistAdapter)mListView.getAdapter()).refreshData();
+				} catch (SQLException e)
+				{
+					e.printStackTrace();	
+				}
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
+    	
     	return true;
     }
+    
+	/**
+	 * Populates the category spinner with the current categories
+	 */
+	private void populateCatSpinner(Spinner mSpinner)
+	{
+		//Spinner mSpinner;
+		
+		
+		// requirement -- all activities that call globalheader must have the helper
+		DatabaseHelper h = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+		
+		try {
+			Dao<CategoryType, Integer> dao = h.getCategoryDao();
+
+			//mSpinner = (Spinner)findViewById(R.id.categorySpinner);
+			
+			ChecklistType data = null;
+
+			// this is requiring adapter
+		    //CategoryAdapter adapter = new CategoryAdapter(this,
+		    //		android.R.layout.simple_spinner_item, h);
+		    
+		 	CategoryAdapter adapter = new CategoryAdapter(this, android.R.layout.simple_spinner_item, 
+		 			h, CategoryAdapter.SubCategoryType.Marker, data);
+		    		// , CategoryAdapter.SubCategoryType.Checklist, data);
+
+			// apply to list adapter.
+		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		    mSpinner.setAdapter(adapter);
+			mSpinner.setSelection(adapter.getSelectedIndex(), false);
+		    // select to current category id
+			 
+		} catch (SQLException e) {
+			Log.e("Locadex", "Failed loading data into GlobalHeaderView. ");
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			
+		}
+		catch(Exception e)
+		{
+			Log.e("Locadex", "Really failed hard querying categories... ");
+			Log.e("Locadex", e.getMessage());
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
     
 }
