@@ -21,9 +21,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -38,6 +40,7 @@ import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.ChecklistAdapter;
 import edu.sru.nullstring.Data.ChecklistItemAdapter;
 import edu.sru.nullstring.Data.ChecklistItemType;
+import edu.sru.nullstring.Data.ChecklistType;
 //import edu.sru.nullstring.Data.ChecklistType;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import edu.sru.nullstring.UI.GlobalHeaderView.OnCategoryChangeListener;
@@ -46,6 +49,7 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	private ListView mListView;
 	private int checklistID;
+	private String checklistTitle;
 	private DatabaseHelper helper;
 	
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,12 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	if(checklist != null)
     	{
     		checklistID = checklist.getInt("CHECKLIST_ID");
+    		checklistTitle = checklist.getString("CHECKLIST_TITLE");
     	}
+    	
+    	// change the title to the current checklist
+    	TextView title = (TextView)this.findViewById(R.id.text1);
+    	title.setText(checklistTitle);
     	
 		try {
 
@@ -94,7 +103,7 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			}
         });
 		
-		Button addItem = (Button)findViewById(R.id.addItem);
+		ImageButton addItem = (ImageButton)findViewById(R.id.addItem);
 		addItem.setOnClickListener(new OnClickListener() {
 			public void onClick(View v)
 			{
@@ -131,7 +140,7 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				CheckBox chkBox = (CheckBox)lastView.findViewById(R.id.chkbox);
     				chkBox.setVisibility(View.VISIBLE);
     				// hide delete button
-					Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+					ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
 					hider.setVisibility(View.GONE);
 				}
 				
@@ -155,15 +164,18 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	
     // Handle list long press clicks
     OnItemLongClickListener mListLongClickListener = new OnItemLongClickListener() {
-    		public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id)
+    		public boolean onItemLongClick(AdapterView<?> parent, View v, final int position, long id)
     		{
     			Log.i("ChecklistMainActivity:OnItemClickListener", String.valueOf(position));
     			// last view, hide remove button again
     			if(lastView != null)
     			{
     				lastView.setBackgroundColor(Color.WHITE);
-    				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+    				ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
     				hider.setVisibility(View.GONE);
+    				
+					ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+					edit.setVisibility(View.GONE);
     			}
 
     			// current view, make remove button visible
@@ -172,7 +184,8 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         			ChecklistItemAdapter clAdapt = (ChecklistItemAdapter) parent.getAdapter();
         			currentChecklistItem = clAdapt.getItem(position);
     				v.setBackgroundColor(Color.LTGRAY);
-    				Button hider = (Button)v.findViewById(R.id.listRightButtons);
+    				
+    				ImageButton hider = (ImageButton)v.findViewById(R.id.listRightButtons);
     				hider.setOnClickListener(new OnClickListener() {
     						public void onClick(View v)
     						{
@@ -183,8 +196,11 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     			    				CheckBox chkBox = (CheckBox)lastView.findViewById(R.id.chkbox);
     			    				chkBox.setVisibility(View.VISIBLE);
     			    				// hide delete button
-    			    				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
+    			    				ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
     			    				hider.setVisibility(View.GONE);
+    			    				
+    			    				ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+    			    				edit.setVisibility(View.GONE);
     			    			};
     							remove(currentChecklistItem);
     						}
@@ -194,6 +210,29 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				chkBox.setVisibility(View.GONE);
     				// show delete button
     				hider.setVisibility(View.VISIBLE);
+    				
+					ImageButton edit = (ImageButton)v.findViewById(R.id.editBtn);
+    				edit.setOnClickListener(new OnClickListener() {
+						public void onClick(View v)
+						{
+			    			if(lastView != null)
+			    			{
+			    				lastView.setBackgroundColor(Color.WHITE);
+			    				ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
+			    				hider.setVisibility(View.GONE);
+			    				
+			    				ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+			    				edit.setVisibility(View.GONE);
+			    				
+			    				CheckBox chkBox = (CheckBox)lastView.findViewById(R.id.chkbox);
+			    				chkBox.setVisibility(View.VISIBLE);
+			    			};
+							editTitle(position);
+							((ChecklistItemAdapter)mListView.getAdapter()).refreshData();
+						}
+					});
+					edit.setVisibility(View.VISIBLE);
+					
     				lastView = v;
     			}
         		
@@ -227,6 +266,46 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			e.printStackTrace();
 	    	return false;
 		}
+    	return true;
+    }
+    
+    /**
+     * Edit the checklist item's title
+     * @param position
+     * @return
+     */
+    public boolean editTitle(int position)
+    {
+    	final ChecklistItemType item = (ChecklistItemType)mListView.getItemAtPosition(position);
+    	
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Edit");
+		alert.setMessage("Title:");
+
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		alert.setView(input);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				// edit the title of the checklist
+				String value = input.getText().toString();
+				item.setText(value);
+				((ChecklistItemAdapter)mListView.getAdapter()).refreshData();
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
+    	
     	return true;
     }
     
@@ -271,8 +350,6 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		alert.show();
 		
-		//item.setText("sample test");
-
 		return true;
     }
 }
