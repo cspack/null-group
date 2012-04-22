@@ -285,6 +285,8 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
+		input.setText(item.getText());
+		input.setSelectAllOnFocus(true);
 		alert.setView(input);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
