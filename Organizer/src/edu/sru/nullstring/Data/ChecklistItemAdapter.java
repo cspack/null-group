@@ -83,7 +83,13 @@ public class ChecklistItemAdapter extends ArrayAdapter<ChecklistItemType> {
                     CheckBox cb = (CheckBox) v.findViewById(R.id.chkbox);
                     if (tt != null)
                     {
+<<<<<<< .mine
                     	tt.setText(o.getText());
+                    	// We don't need an ID! -- spack with <3
+                    	// + " ID: " + o.getListID());
+=======
+                    	tt.setText(o.getText());
+>>>>>>> .r83
                     }
                     if (cb != null)
                     {

@@ -30,6 +30,7 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 	public static final String CAT_ID_FIELD = "cat_id";
 	public static final String TITLE_FIELD = "title";
 	public static final String REMINDER_STATE_FIELD = "state";
+	public static final String NEXT_FIRE_FIELD = "next_fire";
 
 	
 	public static enum ReminderState 
@@ -52,7 +53,10 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 	
 	@DatabaseField(index = true, columnName = CAT_ID_FIELD)
 	private int catid;
-	
+
+	@DatabaseField(columnName = NEXT_FIRE_FIELD)
+	public long nextFire;
+
 	@DatabaseField(columnName = TITLE_FIELD)
 	private String title;
 	public void setTitle(String newtitle)

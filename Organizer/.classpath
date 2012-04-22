@@ -14,5 +14,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="lib" path="robotium/robotium-solo-3.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="robotium/robotium-solo-3.2.1-javadoc.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

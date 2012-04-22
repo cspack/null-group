@@ -28,6 +28,7 @@ public class NoteEditActivity extends GraphicsActivity
 
 	private DatabaseHelper helper = null;
 	private NoteType editItem = null;
+	private MyView sketchRegion = null;
 	int noteID;
 	
    @Override
@@ -79,14 +80,14 @@ public class NoteEditActivity extends GraphicsActivity
 	   {	
 		   Log.i("Locadex:NoteEditActivity","Bundle is null");
 	   }
-       
-	   Log.i("Locadex:NoteEditActivity","line 83");
+
 //	   	// Here is where you refresh the UI for things that may have changed:
 //	   	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 //	   	if(h != null) h.setActivity(this);
 
 
-       setContentView(new MyView(this));
+       sketchRegion = new MyView(this);
+       setContentView(sketchRegion);
        mPaint = new Paint();
        mPaint.setAntiAlias(true);
        mPaint.setDither(true);
@@ -97,9 +98,7 @@ public class NoteEditActivity extends GraphicsActivity
        mPaint.setStrokeWidth(12);
        
        mEmboss = new EmbossMaskFilter(new float[] { 1, 1, 1 }, 0.4f, 6, 3.5f);
-
        mBlur = new BlurMaskFilter(8, BlurMaskFilter.Blur.NORMAL);
-       Log.i("Locadex:NoteEditActivity","line 102");
    }
    
    private Paint       mPaint;
@@ -112,36 +111,21 @@ public class NoteEditActivity extends GraphicsActivity
 
    public class MyView extends View {
        
-       private static final float MINP = 0.25f;
-       private static final float MAXP = 0.75f;
-       
-       private Bitmap  mBitmap;
-       private Canvas  mCanvas;
-       private Path    mPath;
-       private Paint   mBitmapPaint;
+
+	   private static final float MINP = 0.25f;
+	   private static final float MAXP = 0.75f;
+	   
+	   public Bitmap  mBitmap;
+	   private Canvas  mCanvas;
+	   private Path    mPath;
+	   private Paint   mBitmapPaint;
        
        public MyView(Context c) {
            super(c);
-           
-           Display d = getWindowManager().getDefaultDisplay(); 
-           try {
-        	   editItem = helper.getNoteDao().queryForId(noteID);
-			  // Log.i("NoteEditActivity", "bitmap " + editItem.getBitmap().toString());
-		    } catch (SQLException e) {
-			// TODO Auto-generated catch block
-		     	e.printStackTrace();
-	     	}
-           Log.i("Locadex:NoteEditActivity","line 134");
-           mBitmap = editItem.getBitmap();
-           Log.i("Locadex:NoteEditActivity","line 136");
-           if(mBitmap == null) mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
-           // "sym-link" the bitmap objects ASAP
-           editItem.setBitmap(mBitmap);
-           
-           Log.i("Locadex:NoteEditActivity","line 138");
-           mCanvas = new Canvas(mBitmap);
            mPath = new Path();
            mBitmapPaint = new Paint(Paint.DITHER_FLAG);
+           
+           restoreView();
        }
 
        @Override
@@ -149,12 +133,52 @@ public class NoteEditActivity extends GraphicsActivity
            super.onSizeChanged(w, h, oldw, oldh);
        }
        
+       
+       public void pauseView()
+       {
+    	   Log.i("NoteEditActivity:pauseView", "Saving bitmap...");
+    	   // save
+    	   editItem.setBitmap(mBitmap);
+    	   try {
+			editItem.update();
+	    	   Log.i("NoteEditActivity:pauseView", "Saving bitmap success.");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	    	   Log.i("NoteEditActivity:pauseView", "Saving bitmap failed.");
+		}
+    	   
+       }
+       
+       public void restoreView()
+       {
+           Display d = getWindowManager().getDefaultDisplay(); 
+
+           mBitmap = editItem.getBitmap();
+           
+           if(mBitmap == null) 
+    	   {
+    	   Log.i("NoteEditActivity:restoreView", "Bitmap was null, recreated.");
+    	   mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
+    	   }
+           else
+           {
+        	   Log.i("NoteEditActivity:restoreView", "Using saved bitmap.");
+        	   mBitmap = Bitmap.createBitmap(mBitmap);
+           }
+           // "sym-link" the bitmap objects ASAP
+           editItem.setBitmap(mBitmap);
+           
+           
+           mCanvas = new Canvas(mBitmap);
+           // canvas is now linked to underlying bitmap
+    	   
+       }
+       
        @Override
        protected void onDraw(Canvas canvas) {
            canvas.drawColor(0xFFAAAAAA);
-           
            canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
-           
            canvas.drawPath(mPath, mPaint);
        }
        
@@ -183,11 +207,6 @@ public class NoteEditActivity extends GraphicsActivity
            // kill this so we don't double draw
            mPath.reset();
            editItem.setBitmap(mBitmap);
-           Log.i("Locadex:NoteEditActivity","line 185");
-           Log.i("Locadex:NoteEditActivity","Bitmap: " + editItem.getBitmap().toString());
-           Log.i("Locadex:NoteEditActivity","line 134");           
-           //mBitmap = editItem.getBitmap();
-           Log.i("Locadex:NoteEditActivity","line 138");
            
 
            
@@ -284,18 +303,28 @@ public class NoteEditActivity extends GraphicsActivity
        }
        return super.onOptionsItemSelected(item);
    }
+   
 
-//@Override
-//protected void onResume() {
-//	// TODO Auto-generated method stub
-//	super.onResume();
-//	
-//		
-//	// Here is where you refresh the UI for things that may have changed:
-//	GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
-//	h.setActivity(this);
-//	if(h != null) h.refreshData();
-//}
+
+
+@Override
+protected void onPause() {
+	// TODO Auto-generated method stub
+	super.onPause();
+
+	if(sketchRegion != null)
+		sketchRegion.pauseView();
+	
+
+}
+
+protected void onResume() {
+	// TODO Auto-generated method stub
+	super.onResume();
+	
+	if(sketchRegion != null)
+		sketchRegion.restoreView();	
+	}
    
    
    
