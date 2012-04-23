@@ -6,145 +6,235 @@
 
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     	android:layout_width="fill_parent"
-    	android:layout_height="fill_parent"
+    	android:layout_height="wrap_content"
     	android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title:"
+        android:text="@string/title"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
         android:id="@+id/editText1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:inputType="text"
         android:ems="10" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category:"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/categories_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Spinner
-            android:id="@+id/spinner1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Type:"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/type"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-        <Spinner
-            android:id="@+id/spinner2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBox1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Location:" />
-
-        <Spinner
-            android:id="@+id/spinner3"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-        <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Time:" />
-
-        <TimePicker
-            android:id="@+id/timePicker1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
+    <Spinner
+        android:id="@+id/reminder_type"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+    
         <RadioGroup
-            android:id="@+id/radioGroup1"
+            android:id="@+id/reminder_quick"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
 
             <RadioButton
-                android:id="@+id/radio0"
+                android:id="@+id/quick_now"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Date:" />
+                android:text="@string/reminder_tm" />
+
+            <LinearLayout
+                android:id="@+id/hours_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent" >
+                
+                    <TextView
+        				android:id="@+id/quick_hours_label"
+       					android:layout_width="wrap_content"
+        				android:layout_height="wrap_content"
+       	 				android:text="@string/reminder_h"
+        				android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    				<EditText
+        				android:id="@+id/quick_hours"
+        				android:layout_width="fill_parent"
+        				android:layout_height="wrap_content"
+        				android:inputType="number"
+        				android:ems="10" />
+    		</LinearLayout>
+    		
+            <LinearLayout
+                android:id="@+id/minutes_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent" >
+    				
+    				<TextView
+        				android:id="@+id/quick_minutes_label"
+       					android:layout_width="wrap_content"
+        				android:layout_height="wrap_content"
+       	 				android:text="@string/reminder_m"
+        				android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    				<EditText
+        				android:id="@+id/quick_minutes"
+        				android:layout_width="fill_parent"
+        				android:layout_height="wrap_content"
+        				android:inputType="number"
+        				android:ems="10" />
+    				
+            </LinearLayout>
 
             <RadioButton
-                android:id="@+id/radio1"
+                android:id="@+id/quick_today"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Repeating:" />
-        </RadioGroup>
-
-        <DatePicker
-            android:id="@+id/datePicker1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TableLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <TableRow
-                android:id="@+id/tableRow1"
+                android:text="@string/reminder_tt" />
+            
+            <TimePicker
+                android:id="@+id/quick_today_time"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+            
+        </RadioGroup>
+        
+        <CheckBox
+            android:id="@+id/use_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reminder_loc"
+            android:visibility="gone" />
 
-                <ToggleButton
-                    android:id="@+id/toggleButton1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="S" />
+        <Spinner
+            android:id="@+id/reminder_new_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
-                <ToggleButton
-                    android:id="@+id/toggleButton2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="M" />
+        <CheckBox
+            android:id="@+id/use_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reminder_tim"
+            android:visibility="gone" />
+        
+        <TextView
+        	android:id="@+id/tim_label"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="@string/reminder_tim"
+        	android:textAppearance="?android:attr/textAppearanceMedium"
+        	android:visibility="gone" />
 
-                <ToggleButton
-                    android:id="@+id/toggleButton3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Tu" />
+        <TimePicker
+            android:id="@+id/reminder_new_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
 
-                <ToggleButton
-                    android:id="@+id/toggleButton4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="W" />
+        <RadioGroup
+            android:id="@+id/reminder_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
 
-                <ToggleButton
-                    android:id="@+id/toggleButton5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Th" />
-
-                <ToggleButton
-                    android:id="@+id/toggleButton6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="F" />
-
-                <ToggleButton
-                    android:id="@+id/toggleButton7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="S" />
-
-            </TableRow>
-        </TableLayout>
-
+            <RadioButton
+                android:id="@+id/date_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/reminder_dat" />
+        	
+        	<DatePicker
+            	android:id="@+id/reminder_dat"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content" />
+            
+            <RadioButton
+                android:id="@+id/date_rep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reminder_rep" />
+            
+            <LinearLayout
+                android:id="@+id/repeating_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:visibility="gone" >
+    				
+                <Button
+        			android:id="@+id/rep_sun"
+       		 		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/reminder_rep_sun" />
+                
+                <Button
+        			android:id="@+id/rep_mon"
+       		 		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/reminder_rep_mon" />
+                
+                <Button
+        			android:id="@+id/rep_tue"
+       		 		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/reminder_rep_tue" />
+                
+                <Button
+        			android:id="@+id/rep_wed"
+       		 		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/reminder_rep_wed" />
+                
+                <Button
+        			android:id="@+id/rep_thu"
+       		 		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/reminder_rep_thu" />
+                
+                <Button
+        			android:id="@+id/rep_fri"
+       		 		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/reminder_rep_fri" />
+                
+                <Button
+        			android:id="@+id/rep_sat"
+       		 		android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/reminder_rep_sat" />
+                
+    		</LinearLayout>
+        </RadioGroup>
+        
+        <Button
+        	android:id="@+id/start"
+       		android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/reminder_start" />
+        
+        <Button
+        	android:id="@+id/cancel"
+       		android:layout_width="fill_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/reminder_cancel" />
+        
 	</LinearLayout>
 </ScrollView>

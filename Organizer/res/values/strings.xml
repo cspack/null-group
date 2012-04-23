@@ -29,5 +29,29 @@
 
      
     <string name="categories_title">Categories</string>
+    <string-array name="reminder_new_type">
+        <item>Quick</item>
+        <item>Date/Time</item>
+        <item>Advanced</item>
+    </string-array>
+    <string name="title">Title</string>
+    <string name="type">Type</string>
+    <string name="reminder_tm">Time from Now</string>
+    <string name="reminder_h">Hours</string>
+    <string name="reminder_m">Minutes</string>
+    <string name="reminder_tt">Time Today</string>
+    <string name="reminder_loc">Location</string>
+    <string name="reminder_tim">Time</string>
+    <string name="reminder_dat">Date</string>
+    <string name="reminder_rep">Repeating</string>
+    <string name="reminder_rep_sun">S</string>
+    <string name="reminder_rep_mon">M</string>
+    <string name="reminder_rep_tue">Tu</string>
+    <string name="reminder_rep_wed">W</string>
+    <string name="reminder_rep_thu">Th</string>
+    <string name="reminder_rep_fri">F</string>
+    <string name="reminder_rep_sat">S</string>
+    <string name="reminder_start">Start</string>
+    <string name="reminder_cancel">Cancel</string>
     
 </resources>
