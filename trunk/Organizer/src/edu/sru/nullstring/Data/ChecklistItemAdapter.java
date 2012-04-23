@@ -12,9 +12,12 @@ import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 public class ChecklistItemAdapter extends ArrayAdapter<ChecklistItemType> {
@@ -66,7 +69,7 @@ public class ChecklistItemAdapter extends ArrayAdapter<ChecklistItemType> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
     	
             View v = convertView;
             if (v == null) {
@@ -76,11 +79,29 @@ public class ChecklistItemAdapter extends ArrayAdapter<ChecklistItemType> {
             
             
             //TODO: Import fields from the object itself into the layout
-            ChecklistItemType o = items.get(position);
+            final ChecklistItemType o = items.get(position);
             if (o != null)
             {
                     TextView tt = (TextView) v.findViewById(R.id.text);
                     CheckBox cb = (CheckBox) v.findViewById(R.id.chkbox);
+                    
+                    cb.setOnCheckedChangeListener(new OnCheckedChangeListener()
+                    {
+        				public void onCheckedChanged(CompoundButton buttonView,
+        						boolean isChecked) {
+        					if (isChecked)
+        					{
+        						o.setChecked(true);
+        					}
+        					else
+        					{
+        						o.setChecked(false);
+        					}
+        					
+        				}
+                    	
+                    });
+                    
                     if (tt != null)
                     {
                     	tt.setText(o.getText());
@@ -98,7 +119,7 @@ public class ChecklistItemAdapter extends ArrayAdapter<ChecklistItemType> {
                      * - tech document
                      */
             }
-            
+
             return v;
     }
 

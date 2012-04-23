@@ -46,7 +46,9 @@ import android.widget.ListView;
 public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	private ListView mListView;
-	
+	private DatabaseHelper helper = null;
+	private ChecklistType item = null;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
@@ -59,7 +61,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		try {
 
 	        // connect to DAO helper, ugly but it works flawlessly.
-	        DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+	        helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 	        
 			// apply to list adapter.
 			mListView.setAdapter(new ChecklistAdapter(this,
@@ -74,7 +76,9 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		mListView.setOnItemClickListener(mListClickListener);
 		// attach list item click
 		mListView.setOnItemLongClickListener(mListLongClickListener);
-		
+
+		 helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+		 item = new ChecklistType(helper);
 
         GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
         head.setActivity(this);
@@ -281,12 +285,6 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     
     public boolean addItem(View v)
     {
-        //Intent intent = new Intent(v.getContext(), ChecklistCreateActivity.class);
-        //startActivityForResult(intent, 0);   
-
-		DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
-		final ChecklistType item = new ChecklistType(helper);
-
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setTitle("Checklist");
@@ -310,10 +308,12 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
 				// set the id to the checklist
-				//item.setListID(checklistID);
 				String value = input.getText().toString();
 				item.setTitle(value);
-				//item.setChecked(false);
+				
+				CategoryAdapter catAdapt = (CategoryAdapter)catSpin.getAdapter();
+				CategoryType itm = catAdapt.getItem(catSpin.getSelectedItemPosition());
+				item.setCategory(itm.getID());
 				try
 				{
 					item.create(); // add to database
@@ -341,9 +341,6 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	 */
 	private void populateCatSpinner(Spinner mSpinner)
 	{
-		//Spinner mSpinner;
-		
-		
 		// requirement -- all activities that call globalheader must have the helper
 		DatabaseHelper h = OpenHelperManager.getHelper(this, DatabaseHelper.class);
 		
@@ -352,14 +349,12 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 			//mSpinner = (Spinner)findViewById(R.id.categorySpinner);
 			
-			ChecklistType data = null;
-
 			// this is requiring adapter
 		    //CategoryAdapter adapter = new CategoryAdapter(this,
 		    //		android.R.layout.simple_spinner_item, h);
 		    
 		 	CategoryAdapter adapter = new CategoryAdapter(this, android.R.layout.simple_spinner_item, 
-		 			h, CategoryAdapter.SubCategoryType.Marker, data);
+		 			h, CategoryAdapter.SubCategoryType.Checklist, item);
 		    		// , CategoryAdapter.SubCategoryType.Checklist, data);
 
 			// apply to list adapter.
