@@ -132,6 +132,13 @@ public class ReminderNewActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         		}
         	}
         });
+        
+        Button cancel = (Button) findViewById(R.id.cancel);
+        cancel.setOnClickListener(new OnClickListener() {
+    		public void onClick(View v) {
+    			finish();
+        	}
+        });
     }
     public class MyOnItemSelectedListener implements OnItemSelectedListener {
 
