@@ -20,6 +20,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
@@ -94,7 +96,6 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// attach onlongclick
 		mListView.setOnItemLongClickListener(mListLongClickListener);
 		
-
         GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
         head.setActivity(this);
         head.setOnCategoryChange(new OnCategoryChangeListener(){
@@ -146,6 +147,7 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 				
 				CheckBox chkBox = (CheckBox)v.findViewById(R.id.chkbox);
 				ChecklistItemType item = (ChecklistItemType)mListView.getItemAtPosition(position);
+				
 				if (chkBox.isChecked())
 				{
 					chkBox.setChecked(false);
