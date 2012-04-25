@@ -1,5 +1,5 @@
 #
-# generated on 2012/04/21 11:07:23
+# generated on 2012/04/25 06:41:31
 #
 # --table-start--
 dataClass=edu.sru.nullstring.Data.ChecklistType
@@ -70,12 +70,67 @@ fieldName=nextFire
 columnName=next_fire
 # --field-end--
 # --field-start--
+fieldName=quickUseRelativeTime
+# --field-end--
+# --field-start--
+fieldName=advancedUseLocation
+# --field-end--
+# --field-start--
+fieldName=advancedUseTime
+# --field-end--
+# --field-start--
+fieldName=fireTimeHour
+# --field-end--
+# --field-start--
+fieldName=fireTimeMinute
+# --field-end--
+# --field-start--
+fieldName=fireTimeMonth
+# --field-end--
+# --field-start--
+fieldName=fireTimeDay
+# --field-end--
+# --field-start--
+fieldName=fireTimeYear
+# --field-end--
+# --field-start--
+fieldName=useRepeat
+# --field-end--
+# --field-start--
+fieldName=repeatMon
+# --field-end--
+# --field-start--
+fieldName=repeatTue
+# --field-end--
+# --field-start--
+fieldName=repeatWed
+# --field-end--
+# --field-start--
+fieldName=repeatThu
+# --field-end--
+# --field-start--
+fieldName=repeatFri
+# --field-end--
+# --field-start--
+fieldName=repeatSat
+# --field-end--
+# --field-start--
+fieldName=repeatSun
+# --field-end--
+# --field-start--
+fieldName=markerId
+# --field-end--
+# --field-start--
 fieldName=title
 columnName=title
 # --field-end--
 # --field-start--
 fieldName=state
 columnName=state
+# --field-end--
+# --field-start--
+fieldName=reminderType
+columnName=reminder_type
 # --field-end--
 # --table-fields-end--
 # --table-end--

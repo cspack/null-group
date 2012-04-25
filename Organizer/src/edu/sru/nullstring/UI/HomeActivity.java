@@ -79,5 +79,9 @@ public class HomeActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 		if(h != null) h.refreshData();
 		
+
+		NextReminderView n = (NextReminderView)findViewById(R.id.nextReminderView);
+		if(n != null) n.refreshData();
+		
 	}
 }
