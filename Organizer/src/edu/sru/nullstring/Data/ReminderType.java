@@ -26,6 +26,43 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		
 	}
 
+	
+	public static String GetDisplayTimeString(long time)
+	{
+		Date compareTo = new Date(time);
+		Date nowDate = new Date();
+		long derivTime = compareTo.getTime() - nowDate.getTime();
+		Calendar cal = Calendar.getInstance();
+		Date derivDate = new Date(derivTime);
+		cal.setTime(derivDate);
+		StringBuilder build = new StringBuilder();
+		
+		long numDays = derivTime / (1000 * 60 * 60 * 24);
+		int hours = cal.get(Calendar.HOUR);
+		int mins = cal.get(Calendar.MINUTE);
+		
+		boolean hasContent = false;
+		if(mins > 0)
+		{
+			build.append(Integer.toString(mins) + " minutes");
+			hasContent = true;
+		}
+
+		if(hours > 0)
+		{
+			build.insert(0, Integer.toString(mins) + " hours" + (hasContent ? " and " : ""));
+			hasContent = true;
+		}
+
+		if(numDays > 0)
+		{
+			build.insert(0, Long.toString(numDays) + " days" + (hasContent ? " and " : ""));
+			hasContent = true;
+		}
+
+		
+		return build.toString();
+	}
 	public ReminderType(DatabaseHelper helper)
 	{
 		CategoryType curCat = helper.getCurrentCategory();
@@ -141,8 +178,7 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 	{
 		Date today = new Date();
         Calendar todayCal = Calendar.getInstance();  
-        todayCal.setTime(today);  
-
+        todayCal.setTime(today);
         Date fireTime;
 		long temp = 0;
 		switch(this.reminderType)
@@ -152,7 +188,9 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 			// 		 fireTimeYear
 			// 		 fireTimeMon
 			// 		 fireTimeDay
-			fireTime = new Date(fireTimeYear, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
+			
+			Log.e("ReminderType", "This reminder is set to Quick, creating nextFireTime from it.");
+			fireTime = new Date(fireTimeYear - 1900, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
 			temp = fireTime.getTime();
 
 			break;
@@ -169,7 +207,7 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 				// location is NOT THE SCOPE OF NEXTFIRETIME
 			}
 			
-			fireTime = new Date(fireTimeYear, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
+			fireTime = new Date(fireTimeYear - 1900, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
 			temp = fireTime.getTime();
 			
 			// repeating?

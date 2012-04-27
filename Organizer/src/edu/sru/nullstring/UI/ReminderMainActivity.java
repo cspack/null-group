@@ -51,7 +51,7 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         try {
         	DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
 			mReminderView.setAdapter(new ReminderAdapter(this,
-	                android.R.layout.simple_list_item_1, helper));
+	                R.layout.reminder_list_row, helper));
         } catch(Exception ex)
         {
         	Log.e("ReminderMainActivity", "Some database stuff failed =/");
@@ -69,7 +69,7 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	addItem.setOnClickListener(new OnClickListener() {
     		public void onClick(View v)
     		{
-    	        Intent myIntent = new Intent(v.getContext(), ReminderNewActivity.class);
+    	        Intent myIntent = new Intent(v.getContext(), ReminderEditActivity.class);
     	        startActivityForResult(myIntent, 0); 
     		}
     	});
@@ -84,6 +84,10 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// Here is where you refresh the UI for things that may have changed:
 		GlobalHeaderView h = (GlobalHeaderView)findViewById(R.id.topBanner);
 		if(h != null) h.refreshData();
+		
+		// refresh reminder list
+		ReminderAdapter r = (ReminderAdapter)mReminderView.getAdapter();
+		r.refreshData();
 		
 	}
 	
@@ -157,7 +161,7 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	public void openEditorActivity(ReminderType item)
 	{
-        Intent myIntent = new Intent(this, ReminderNewActivity.class);
+        Intent myIntent = new Intent(this, ReminderEditActivity.class);
         myIntent.putExtra("edu.sru.nullstring.reminderId", item.getID());
         startActivityForResult(myIntent, 0);
 	}

@@ -77,7 +77,7 @@ public class ReminderAdapter extends ArrayAdapter<ReminderType> {
             View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.note_list_row, null);
+                v = vi.inflate(R.layout.reminder_list_row, null);
             }
             
             
@@ -86,10 +86,16 @@ public class ReminderAdapter extends ArrayAdapter<ReminderType> {
             ReminderType o = items.get(position);
             if (o != null) {
                     TextView tt = (TextView) v.findViewById(R.id.toptext);
+                    TextView mt = (TextView) v.findViewById(R.id.midtext);
                     TextView bt = (TextView) v.findViewById(R.id.bottomtext);
                     if (tt != null) {
-                          tt.setText("Title: "+o.getTitle());
-                    }
+                        tt.setText("Title: "+o.getTitle());
+                  }
+
+                    if (mt != null) {
+                        mt.setText("In "+ReminderType.GetDisplayTimeString(o.calculateNextFire()));
+                  }
+
                     if(bt != null)
                     {
                 		DatabaseHelper h = OpenHelperManager.getHelper(context, DatabaseHelper.class); 

@@ -48,12 +48,13 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ListView;
+import android.widget.ToggleButton;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class ReminderNewActivity extends OrmLiteBaseActivity<DatabaseHelper> {
+public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	
 	// persist a remindertype
 	private ReminderType reminder;
@@ -73,7 +74,6 @@ public class ReminderNewActivity extends OrmLiteBaseActivity<DatabaseHelper> {
  	       int reminderID = extras.getInt("edu.sru.nullstring.reminderId");
  	       if(reminderID != 0)
  		   {
- 	
  	           try {
  				   Log.i("ReminderNewActivity", "open attempt with id " + Integer.toString(reminderID));
  	        	   reminder = helper.getReminderDao().queryForId(reminderID);
@@ -189,6 +189,7 @@ public class ReminderNewActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         start.setOnClickListener(new OnClickListener() {
     		public void onClick(View v) {
     			saveReminder();
+    			finish();
         	}
         });
 
@@ -370,20 +371,20 @@ public class ReminderNewActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	{
     	reminder.useRepeat = true;	
     	// repeat fields
-    	Button repSun = (Button)findViewById(R.id.rep_sun);
-    	Button repMon = (Button)findViewById(R.id.rep_mon);
-    	Button repTue = (Button)findViewById(R.id.rep_tue);
-    	Button repWed = (Button)findViewById(R.id.rep_wed);
-    	Button repThu = (Button)findViewById(R.id.rep_thu);
-    	Button repFri = (Button)findViewById(R.id.rep_fri);
-    	Button repSat = (Button)findViewById(R.id.rep_sat);
-    	reminder.repeatSun = repSun.isSelected();
-    	reminder.repeatMon = repMon.isSelected();
-    	reminder.repeatTue = repTue.isSelected();
-    	reminder.repeatWed = repWed.isSelected();
-    	reminder.repeatThu = repThu.isSelected();
-    	reminder.repeatFri = repFri.isSelected();
-    	reminder.repeatSat = repSat.isSelected();    
+    	ToggleButton repSun = (ToggleButton)findViewById(R.id.rep_sun);
+    	ToggleButton repMon = (ToggleButton)findViewById(R.id.rep_mon);
+    	ToggleButton repTue = (ToggleButton)findViewById(R.id.rep_tue);
+    	ToggleButton repWed = (ToggleButton)findViewById(R.id.rep_wed);
+    	ToggleButton repThu = (ToggleButton)findViewById(R.id.rep_thu);
+    	ToggleButton repFri = (ToggleButton)findViewById(R.id.rep_fri);
+    	ToggleButton repSat = (ToggleButton)findViewById(R.id.rep_sat);
+    	reminder.repeatSun = repSun.isChecked();
+    	reminder.repeatMon = repMon.isChecked();
+    	reminder.repeatTue = repTue.isChecked();
+    	reminder.repeatWed = repWed.isChecked();
+    	reminder.repeatThu = repThu.isChecked();
+    	reminder.repeatFri = repFri.isChecked();
+    	reminder.repeatSat = repSat.isChecked();    
     	}
     }
     
@@ -421,22 +422,27 @@ public class ReminderNewActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     		reminder.setReminderType(ReminderTypes.Quick);
     		// proper fields are in qui
     		RadioButton qtoday = (RadioButton)findViewById(R.id.quick_today);
-    		if(qtoday.isSelected())
+    		if(qtoday.isChecked())
     		{
+    			Log.e("ReminderNewActivity", "Attempting to base time off of a TimePicker.");
     			// auto time
     			TimePicker qtodayTime = (TimePicker)findViewById(R.id.quick_today_time);
     			hour = qtodayTime.getCurrentHour();
     			min = qtodayTime.getCurrentMinute();
+    			Log.e("ReminderNewActivity", "Hour: " + hour);
+    			Log.e("ReminderNewActivity", "Min: " + min);
         		todayCal.set(Calendar.HOUR_OF_DAY, hour);
         		todayCal.set(Calendar.MINUTE, min);
     		}
     		else
     		{
+    			Log.e("ReminderNewActivity", "Attempting to base time off of hours/min in text.");
     			// manual add min hour
         		EditText qmin = (EditText)findViewById(R.id.quick_minutes);
         		EditText qhour = (EditText)findViewById(R.id.quick_hours);
         		try {
         		hour = Integer.parseInt(qhour.getText().toString());
+    			Log.e("ReminderNewActivity", "Hour: " + hour);
         		}catch(Exception e)
         		{
         			hour = 0;
@@ -444,6 +450,7 @@ public class ReminderNewActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         		}
         		try {
         		min = Integer.parseInt(qmin.getText().toString());
+    			Log.e("ReminderNewActivity", "Min: " + min);
         		}catch(Exception e)
         		{
         			min = 0;
