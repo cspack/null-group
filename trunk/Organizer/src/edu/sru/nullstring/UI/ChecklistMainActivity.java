@@ -77,8 +77,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// attach list item click
 		mListView.setOnItemLongClickListener(mListLongClickListener);
 
-		 helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
-		 item = new ChecklistType(helper);
+		 helper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
 
         GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
         head.setActivity(this);
@@ -285,6 +284,8 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     
     public boolean addItem(View v)
     {
+    	item = new ChecklistType(helper);
+    	
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setTitle("Checklist");
