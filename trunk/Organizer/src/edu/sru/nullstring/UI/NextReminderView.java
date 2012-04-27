@@ -1,6 +1,7 @@
 package edu.sru.nullstring.UI;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -78,7 +79,10 @@ public class NextReminderView extends LinearLayout {
 		QueryBuilder<ReminderType, Integer> q;
 		try {
 			q = helper.getReminderDao().queryBuilder();
-		q.orderBy(ReminderType.NEXT_FIRE_FIELD, true); // ascending
+			
+			long current = new Date().getTime();
+			
+		q.orderBy(ReminderType.NEXT_FIRE_FIELD, true).where().ge(ReminderType.NEXT_FIRE_FIELD, current); // ascending
 		ReminderType item = q.queryForFirst();
 		
 		if(item != null)
@@ -96,7 +100,7 @@ public class NextReminderView extends LinearLayout {
 			topText.setText(item.getTitle());
 
 			TextView btmText = (TextView)findViewById(R.id.textRemindBottom);
-			btmText.setText(Long.toString(item.nextFire));
+			btmText.setText(ReminderType.GetDisplayTimeString(item.nextFire));
 
 		}
 		else
