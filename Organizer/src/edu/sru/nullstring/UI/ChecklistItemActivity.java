@@ -143,6 +143,9 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				// hide delete button
 					ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
 					hider.setVisibility(View.GONE);
+					// hide edit button
+					ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+					edit.setVisibility(View.GONE);
 				}
 				
 				CheckBox chkBox = (CheckBox)v.findViewById(R.id.chkbox);
