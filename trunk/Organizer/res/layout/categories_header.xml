@@ -18,7 +18,7 @@
     
         <Button 
         android:id="@+id/addItem"
-        android:drawableTop="@drawable/new_24" 
+        android:drawableTop="@android:drawable/ic_input_add"
         android:layout_width="48dp"
         android:layout_height="48dp" 
         android:layout_alignParentBottom="true"

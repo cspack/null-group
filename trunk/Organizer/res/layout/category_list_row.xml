@@ -30,4 +30,22 @@
             android:ellipsize="marquee"
         />
     </LinearLayout>
+	<ImageButton 
+        android:id="@+id/editBtn"
+        android:src="@android:drawable/ic_menu_edit" 
+        android:layout_width="48dp"
+        android:layout_height="48dp" 
+        android:layout_margin="1dip"
+        android:textColor="#000000"
+        android:visibility="gone"        
+	/>
+    <ImageButton 
+        android:id="@+id/listRightButtons"
+        android:src="@android:drawable/ic_delete" 
+        android:layout_width="48dp"
+        android:layout_height="48dp" 
+        android:layout_margin="1dip"
+        android:textColor="#000000"
+        android:visibility="gone"
+	/>
 </LinearLayout>
