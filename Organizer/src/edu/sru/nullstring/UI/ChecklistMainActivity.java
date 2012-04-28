@@ -210,21 +210,6 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     		}
     };
     
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.checklist_menu, menu);
-        return true;        
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.text:     Toast.makeText(this, "You pressed Jeb!", Toast.LENGTH_LONG).show();
-                                break;
-        }
-        return true;
-    }
-    
     public boolean remove(ChecklistType checklist)
     {
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
@@ -239,26 +224,37 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	return true;
     }
     /**
-     * Edit the checklist's title
+     * Edit the checklist's title and category
      * @param position
      * @return
      */
     public boolean editTitle(int position)
     {
-    	final ChecklistType item = (ChecklistType)mListView.getItemAtPosition(position);
+    	item = (ChecklistType)mListView.getItemAtPosition(position);
     	
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setTitle("Edit");
-		alert.setMessage("Title:");
 
+		LinearLayout alertLayout = new LinearLayout(this);
+		alertLayout.setOrientation(LinearLayout.VERTICAL);
+		
 		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);		
+		final EditText input = new EditText(this);
+		final Spinner catSpin = new Spinner(this);
+		populateCatSpinner(catSpin);
 		// Set the text to the current title and highlight it
 		input.setText(item.getTitle());
 		input.setSelectAllOnFocus(true);
 		
-		alert.setView(input);
+		catSpin.setSelection(((CategoryAdapter)catSpin.getAdapter()).getSelectedIndex());
+		
+		alertLayout.addView(input);
+		alertLayout.addView(catSpin);
+		
+		
+		
+		alert.setView(alertLayout);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
 		{
@@ -267,6 +263,18 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 				// edit the title of the checklist
 				String value = input.getText().toString();
 				item.setTitle(value);
+				
+				CategoryAdapter catAdapt = (CategoryAdapter)catSpin.getAdapter();
+				CategoryType itm = catAdapt.getItem(catSpin.getSelectedItemPosition());
+				item.setCategory(itm.getID());
+				try
+				{
+					item.update();
+				}
+				catch (SQLException e)
+				{
+					e.printStackTrace();
+				}
 				((ChecklistAdapter)mListView.getAdapter()).refreshData();
 			}
 		});
@@ -347,16 +355,9 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		try {
 			Dao<CategoryType, Integer> dao = h.getCategoryDao();
-
-			//mSpinner = (Spinner)findViewById(R.id.categorySpinner);
-			
-			// this is requiring adapter
-		    //CategoryAdapter adapter = new CategoryAdapter(this,
-		    //		android.R.layout.simple_spinner_item, h);
 		    
 		 	CategoryAdapter adapter = new CategoryAdapter(this, android.R.layout.simple_spinner_item, 
 		 			h, CategoryAdapter.SubCategoryType.Checklist, item);
-		    		// , CategoryAdapter.SubCategoryType.Checklist, data);
 
 			// apply to list adapter.
 		    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -367,7 +368,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		} catch (SQLException e) {
 			Log.e("Locadex", "Failed loading data into GlobalHeaderView. ");
 			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			e.printStackTrace();
 			
 		}
 		catch(Exception e)

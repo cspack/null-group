@@ -244,22 +244,7 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         		return true;
     		}
     };
-    
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.checklist_menu, menu);
-        return true;        
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.text:     Toast.makeText(this, "Item!", Toast.LENGTH_LONG).show();
-                                break;
-        }
-        return true;
-    }
-    
+
     public boolean remove(ChecklistItemType checklist)
     {
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
@@ -286,7 +271,6 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setTitle("Edit");
-		alert.setMessage("Title:");
 
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
