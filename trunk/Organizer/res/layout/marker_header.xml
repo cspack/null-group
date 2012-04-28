@@ -19,7 +19,7 @@
     
         <ImageButton 
         android:id="@+id/addItem"
-        android:src="@drawable/new_24" 
+        android:src="@android:drawable/ic_input_add" 
         android:layout_width="48dp"
         android:layout_height="48dp" 
         android:scaleType="fitXY"
