@@ -23,12 +23,13 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 	
 	ReminderType()
 	{
-		
 	}
 
 	
-	public static String GetDisplayTimeString(long time)
+	public static String GetDisplayTimeString(ReminderType t)
 	{
+		long time = t.calculateNextFire();
+		
 		Date compareTo = new Date(time);
 		Date nowDate = new Date();
 		long derivTime = compareTo.getTime() - nowDate.getTime();
@@ -38,31 +39,44 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		StringBuilder build = new StringBuilder();
 		
 		long numDays = derivTime / (1000 * 60 * 60 * 24);
-		int hours = cal.get(Calendar.HOUR);
+		int hours = cal.get(Calendar.HOUR_OF_DAY);
 		int mins = cal.get(Calendar.MINUTE);
 		
-		boolean hasContent = false;
-		if(mins > 0)
+		//Log.i("ReminderType:DisplayTime", "Seconds until firing: " + (derivTime / 1000));
+
+		if(t.getReminderType() == ReminderTypes.Location || (t.advancedUseLocation && !t.advancedUseTime))
 		{
-			build.append(Integer.toString(mins) + " minutes");
+			return ("Location-aware only reminder");
+		}
+
+		if(derivTime < 0)
+		{
+			return ("Reminder completed");
+		}
+		
+		boolean hasContent = false;
+		if(mins >= 0)
+		{
+			build.append(Integer.toString(mins) + " minute" + (mins != 1 ? "s":""));
 			hasContent = true;
 		}
 
 		if(hours > 0)
 		{
-			build.insert(0, Integer.toString(mins) + " hours" + (hasContent ? " and " : ""));
+			build.insert(0, Integer.toString(hours) + " hour" + (hours != 1 ? "s":"") + (hasContent ? " and " : ""));
 			hasContent = true;
 		}
 
 		if(numDays > 0)
 		{
-			build.insert(0, Long.toString(numDays) + " days" + (hasContent ? " and " : ""));
+			build.insert(0, Long.toString(numDays) + " day" + (numDays != 1 ? "s":"") + (hasContent ? " and " : ""));
 			hasContent = true;
 		}
 
-		
+		build.insert(0, "In ");
 		return build.toString();
 	}
+	
 	public ReminderType(DatabaseHelper helper)
 	{
 		CategoryType curCat = helper.getCurrentCategory();
@@ -82,6 +96,22 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		this.catid = curCat.getID();
 	}
 	
+	
+	public boolean getDayOfWeek(int weekday)
+	{
+		boolean ret = false;
+		switch(weekday)
+		{
+		case 0:	ret = repeatSun;break;
+		case 1:	ret = repeatMon;break;
+		case 2:	ret = repeatTue;break;
+		case 3:	ret = repeatWed;break;
+		case 4:	ret = repeatThu;break;
+		case 5:	ret = repeatFri;break;
+		case 6:	ret = repeatSat;break;
+		}
+		return ret;
+	}
 
 	public static final String REMINDER_ID_FIELD = "reminder_id";
 	public static final String CAT_ID_FIELD = "cat_id";
@@ -167,15 +197,14 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 	@DatabaseField
 	public int markerId = 0;
 	
-	// array that passes to the boolean type
-	private final boolean[] repeatDays = new boolean[]{repeatSun, repeatMon, repeatTue, repeatWed, repeatThu, repeatFri, repeatSat};
-	
 	// When Quick use:
 	
 	
 	// this processes all the stored information to get the next time it fires
 	public long calculateNextFire()
 	{
+		long fire = this.nextFire;		
+
 		Date today = new Date();
         Calendar todayCal = Calendar.getInstance();  
         todayCal.setTime(today);
@@ -216,11 +245,12 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 
 				// reset calendar
 				todayCal.setTime(today);  
-			
+
+				// test one week
 				for(int checkWeek = 0; checkWeek < 7; checkWeek++ )
 				{
-					int weekDay = todayCal.DAY_OF_WEEK;
-					if(repeatDays[weekDay])
+					int weekDay = todayCal.get(Calendar.DAY_OF_WEEK);
+					if(getDayOfWeek(weekDay))
 					{
 						// found a day.. done.
 						todayCal.set(Calendar.HOUR_OF_DAY, fireTimeHour);
@@ -245,6 +275,16 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		}
 		
 		nextFire = temp;
+
+		if(fire != nextFire)
+		{
+			// update db
+			try {
+				update();
+			} catch (SQLException e) {
+				// you need a DB helper, this will never update :'(
+			}
+		}
 		
 		return nextFire;
 	}

@@ -89,11 +89,11 @@ public class ReminderAdapter extends ArrayAdapter<ReminderType> {
                     TextView mt = (TextView) v.findViewById(R.id.midtext);
                     TextView bt = (TextView) v.findViewById(R.id.bottomtext);
                     if (tt != null) {
-                        tt.setText("Title: "+o.getTitle());
+                        tt.setText(o.getTitle());
                   }
 
                     if (mt != null) {
-                        mt.setText("In "+ReminderType.GetDisplayTimeString(o.calculateNextFire()));
+                        mt.setText(ReminderType.GetDisplayTimeString(o));
                   }
 
                     if(bt != null)

@@ -66,14 +66,16 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reminder_new);
         
-        helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
+        helper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
         Bundle extras = getIntent().getExtras();        
         if(extras != null)
         {
+        	Log.e("ReminderEditActivity","Found extra's bundle.");
  	       // Setup database helper and object early on
  	       int reminderID = extras.getInt("edu.sru.nullstring.reminderId");
  	       if(reminderID != 0)
  		   {
+ 	        	Log.e("ReminderEditActivity","Found reminder! Id = " +reminderID);
  	           try {
  				   Log.i("ReminderNewActivity", "open attempt with id " + Integer.toString(reminderID));
  	        	   reminder = helper.getReminderDao().queryForId(reminderID);
@@ -83,11 +85,6 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
  				   Log.e("ReminderNewActivity", "Failed to open item for editing");
  				   e.printStackTrace();
  			   }
- 	           finally
- 	           {
- 	        	  isCreateMode = true;
- 	 	          reminder = new ReminderType(helper);
- 	           }
 
  	       }
  	       else
@@ -115,6 +112,67 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         rtype.setAdapter(adapter);
         rtype.setOnItemSelectedListener(new MyOnItemSelectedListener());
+        
+        
+  	   // Associate category spinner with item
+  	   Spinner subCatSpinner = (Spinner)findViewById(R.id.subCatSpinner);
+  	   CategoryAdapter catAdapter = new CategoryAdapter(this, android.R.layout.simple_spinner_item, 
+  			   helper, CategoryAdapter.SubCategoryType.Reminder, reminder);
+  	   subCatSpinner.setAdapter(catAdapter);
+  	   subCatSpinner.setSelection(catAdapter.getSelectedIndex());
+  	   
+  	   subCatSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+ 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+ 				long arg3) {
+
+ 			try {
+ 				CategoryAdapter cat = (CategoryAdapter)(arg0.getAdapter());
+ 				CategoryType itm = cat.getItem(arg2);
+ 				reminder.setCategory(itm.getID());
+ 			} catch (Exception e) {
+ 				Log.e("ReminderEditActivity", "Edit item category update failed.");
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 		}
+
+ 		public void onNothingSelected(AdapterView<?> arg0) {
+ 			// TODO Auto-generated method stub
+ 			
+ 		}
+  		   
+  	   });
+
+  	   // Associate category spinner with item
+  	   Spinner markerSpinner = (Spinner)findViewById(R.id.reminder_new_location);
+  	   MarkerAdapter markAdapter = new MarkerAdapter(this, android.R.layout.simple_spinner_item, 
+  			   helper, true);
+  	   markerSpinner.setAdapter(markAdapter);
+  	   markerSpinner.setSelection(markAdapter.findMarkerPosition(reminder.markerId));
+  	 	markerSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+
+ 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+ 				long arg3) {
+
+ 			try {
+ 				MarkerAdapter adp = (MarkerAdapter)(arg0.getAdapter());
+ 				MarkerType itm = adp.getItem(arg2);
+ 				reminder.markerId = itm.getID();
+ 				
+ 			} catch (Exception e) {
+ 				Log.e("ReminderEditActivity", "Edit item category update failed.");
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+ 		}
+
+ 		public void onNothingSelected(AdapterView<?> arg0) {
+ 			// TODO Auto-generated method stub
+ 			
+ 		}
+  		   
+  	   });
         
         RadioButton qnow = (RadioButton) findViewById(R.id.quick_now);
         RadioButton qtod = (RadioButton) findViewById(R.id.quick_today);
@@ -158,6 +216,7 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         });
         
         CheckBox uloc = (CheckBox) findViewById(R.id.use_location);
+
         CheckBox utim = (CheckBox) findViewById(R.id.use_time);
         uloc.setOnClickListener(new OnClickListener() {
         	public void onClick(View v) {
@@ -201,6 +260,8 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         	}
         });
         
+        // restore initial values
+        restoreData();
     }
 
     
@@ -255,6 +316,20 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         		tp.setVisibility(View.GONE);
         	  	ul.setVisibility(View.VISIBLE);
         	  	ut.setVisibility(View.VISIBLE);
+    			if (reminder.advancedUseTime)
+    			{
+    			//begin copy from use_time event listener
+        			dat.setVisibility(View.VISIBLE);
+        			tp.setVisibility(View.VISIBLE);
+        		//end copy
+    			}
+    			if (reminder.advancedUseLocation)
+    			{
+    			//begin copy from use_time event listener
+        			loc.setVisibility(View.VISIBLE);
+        		//end copy
+    			}
+
         	}
         }
 
@@ -265,31 +340,73 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     
     public void restoreData()
     {
-        Spinner rtype = (Spinner) findViewById(R.id.reminder_type);
+    	if(isCreateMode) {
+        	Log.e("ReminderEditActivity", "Not restoring information, because default object.");
+    		return;
+    	}
+    	
+    	debugPrint();
+    	
+    	Log.e("ReminderEditActivity", "Restoring reminder... Title: " + reminder.getTitle());
+    	EditText title = (EditText)findViewById(R.id.editText1);
+    	title.setText(reminder.getTitle());
+    	
+    	Spinner rtype = (Spinner) findViewById(R.id.reminder_type);
 
         
     	// first set category mode
     	switch(reminder.getReminderType())
     	{
     	case Location: //TODO: make location item in switch
-		case Advanced:
-			rtype.setSelection(2);
-			break;
+    		break;
 		case Quick:
 			rtype.setSelection(0);
     		RadioButton qtoday = (RadioButton)findViewById(R.id.quick_today);
     		if(!isCreateMode)
     		{
-    		qtoday.setSelected(true); // set it to today mode, not hr/min from now
+    		qtoday.setChecked(true); // set it to today mode, not hr/min from now
+
+    		LinearLayout hl = (LinearLayout) findViewById(R.id.hours_layout);
+    		LinearLayout ml = (LinearLayout) findViewById(R.id.minutes_layout);
+    		TimePicker qtt = (TimePicker) findViewById(R.id.quick_today_time);
+    		hl.setVisibility(View.GONE);
+    		ml.setVisibility(View.GONE);
+    		qtt.setVisibility(View.VISIBLE);
     		
 			TimePicker qtodayTime = (TimePicker)findViewById(R.id.quick_today_time);
 			qtodayTime.setCurrentHour(reminder.fireTimeHour);
 			qtodayTime.setCurrentMinute(reminder.fireTimeMinute);
     		}
 			break;
+		case Advanced:
+			rtype.setSelection(2);
+			CheckBox useLocation = (CheckBox)findViewById(R.id.use_location);
+			useLocation.setChecked(reminder.advancedUseLocation);
+			//TODO: Display fields
+			// Insert location spinner modification
+			if(reminder.advancedUseLocation)
+			{
+				useLocation.setVisibility(View.VISIBLE);
+			}
+			
+			CheckBox useTime = (CheckBox)findViewById(R.id.use_time);
+			useTime.setChecked(reminder.advancedUseTime);
+			if (reminder.advancedUseTime)
+			{
+			//begin copy from use_time event listener
+				TimePicker tp = (TimePicker) findViewById(R.id.reminder_new_time);
+				RadioGroup dat = (RadioGroup) findViewById(R.id.reminder_date);
+    			dat.setVisibility(View.VISIBLE);
+    			tp.setVisibility(View.VISIBLE);
+    		//end copy
+			}
+    			else  break;
+			
 		case DateTime:
-			rtype.setSelection(1);
-
+			if(reminder.getReminderType() == ReminderTypes.DateTime)
+			{
+				rtype.setSelection(1);
+			}
 			TimePicker qtodayTime = (TimePicker)findViewById(R.id.reminder_new_time);
 			qtodayTime.setCurrentHour(reminder.fireTimeHour);
 			qtodayTime.setCurrentMinute(reminder.fireTimeMinute);
@@ -302,12 +419,23 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	}
     	
     	
+
+    	
+    	Spinner loc	= (Spinner) findViewById(R.id.reminder_new_location);
+    	MarkerAdapter mloc = (MarkerAdapter)loc.getAdapter();
+    	loc.setSelection(mloc.findMarkerPosition(reminder.markerId));
+
+    	
     	RadioButton rrep = (RadioButton) findViewById(R.id.date_rep);
     	RadioButton rday = (RadioButton) findViewById(R.id.date_day);
     	
     	if(reminder.useRepeat == true)
     	{
     		rrep.setChecked(true);
+    		DatePicker rd = (DatePicker) findViewById(R.id.reminder_dat);
+    		LinearLayout rl = (LinearLayout) findViewById(R.id.repeating_layout);
+    		rd.setVisibility(View.GONE);
+    		rl.setVisibility(View.VISIBLE);
     	}
     	else
     	{
@@ -315,20 +443,20 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	}
 
     	
-    	Button repSun = (Button)findViewById(R.id.rep_sun);
-    	Button repMon = (Button)findViewById(R.id.rep_mon);
-    	Button repTue = (Button)findViewById(R.id.rep_tue);
-    	Button repWed = (Button)findViewById(R.id.rep_wed);
-    	Button repThu = (Button)findViewById(R.id.rep_thu);
-    	Button repFri = (Button)findViewById(R.id.rep_fri);
-    	Button repSat = (Button)findViewById(R.id.rep_sat);
-    	repSun.setSelected(reminder.repeatSun);
-    	repMon.setSelected(reminder.repeatMon);
-    	repTue.setSelected(reminder.repeatTue);
-    	repWed.setSelected(reminder.repeatWed);
-    	repThu.setSelected(reminder.repeatThu);
-    	repFri.setSelected(reminder.repeatFri);
-    	repSat.setSelected(reminder.repeatSat);    
+    	ToggleButton repSun = (ToggleButton)findViewById(R.id.rep_sun);
+    	ToggleButton repMon = (ToggleButton)findViewById(R.id.rep_mon);
+    	ToggleButton repTue = (ToggleButton)findViewById(R.id.rep_tue);
+    	ToggleButton repWed = (ToggleButton)findViewById(R.id.rep_wed);
+    	ToggleButton repThu = (ToggleButton)findViewById(R.id.rep_thu);
+    	ToggleButton repFri = (ToggleButton)findViewById(R.id.rep_fri);
+    	ToggleButton repSat = (ToggleButton)findViewById(R.id.rep_sat);
+    	repSun.setChecked(reminder.repeatSun);
+    	repMon.setChecked(reminder.repeatMon);
+    	repTue.setChecked(reminder.repeatTue);
+    	repWed.setChecked(reminder.repeatWed);
+    	repThu.setChecked(reminder.repeatThu);
+    	repFri.setChecked(reminder.repeatFri);
+    	repSat.setChecked(reminder.repeatSat);    
 
     	
     }
@@ -390,7 +518,21 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     
     public void saveLocationFields()
     {
-    	Spinner loc	= (Spinner) findViewById(R.id.reminder_new_location);    	
+    		
+    	
+    	if(reminder.advancedUseLocation || reminder.getReminderType() == ReminderTypes.Location)
+    	{
+    	
+	    	Spinner loc	= (Spinner) findViewById(R.id.reminder_new_location);
+	    	MarkerAdapter mloc = (MarkerAdapter)loc.getAdapter();
+	    	
+	    	int selMarkerId = mloc.getItem(loc.getSelectedItemPosition()).getID();
+	    	reminder.markerId = selMarkerId;
+    	}
+    	else
+    	{
+    		reminder.markerId = 0;
+    	}
     }
     
     public void saveReminder()
@@ -429,20 +571,16 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     			TimePicker qtodayTime = (TimePicker)findViewById(R.id.quick_today_time);
     			hour = qtodayTime.getCurrentHour();
     			min = qtodayTime.getCurrentMinute();
-    			Log.e("ReminderNewActivity", "Hour: " + hour);
-    			Log.e("ReminderNewActivity", "Min: " + min);
         		todayCal.set(Calendar.HOUR_OF_DAY, hour);
         		todayCal.set(Calendar.MINUTE, min);
     		}
     		else
     		{
-    			Log.e("ReminderNewActivity", "Attempting to base time off of hours/min in text.");
     			// manual add min hour
         		EditText qmin = (EditText)findViewById(R.id.quick_minutes);
         		EditText qhour = (EditText)findViewById(R.id.quick_hours);
         		try {
         		hour = Integer.parseInt(qhour.getText().toString());
-    			Log.e("ReminderNewActivity", "Hour: " + hour);
         		}catch(Exception e)
         		{
         			hour = 0;
@@ -502,6 +640,11 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     		
 		try {
     	
+			// sync next fire with DB
+			reminder.calculateNextFire();
+			
+			debugPrint();
+			
     	if(isCreateMode)
 				reminder.create();
 		else
@@ -515,5 +658,11 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		}
 
 
+    public void debugPrint()
+    {
+    	Log.i("Reminder-Debug", "Fire Month: " + reminder.fireTimeMonth + " Day: " + reminder.fireTimeDay + " Year:"  + reminder.fireTimeYear );
+    	Log.i("Reminder-Debug", "Fire Hour: "  + reminder.fireTimeHour + " Minute: " + reminder.fireTimeMinute);
+    }
+    
 }
 
