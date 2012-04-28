@@ -1,6 +1,7 @@
 package edu.sru.nullstring.UI;
 
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -95,8 +96,6 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			}
 		});
     }
-    
-
     
 	@Override
 	protected void onResume() {
@@ -212,11 +211,24 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     
     public boolean remove(ChecklistType checklist)
     {
+    	List<ChecklistItemType> items = null;
         DatabaseHelper helper = OpenHelperManager.getHelper(this, DatabaseHelper.class); 
-    	try {
+    	try
+    	{
+    		// need to delete all of the checklist's items
+    		items = helper.getChecklistItemDao().queryForEq(ChecklistItemType.LIST_ID_FIELD, checklist.getID());
+    		
+    		Iterator<ChecklistItemType> iterator = items.iterator();
+    		while (iterator.hasNext())
+    		{
+    			iterator.next().delete();
+    		}
+    		
 			helper.getChecklistDao().delete(checklist);
 			((ChecklistAdapter)mListView.getAdapter()).refreshData();
-		} catch (SQLException e) {
+		}
+    	catch (SQLException e)
+    	{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 	    	return false;
