@@ -31,7 +31,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/subCatSpinner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
@@ -176,68 +176,69 @@
             <LinearLayout
                 android:id="@+id/repeating_layout"
                 android:layout_width="wrap_content"
+                android:layout_weight="7"
                 android:layout_height="fill_parent"
                 android:visibility="gone" >
     				
                 <ToggleButton
         			android:id="@+id/rep_sun"
-       		 		android:layout_width="wrap_content"
+       		 		android:layout_width="fill_parent"
         			android:layout_height="wrap_content"
-        			android:textOff="@string/reminder_rep_sun"
-        			android:textOn="@string/reminder_rep_sun" />
-
-                <ToggleButton
-        			android:id="@+id/rep_sun"
-       		 		android:layout_width="wrap_content"
-        			android:layout_height="wrap_content"
+        			android:layout_weight="1"
         			android:textOff="@string/reminder_rep_sun"
         			android:textOn="@string/reminder_rep_sun" />
                 
                                 <ToggleButton
         			android:id="@+id/rep_mon"
-       		 		android:layout_width="wrap_content"
+       		 		android:layout_width="fill_parent"
         			android:layout_height="wrap_content"
+        			android:layout_weight="1"
         			android:textOff="@string/reminder_rep_mon"
         			android:textOn="@string/reminder_rep_mon" />
                 
-                                                <ToggleButton
+					<ToggleButton
         			android:id="@+id/rep_tue"
-       		 		android:layout_width="wrap_content"
+       		 		android:layout_width="fill_parent"
         			android:layout_height="wrap_content"
         			android:textOff="@string/reminder_rep_tue"
+        			android:layout_weight="1"
         			android:textOn="@string/reminder_rep_tue" />
                                 
-                                                                <ToggleButton
+					<ToggleButton
         			android:id="@+id/rep_wed"
-       		 		android:layout_width="wrap_content"
+       		 		android:layout_width="fill_parent"
         			android:layout_height="wrap_content"
+        			android:layout_weight="1"
         			android:textOff="@string/reminder_rep_wed"
         			android:textOn="@string/reminder_rep_wed" />
                                                 
-                                                                                <ToggleButton
+					<ToggleButton
         			android:id="@+id/rep_thu"
-       		 		android:layout_width="wrap_content"
+        			android:layout_width="fill_parent"
         			android:layout_height="wrap_content"
+        			android:layout_weight="1"
         			android:textOff="@string/reminder_rep_thu"
         			android:textOn="@string/reminder_rep_thu" />
                                                                 
-                                                                                                <ToggleButton
+					<ToggleButton
         			android:id="@+id/rep_fri"
-       		 		android:layout_width="wrap_content"
+       		 		android:layout_width="fill_parent"
+        			android:layout_weight="1"
         			android:layout_height="wrap_content"
         			android:textOff="@string/reminder_rep_fri"
         			android:textOn="@string/reminder_rep_fri" />
                                                                                 
-                                            	                                                   <ToggleButton
+					<ToggleButton
         			android:id="@+id/rep_sat"
-       		 		android:layout_width="wrap_content"
+       		 		android:layout_width="fill_parent"
         			android:layout_height="wrap_content"
+        			android:layout_weight="1"
         			android:textOff="@string/reminder_rep_sat"
         			android:textOn="@string/reminder_rep_sat" />
                                                                                                 
-                                                                                                                		</LinearLayout>
+			</LinearLayout>
         </RadioGroup>
-        
+a        
         <Button
         	android:id="@+id/start"
        		android:layout_width="fill_parent"

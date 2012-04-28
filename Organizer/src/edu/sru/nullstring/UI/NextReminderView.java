@@ -49,6 +49,7 @@ public class NextReminderView extends LinearLayout {
 	private View xmlView;
 	private Spinner mSpinner;
 	private DatabaseHelper helper;
+	private ReminderType item;
 	
 	// Constructor from XML files
 	public NextReminderView(Context context, AttributeSet attrs) {
@@ -65,9 +66,55 @@ public class NextReminderView extends LinearLayout {
 
 	public void refreshData()
 	{
+		QueryBuilder<ReminderType, Integer> q;
+		try {
+			q = helper.getReminderDao().queryBuilder();
+			
+			long current = new Date().getTime();
+			
+			// refresh all reminders
+			
+		q.orderBy(ReminderType.NEXT_FIRE_FIELD, true).where().ge(ReminderType.NEXT_FIRE_FIELD, current); // ascending
+		item = q.queryForFirst();
+
+		if(item != null)
+	{
+		// no items in reminders
+		RelativeLayout next = (RelativeLayout)findViewById(R.id.nextReminderLayout);
+		next.setVisibility(View.VISIBLE);
+
+		TextView none = (TextView)findViewById(R.id.textNoUpcoming);
+		none.setVisibility(View.GONE);
+		
+		// FILL item with it...
+
+		TextView topText = (TextView)findViewById(R.id.textRemindTop);
+		topText.setText(item.getTitle());
+
+		TextView btmText = (TextView)findViewById(R.id.textRemindBottom);
+		btmText.setText(ReminderType.GetDisplayTimeString(item));
+
+	}
+	else
+	{
+		
+		// no items in reminders
+		
+		TextView none = (TextView)findViewById(R.id.textNoUpcoming);
+		none.setVisibility(View.VISIBLE);
+
+		RelativeLayout next = (RelativeLayout)findViewById(R.id.nextReminderLayout);
+		next.setVisibility(View.GONE);
+	}
+		} catch (SQLException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+		}
+
 	}
 
 
+	
 	
 	@Override
 	protected void onFinishInflate() {
@@ -76,48 +123,8 @@ public class NextReminderView extends LinearLayout {
 
 		// SETUP 'oncreate' style stuff here that requires finding elements
 
-		QueryBuilder<ReminderType, Integer> q;
-		try {
-			q = helper.getReminderDao().queryBuilder();
-			
-			long current = new Date().getTime();
-			
-		q.orderBy(ReminderType.NEXT_FIRE_FIELD, true).where().ge(ReminderType.NEXT_FIRE_FIELD, current); // ascending
-		ReminderType item = q.queryForFirst();
+		refreshData();
 		
-		if(item != null)
-		{
-			// no items in reminders
-			RelativeLayout next = (RelativeLayout)findViewById(R.id.nextReminderLayout);
-			next.setVisibility(View.VISIBLE);
-
-			TextView none = (TextView)findViewById(R.id.textNoUpcoming);
-			none.setVisibility(View.GONE);
-			
-			// FILL item with it...
-
-			TextView topText = (TextView)findViewById(R.id.textRemindTop);
-			topText.setText(item.getTitle());
-
-			TextView btmText = (TextView)findViewById(R.id.textRemindBottom);
-			btmText.setText(ReminderType.GetDisplayTimeString(item.nextFire));
-
-		}
-		else
-		{
-			
-			// no items in reminders
-			
-			TextView none = (TextView)findViewById(R.id.textNoUpcoming);
-			none.setVisibility(View.VISIBLE);
-
-			RelativeLayout next = (RelativeLayout)findViewById(R.id.nextReminderLayout);
-			next.setVisibility(View.GONE);
-		}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	
 	}

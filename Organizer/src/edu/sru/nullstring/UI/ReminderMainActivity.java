@@ -8,6 +8,7 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 
 import edu.sru.nullstring.R;
 import edu.sru.nullstring.R.layout;
+import edu.sru.nullstring.UI.GlobalHeaderView.OnCategoryChangeListener;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import edu.sru.nullstring.Data.NoteAdapter;
 import edu.sru.nullstring.Data.NoteType;
@@ -43,7 +44,11 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         setContentView(R.layout.reminder_main);
         GlobalHeaderView head = (GlobalHeaderView)findViewById(R.id.topBanner);
         head.setActivity(this);
-        
+        head.setOnCategoryChange(new OnCategoryChangeListener(){
+			public void onCategoryChanged() {
+				((ReminderAdapter)mReminderView.getAdapter()).refreshData();
+			}
+        });
         
         mReminderView = (ListView)findViewById(R.id.reminderView);
 
@@ -92,12 +97,12 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 	}
 	
 	private View lastView = null;
-	private ReminderType currentNote;
+	private ReminderType currentReminder;
     // Handle list long press clicks
     OnItemClickListener mListClickListener = new OnItemClickListener() {
     		public void onItemClick(AdapterView<?> parent, View v, int position, long id)
     		{
-    			Log.i("NoteMainActivity:OnItemClickListener", String.valueOf(position));
+    			Log.i("ReminderMainActivity:OnItemClickListener", String.valueOf(position));
     			// last view, hide remove button again
     			if(lastView != null)
     			{
@@ -111,9 +116,9 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     			if(v != null)
     			{
         			ReminderAdapter nada = (ReminderAdapter) parent.getAdapter();
-        			currentNote = nada.getItem(position);
+        			currentReminder = nada.getItem(position);
 
-        			openEditorActivity(currentNote);
+        			openEditorActivity(currentReminder);
     			}
     		}
     };
@@ -136,7 +141,7 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     			if(v != null)
     			{
         			ReminderAdapter nada = (ReminderAdapter) parent.getAdapter();
-        			currentNote = nada.getItem(position);
+        			currentReminder = nada.getItem(position);
     				v.setBackgroundColor(Color.LTGRAY);
     				Button hider = (Button)v.findViewById(R.id.listRightButtons);
     				hider.setOnClickListener(new OnClickListener() {
@@ -148,7 +153,7 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     			    				Button hider = (Button)lastView.findViewById(R.id.listRightButtons);
     			    				hider.setVisibility(View.GONE);
     			    			};
-    							remove(currentNote);
+    							remove(currentReminder);
     						}
     					});
     				hider.setVisibility(View.VISIBLE);
