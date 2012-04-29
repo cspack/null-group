@@ -7,10 +7,16 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import edu.sru.nullstring.Data.CategoryType;
 import edu.sru.nullstring.Data.DatabaseHelper;
+import edu.sru.nullstring.Service.LocadexService;
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.util.Log;
 
 public class LocadexApplication extends Application {
 
+	
+	public boolean useLocation = true;
 	
 	// Singletons go here!
 	// We will need to make some
@@ -76,10 +82,24 @@ public class LocadexApplication extends Application {
 */
     
 	private volatile DatabaseHelper databaseHelper = null;
-
+	public volatile LocadexService service = null;
+	
 	  @Override
 	  public void onCreate() {
 	    super.onCreate();
+	    
+	    
+	    // Check for service running
+	    if(service == null)
+	    {
+	    	Log.e("LocadexApplication", "Starting service for it hasn't started yet.");
+            Intent serviceIntent = new Intent(this, LocadexService.class);
+            ComponentName c = this.startService(serviceIntent);
+	    } else {
+	    	Log.e("LocadexApplication", "Locadex Service already running.");
+	    }
+	    
+	    
 	  }
 
 	  @Override

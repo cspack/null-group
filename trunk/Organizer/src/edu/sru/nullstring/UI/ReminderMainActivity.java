@@ -1,6 +1,8 @@
 package edu.sru.nullstring.UI;
 
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
@@ -18,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -32,6 +35,10 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	private ListView mReminderView;
 	private DatabaseHelper helper;
+
+	
+	private Handler refresher = new Handler();
+	private Runnable refresherRunnable;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,28 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	        startActivityForResult(myIntent, 0); 
     		}
     	});
+    	
+    	
+    	// Setup UI Refresher
+
+		refresherRunnable = new Runnable()
+		{
+			private Calendar cal = Calendar.getInstance();
+			public void run()
+			{
+				// refresh
+				onResume();
+				
+				final long startTime = System.currentTimeMillis();
+				cal.setTime(new Date(startTime));
+				cal.add(Calendar.MINUTE, 1);
+				cal.set(Calendar.SECOND, 0);
+				refresher.postDelayed(this, cal.getTime().getTime() - startTime);
+			}
+		};
+		
+		
+		refresher.post(refresherRunnable);
     }
     
 
