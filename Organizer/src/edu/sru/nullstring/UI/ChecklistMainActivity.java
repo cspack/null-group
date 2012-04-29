@@ -22,6 +22,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -255,6 +256,13 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		final EditText input = new EditText(this);
 		final Spinner catSpin = new Spinner(this);
 		populateCatSpinner(catSpin);
+		
+		// Set the max length of a checklist to 19 characters
+		int maxLength = 20;
+		InputFilter[] FilterArr = new InputFilter[1];
+		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
+		input.setFilters(FilterArr);
+		
 		// Set the text to the current title and highlight it
 		input.setText(item.getTitle());
 		input.setSelectAllOnFocus(true);
@@ -318,6 +326,11 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		final EditText input = new EditText(this);
 		final Spinner catSpin = new Spinner(this);
 		populateCatSpinner(catSpin);
+		// Set the max length of a checklist to 19 characters
+		int maxLength = 20;
+		InputFilter[] FilterArr = new InputFilter[1];
+		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
+		input.setFilters(FilterArr);
 		
 		alertLayout.addView(input);
 		alertLayout.addView(catSpin);

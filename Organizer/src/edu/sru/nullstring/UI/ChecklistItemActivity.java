@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -274,6 +275,13 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
+		
+		// Set the max length of a checklist to 19 characters
+		int maxLength = 20;
+		InputFilter[] FilterArr = new InputFilter[1];
+		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
+		input.setFilters(FilterArr);
+		
 		input.setText(item.getText());
 		input.setSelectAllOnFocus(true);
 		alert.setView(input);
@@ -311,6 +319,13 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
+		
+		// Set the max length of a checklist to 19 characters
+		int maxLength = 20;
+		InputFilter[] FilterArr = new InputFilter[1];
+		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
+		input.setFilters(FilterArr);
+		
 		alert.setView(input);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
