@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <!-- <EditText
+        style="@android:style/TextAppearance.Widget.TextView"
+        android:id="@+id/editText1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:inputType="textMultiLine"
+        android:gravity="top|left" >
+    </EditText> -->
+	
+	<view xmlns:android="http://schemas.android.com/apk/res/android"
+	    class="edu.sru.nullstring.UI.NoteTextActivity$LinedEditText"
+	    android:id="@+id/note"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:background="@android:color/background_light"
+	    android:padding="5dip"
+	    android:scrollbars="vertical"
+	    android:fadingEdge="vertical"
+	    android:gravity="top"
+	    android:textSize="22sp"
+	    android:capitalize="sentences"
+	/>
+</LinearLayout>

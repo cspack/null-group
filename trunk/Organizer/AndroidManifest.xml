@@ -58,6 +58,8 @@
 		    android:screenOrientation="portrait"/>
 		<activity android:name=".UI.NoteEditActivity"
 		    android:screenOrientation="portrait"/>
+		<activity android:name=".UI.NoteTextActivity"/>
+		<activity android:name=".UI.NoteDrawingActivity"/>
 		
    		<activity android:name=".UI.ReminderMainActivity"
    		    android:screenOrientation="portrait"/>
