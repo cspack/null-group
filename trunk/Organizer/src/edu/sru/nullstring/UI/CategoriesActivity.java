@@ -30,9 +30,12 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ListView;
 
@@ -40,6 +43,7 @@ public class CategoriesActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 	private ListView mListView;
 	private DatabaseHelper helper;
+	private CategoryType item = null;
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +76,8 @@ public class CategoriesActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		mListView.setTextFilterEnabled(true);
 		
 		// attach list item click
-		mListView.setOnItemClickListener(mListClickListener);
+		//mListView.setOnItemClickListener(mListClickListener);
+		mListView.setOnItemLongClickListener(mListLongClickListener);
 		
 		Button addItem = (Button)findViewById(R.id.addItem);
 		addItem.setOnClickListener(new OnClickListener() {
@@ -143,20 +148,75 @@ public class CategoriesActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     		}
     };
     
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.checklist_menu, menu);
-        return true;        
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.text:     Toast.makeText(this, "You pressed Jeb!", Toast.LENGTH_LONG).show();
-                                break;
-        }
-        return true;
-    }
+    // Handle list long press clicks
+    OnItemLongClickListener mListLongClickListener = new OnItemLongClickListener() {
+    		public boolean onItemLongClick(AdapterView<?> parent, View v, final int position, long id)
+    		{
+    			Log.i("CategoryActivity:OnItemClickListener", String.valueOf(position));
+    			// last view, hide remove button again
+    			if(lastView != null)
+    			{
+    				lastView.setBackgroundColor(Color.WHITE);
+    				ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
+    				hider.setVisibility(View.GONE);
+    				
+					ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+					edit.setVisibility(View.GONE);
+    			}
+
+    			// current view, make remove button visible
+    			if(v != null)
+    			{
+        			CategoryAdapter clAdapt = (CategoryAdapter) parent.getAdapter();
+        			currentCat = clAdapt.getItem(position);
+        			if(currentCat.getFixedType() == CategoryType.FixedTypes.None)
+        			{
+	    				v.setBackgroundColor(Color.LTGRAY);
+	    				
+	    				ImageButton hider = (ImageButton)v.findViewById(R.id.listRightButtons);
+	    				hider.setOnClickListener(new OnClickListener() {
+	    						public void onClick(View v)
+	    						{
+	    			    			if(lastView != null)
+	    			    			{
+	    			    				lastView.setBackgroundColor(Color.WHITE);
+	    			    				ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
+	    			    				hider.setVisibility(View.GONE);
+	    			    				
+	    			    				ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+	    			    				edit.setVisibility(View.GONE);
+	    			    			};
+	    							remove(currentCat);
+	    						}
+	    					});
+	    				hider.setVisibility(View.VISIBLE);
+	    				
+						ImageButton edit = (ImageButton)v.findViewById(R.id.editBtn);
+	    				edit.setOnClickListener(new OnClickListener() {
+							public void onClick(View v)
+							{
+				    			if(lastView != null)
+				    			{
+				    				lastView.setBackgroundColor(Color.WHITE);
+				    				ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
+				    				hider.setVisibility(View.GONE);
+				    				
+				    				ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+				    				edit.setVisibility(View.GONE);
+				    			};
+								editTitle(position);
+								((CategoryAdapter)mListView.getAdapter()).refreshData();
+							}
+						});
+						edit.setVisibility(View.VISIBLE);
+						
+	    				lastView = v;
+        			}
+    			}
+        		
+        		return true;
+    		}
+    };
     
     public boolean remove(CategoryType cat)
     {
@@ -189,6 +249,63 @@ public class CategoriesActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 			e.printStackTrace();
 	    	return false;
 		}
+    	return true;
+    }
+    
+    /**
+     * Edit the category title
+     * @param position
+     * @return
+     */
+    public boolean editTitle(int position)
+    {
+    	item = (CategoryType)mListView.getItemAtPosition(position);
+    	
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setTitle("Edit");
+
+		LinearLayout alertLayout = new LinearLayout(this);
+		alertLayout.setOrientation(LinearLayout.VERTICAL);
+		
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		// Set the text to the current title and highlight it
+		input.setText(item.getTitle());
+		input.setSelectAllOnFocus(true);
+			
+		alertLayout.addView(input);
+		
+		alert.setView(alertLayout);
+
+		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
+		{
+			public void onClick(DialogInterface dialog, int whichButton)
+			{
+				// edit the title of the category
+				String value = input.getText().toString();
+				item.setTitle(value);
+				
+				try
+				{
+					item.update();
+				}
+				catch (SQLException e)
+				{
+					e.printStackTrace();
+				}
+				((CategoryAdapter)mListView.getAdapter()).refreshData();
+			}
+		});
+
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		  public void onClick(DialogInterface dialog, int whichButton) {
+		    // Canceled.
+		  }
+		});
+
+		alert.show();
+    	
     	return true;
     }
     
