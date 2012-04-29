@@ -20,33 +20,49 @@
         <activity
             android:name=".UI.HomeActivity"
             android:label="@string/app_name" 
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
-		<activity android:name=".UI.AboutActivity"/>
-  		<activity android:name=".UI.CategoriesActivity"/>
-  		<activity android:name=".UI.SettingsActivity"/>
+		<activity android:name=".UI.AboutActivity"
+		    android:screenOrientation="portrait"/>
+  		<activity android:name=".UI.CategoriesActivity"
+  		    android:screenOrientation="portrait"/>
+  		<activity android:name=".UI.SettingsActivity"
+  		    android:screenOrientation="portrait"/>
 						
 		
-		<activity android:name=".UI.ChecklistMainActivity"/>
-		<activity android:name=".UI.ChecklistItemActivity"/>
+		<activity android:name=".UI.ChecklistMainActivity"
+		    android:screenOrientation="portrait"/>
+		<activity android:name=".UI.ChecklistItemActivity"
+		    android:screenOrientation="portrait"/>
 		
-     	<activity android:name=".UI.MarkerMainActivity"/>
-     	<activity android:name=".UI.MarkerListActivity"/>
-     	<activity android:name=".UI.MarkerMapActivity"/>
-     	<activity android:name=".UI.MarkerEditActivity"/>
-     	<activity android:name=".UI.MarkerEditInfoActivity"/>
-     	<activity android:name=".UI.MarkerEditMapActivity"/>
+     	<activity android:name=".UI.MarkerMainActivity"
+     	    android:screenOrientation="portrait"/>
+     	<activity android:name=".UI.MarkerListActivity"
+     	    android:screenOrientation="portrait"/>
+     	<activity android:name=".UI.MarkerMapActivity"
+     	    android:screenOrientation="portrait"/>
+     	<activity android:name=".UI.MarkerEditActivity"
+     	    android:screenOrientation="portrait"/>
+     	<activity android:name=".UI.MarkerEditInfoActivity"
+     	    android:screenOrientation="portrait"/>
+     	<activity android:name=".UI.MarkerEditMapActivity"
+     	    android:screenOrientation="portrait"/>
      	
-		<activity android:name=".UI.NoteMainActivity"/>
-		<activity android:name=".UI.NoteEditActivity"/>
+		<activity android:name=".UI.NoteMainActivity"
+		    android:screenOrientation="portrait"/>
+		<activity android:name=".UI.NoteEditActivity"
+		    android:screenOrientation="portrait"/>
 		
-   		<activity android:name=".UI.ReminderMainActivity"/>
-   		<activity android:name=".UI.ReminderEditActivity"/>
+   		<activity android:name=".UI.ReminderMainActivity"
+   		    android:screenOrientation="portrait"/>
+   		<activity android:name=".UI.ReminderEditActivity"
+   		    android:screenOrientation="portrait"/>
 			
 		<service android:name=".Service.LocadexService"
 			android:label="@string/service_name" />
