@@ -177,6 +177,8 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     				lastView.setBackgroundColor(Color.WHITE);
     				ImageButton hider = (ImageButton)lastView.findViewById(R.id.listRightButtons);
     				hider.setVisibility(View.GONE);
+					ImageButton edit = (ImageButton)lastView.findViewById(R.id.editBtn);
+					edit.setVisibility(View.GONE);
     			}
 
     			// current view, open it

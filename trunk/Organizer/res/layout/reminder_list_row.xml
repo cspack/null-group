@@ -39,14 +39,23 @@
         />
     </LinearLayout>
 	<!-- KISS. Don't need more than one thing, just leave it then. -->
-    <Button 
+    <ImageButton 
+        android:id="@+id/editBtn"
+        android:src="@android:drawable/ic_menu_edit" 
+        android:layout_width="48dp"
+        android:layout_height="48dp" 
+        android:layout_margin="1dip"
+        android:textColor="#000000"
+        android:visibility="gone"        
+	/>
+    <ImageButton 
         android:id="@+id/listRightButtons"
-        android:drawableTop="@drawable/remove_24" 
+        android:src="@android:drawable/ic_delete" 
         android:layout_width="48dp"
         android:layout_height="48dp" 
         android:layout_margin="1dip"
         android:textColor="#000000"
         android:visibility="gone"
-         />
+	/>
      
 </LinearLayout>
