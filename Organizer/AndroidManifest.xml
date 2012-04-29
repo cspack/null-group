@@ -10,6 +10,7 @@
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	
     <application
         android:name=".LocadexApplication"
@@ -49,6 +50,16 @@
 			
 		<service android:name=".Service.LocadexService"
 			android:label="@string/service_name" />
+		
+		<receiver
+		    android:name=".Service.StartMyServiceAtBootReceiver"
+		    android:enabled="true"
+		    android:exported="true"
+		    android:label="Locadex Service Enabler">
+		    <intent-filter>
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />
+		    </intent-filter>
+		</receiver>
 		
         <uses-library android:name="com.google.android.maps" />
         

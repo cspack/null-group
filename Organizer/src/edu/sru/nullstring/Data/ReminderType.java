@@ -119,6 +119,7 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 	public static final String REMINDER_STATE_FIELD = "state";
 	public static final String REMINDER_TYPE_FIELD = "reminder_type";
 	public static final String NEXT_FIRE_FIELD = "next_fire";
+	public static final String MARKER_ID_FIELD = "markerId";
 
 	
 	public int getID()

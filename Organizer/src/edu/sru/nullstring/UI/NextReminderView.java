@@ -1,6 +1,7 @@
 package edu.sru.nullstring.UI;
 
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
+import android.text.format.Time;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +53,9 @@ public class NextReminderView extends LinearLayout {
 	private Spinner mSpinner;
 	private DatabaseHelper helper;
 	private ReminderType item;
+	
+	private Handler refresher = new Handler();
+	private Runnable refresherRunnable;
 	
 	// Constructor from XML files
 	public NextReminderView(Context context, AttributeSet attrs) {
@@ -83,6 +89,16 @@ public class NextReminderView extends LinearLayout {
 		RelativeLayout next = (RelativeLayout)findViewById(R.id.nextReminderLayout);
 		next.setVisibility(View.VISIBLE);
 
+		Button viewBtn = (Button)findViewById(R.id.buttonView);
+		viewBtn.setOnClickListener(new OnClickListener(){
+
+			public void onClick(View arg0) {
+				openEditorActivity(item);
+			}
+			
+		});
+		
+		
 		TextView none = (TextView)findViewById(R.id.textNoUpcoming);
 		none.setVisibility(View.GONE);
 		
@@ -114,6 +130,13 @@ public class NextReminderView extends LinearLayout {
 	}
 
 
+	public void openEditorActivity(ReminderType item)
+	{
+        Intent myIntent = new Intent(this.getContext(), ReminderEditActivity.class);
+        myIntent.putExtra("edu.sru.nullstring.reminderId", item.getID());
+        this.getContext().startActivity(myIntent);
+	}
+
 	
 	
 	@Override
@@ -125,6 +148,25 @@ public class NextReminderView extends LinearLayout {
 
 		refreshData();
 		
+		refresherRunnable = new Runnable()
+		{
+			private Calendar cal = Calendar.getInstance();
+			public void run()
+			{
+				refreshData();
+				
+				final long startTime = System.currentTimeMillis();
+				cal.setTime(new Date(startTime));
+				cal.add(Calendar.MINUTE, 1);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MILLISECOND, 0);
+
+				refresher.postDelayed(this, cal.getTime().getTime() - startTime);
+			}
+		};
+		
+		
+		refresher.post(refresherRunnable);
 
 	
 	}

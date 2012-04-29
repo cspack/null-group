@@ -1,6 +1,7 @@
 package edu.sru.nullstring.UI;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -42,11 +43,11 @@ public class GlobalHeaderView extends LinearLayout {
 
 	private View xmlView;
 	private Spinner mSpinner;
-	
+	private Context viewContext;
 	// Constructor from XML files
 	public GlobalHeaderView(Context context, AttributeSet attrs) {
 	super(context, attrs);
-
+	viewContext=context;
 
 	// Expand global_header xml into content.
 		
@@ -95,26 +96,51 @@ public class GlobalHeaderView extends LinearLayout {
 			ImageButton settingsButton = (ImageButton)findViewById(R.id.settingsButton);
 	
 			
-			final CharSequence[] items = {"Location Reminders: ON", "Manage Categories", "Settings", "About"};
+			final ArrayList<CharSequence> items = new ArrayList<CharSequence>();
+        	final LocadexApplication app = (LocadexApplication)context.getApplicationContext();
+			
 			settingsButton.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
+					
+					items.clear();
+					items.add("Location Reminders: " + (app.useLocation?"ON":"OFF"));
+					items.add("Manage Categories");
+					//items.add("Settings");
+					items.add("About");
+
+					
 				    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
 				    final Context context = v.getContext();
-				    builder.setItems(items, new DialogInterface.OnClickListener() {
-				        public void onClick(DialogInterface dialog, int item) {
+				    final CharSequence[] itemChar = items.toArray(new CharSequence[items.size()]);
+				    builder.setItems(itemChar, new DialogInterface.OnClickListener() {
 
+				        public void onClick(DialogInterface dialog, int item) {
+				        	Log.i("SettingsButton", "item: " + item);
 				            if(item == 0) {
 				            	// GPS Enabled
+				            	if(app.useLocation)
+				            	{
+				            		// set true
+				            		app.useLocation = false;
+				            		Toast.makeText(getContext(), "Locadex GPS Disabled", Toast.LENGTH_SHORT).show();
+				            	}
+				            	else
+				            	{
+				            		// set false
+				            		app.useLocation = true;
+				            		Toast.makeText(getContext(), "Locadex GPS Enabled", Toast.LENGTH_SHORT).show();
+				            	}
+				            	
 				            } else if(item == 1) {
 				            	// Manage Categories
 				            	Intent aboutPage = new Intent(context, CategoriesActivity.class);
 				            	context.startActivity(aboutPage);
-				            } else if(item == 2) {
+				            } /*else if(item == 2) {
 				            	// Settings
 				            	Intent aboutPage = new Intent(context, SettingsActivity.class);
 				            	context.startActivity(aboutPage);
-				            }
+				            }*/
 				            else
 				            {
 				            	// About
