@@ -5,13 +5,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
-	android:apiKey="0NMzhV1ZArJCN_i8eDTFn7LXzKSA8MPWGZlTSJQ"
+	android:apiKey="0NMzhV1ZArJA1GtA_kx2CztEREVKgyhbtyPtPkw"
 />
 
 
 	<!--  
-	for builds using the keystore:  
-	android:apiKey="0NMzhV1ZArJDRzdE83q2kW1pmXJafwTUJpSuEgQ"
+	for builds using the locadex.keystore:  
+	android:apiKey="0NMzhV1ZArJA1GtA_kx2CztEREVKgyhbtyPtPkw"
 	
 	for debug:
 	android:apiKey="0NMzhV1ZArJCN_i8eDTFn7LXzKSA8MPWGZlTSJQ"
