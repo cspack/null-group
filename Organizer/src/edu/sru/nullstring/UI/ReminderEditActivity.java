@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseActivity;
@@ -503,6 +504,7 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         todayCal.set(Calendar.HOUR_OF_DAY, hour);
 		todayCal.set(Calendar.MINUTE, min);
 
+
 		// mode 1: use datepicker
     	if(rday.isChecked())
     	{
@@ -513,6 +515,8 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
             todayCal.set(Calendar.YEAR,     		qtodayDate.getYear());
     	}
 
+		// set timezone last
+		todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
 		reminder.fireTimeDay = todayCal.get(Calendar.DAY_OF_MONTH);
 		reminder.fireTimeMonth = todayCal.get(Calendar.MONTH);
 		reminder.fireTimeYear = todayCal.get(Calendar.YEAR);
@@ -623,6 +627,9 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         		todayCal.add(Calendar.HOUR_OF_DAY, hour);
         		todayCal.add(Calendar.MINUTE, min);
     		}
+
+    		// set it last
+    		todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
 
     		reminder.fireTimeDay = todayCal.get(Calendar.DAY_OF_MONTH);
     		reminder.fireTimeMonth = todayCal.get(Calendar.MONTH);

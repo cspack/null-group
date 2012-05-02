@@ -293,7 +293,9 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		// Set the text to the current title and highlight it
 		input.setText(item.getTitle());
-		input.setSelectAllOnFocus(true);
+		input.setSelectAllOnFocus(true);		
+		input.setSingleLine(true);
+
 		
 		catSpin.setSelection(((CategoryAdapter)catSpin.getAdapter()).getSelectedIndex());
 		

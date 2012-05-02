@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteBaseService;
@@ -67,23 +68,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
+
+	private static long nextAlarmTime;
+	private static boolean locationRunning = false;
 	
 	private DatabaseHelper helper = null;
 	private Handler refresher = new Handler();
 	private Runnable refresherRunnable;
 	private ReminderType item = null;
-	private boolean locationRunning = false;
 	private LocationManager locationManager = null;
 	private Location dummyLocation = new Location("Locadex");
+	private PendingIntent operation;
 	
-	public void checkForNextFire()
+	public ReminderType getNextReminder()
 	{
-		// Current minute:
 		Calendar c = Calendar.getInstance();
 		c.setTime(new Date());
 		c.set(Calendar.SECOND, 0); // set to current minute
 		c.set(Calendar.MILLISECOND, 0);
 		
+		ReminderType result = null;
 		QueryBuilder<ReminderType, Integer> q;
 		try {
 			q = helper.getReminderDao().queryBuilder();
@@ -94,9 +98,36 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 			
 		q.orderBy(ReminderType.NEXT_FIRE_FIELD, true).where().ge(ReminderType.NEXT_FIRE_FIELD, current); // ascending
 		item = q.queryForFirst();
+		result = item;
+		}catch(Exception e)
+		{
+			
+		}
+		return result;
+	}
+	
+	public void checkForNextFire()
+	{
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.setTimeZone(TimeZone.getTimeZone("GMT"));
+		c.set(Calendar.SECOND, 0); // set to current minute
+		c.set(Calendar.MILLISECOND, 0);
 
+		// Current minute:
+		QueryBuilder<ReminderType, Integer> q;
+		try {
+		item = getNextReminder();
+
+		if(c.getTimeInMillis() / 60000L > nextAlarmTime / 60000L)
+		{
+			if(operation != null) alarmManager.cancel(operation);
+		}
+		
 		if(item != null)
 		{
+
+
 
 			// i has result
 			if( (c.getTimeInMillis() / 60000L) == (item.nextFire / 60000L) )
@@ -104,13 +135,32 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 				// OMG its fire time!
 				DisplayReminderFire(item);
 			}
+			else
+			{
+				// clear
+				if(item.nextFire  / 60000L != nextAlarmTime  / 60000L)
+				{
+					Log.i("Locadex Service", "Next alarm time: " + nextAlarmTime + ", nextFire: " + item.nextFire);
+					if(operation != null)
+					{
+						alarmManager.cancel(operation);
+					}
+					
+					Log.i("LocadexService", "Defined an alarm!");
+					Intent intent = new Intent(this, AlarmReceiver.class);
+					intent.putExtra("edu.sru.nullstring.alarmId", item.getID());
+					operation = PendingIntent.getBroadcast(this, 0, intent, 0);
+					nextAlarmTime = item.nextFire;
+					alarmManager.set(AlarmManager.RTC_WAKEUP, item.nextFire, operation);
+				}
+			}
 				
 		}
 		else
 		{
 			// no results
 		}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -122,6 +172,7 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 	
 	public void DisplayReminderFire(ReminderType t)
 	{
+		
 		String ns = Context.NOTIFICATION_SERVICE;
 		NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
 		int icon = R.drawable.locadex_icon;
@@ -136,7 +187,10 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 		Intent notificationIntent = new Intent(context,HomeActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-		notification.flags += Notification.FLAG_AUTO_CANCEL;
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+		notification.flags |= Notification.DEFAULT_SOUND;
+		notification.flags |= Notification.DEFAULT_VIBRATE;
 		mNotificationManager.notify(HELLO_ID, notification);
 
 
@@ -147,7 +201,7 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
-
+		nextAlarmTime = 0;
 	}
 
 	private AlarmManager alarmManager;
@@ -227,6 +281,7 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 	    
 	    alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		
+	    
 
 		// 1: Create Reminder Refresher for every minute
     	// Setup UI Refresher

@@ -347,11 +347,12 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		final EditText input = new EditText(this);
 		
 		// Set the max length of a checklist to 19 characters
-		int maxLength = 20;
+		int maxLength = 50;
 		InputFilter[] FilterArr = new InputFilter[1];
 		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
 		input.setFilters(FilterArr);
-		
+		input.setSingleLine(true);
+
 		alert.setView(input);
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
