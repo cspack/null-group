@@ -62,6 +62,7 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		long derivTime = compareTo.getTime() - nowDate.getTime();
 		Calendar cal = Calendar.getInstance();
 		Date derivDate = new Date(derivTime);
+		
 		// base on GMT
 		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
 		cal.setTime(derivDate);
@@ -238,6 +239,7 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		Date today = new Date();
         Calendar todayCal = Calendar.getInstance();  
         todayCal.setTime(today);
+		todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
         Date fireTime;
 		long temp = 0;
 		switch(this.reminderType)
@@ -279,7 +281,9 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 				// test one week
 				for(int checkWeek = 0; checkWeek < 7; checkWeek++ )
 				{
+					todayCal.setTimeZone(TimeZone.getDefault());
 					int weekDay = todayCal.get(Calendar.DAY_OF_WEEK);
+					todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
 					if(getDayOfWeek(weekDay))
 					{
 						// found a day.. done.
