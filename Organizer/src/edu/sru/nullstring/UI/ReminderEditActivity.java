@@ -379,6 +379,15 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	
     	Spinner rtype = (Spinner) findViewById(R.id.reminder_type);
 
+		// convert from gmt to locale
+		Calendar c = Calendar.getInstance();
+		c.setTimeZone(TimeZone.getTimeZone("GMT"));
+		c.set(Calendar.HOUR_OF_DAY, reminder.fireTimeHour);
+		c.set(Calendar.MINUTE, reminder.fireTimeMinute);
+		c.set(Calendar.YEAR, reminder.fireTimeYear);
+		c.set(Calendar.MONTH, reminder.fireTimeMonth);
+		c.set(Calendar.DAY_OF_MONTH, reminder.fireTimeDay);
+		c.setTimeZone(TimeZone.getDefault());
         
     	// first set category mode
     	switch(reminder.getReminderType())
@@ -399,9 +408,11 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     		ml.setVisibility(View.GONE);
     		qtt.setVisibility(View.VISIBLE);
     		
+
+    		
 			TimePicker qtodayTime = (TimePicker)findViewById(R.id.quick_today_time);
-			qtodayTime.setCurrentHour(reminder.fireTimeHour);
-			qtodayTime.setCurrentMinute(reminder.fireTimeMinute);
+			qtodayTime.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+			qtodayTime.setCurrentMinute(c.get(Calendar.MINUTE));
     		}
 			break;
 		case Advanced:
@@ -434,12 +445,12 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 				rtype.setSelection(1);
 			}
 			TimePicker qtodayTime = (TimePicker)findViewById(R.id.reminder_new_time);
-			qtodayTime.setCurrentHour(reminder.fireTimeHour);
-			qtodayTime.setCurrentMinute(reminder.fireTimeMinute);
+			qtodayTime.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+			qtodayTime.setCurrentMinute(c.get(Calendar.MINUTE));
 			
 			// update datetime picker
 			DatePicker qtodayDate = (DatePicker)findViewById(R.id.reminder_dat);
-    		qtodayDate.updateDate(reminder.fireTimeYear, reminder.fireTimeMonth, reminder.fireTimeDay);
+    		qtodayDate.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 
 			break;
     	}
