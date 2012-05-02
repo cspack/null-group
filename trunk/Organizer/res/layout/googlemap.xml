@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
 <com.google.android.maps.MapView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/mapview"
@@ -7,6 +12,12 @@
     android:clickable="true"
 	android:apiKey="0NMzhV1ZArJA1GtA_kx2CztEREVKgyhbtyPtPkw"
 />
+<TextView android:id="@+id/nopoints" android:text="No points are available" android:visibility="gone" 
+    
+        android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    />
+</FrameLayout>
 
 
 	<!--  

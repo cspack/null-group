@@ -46,7 +46,9 @@ import edu.sru.nullstring.Data.MarkerType.MarkerState;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 public class MarkerMapActivity extends MapActivity {
 
@@ -99,6 +101,19 @@ public class MarkerMapActivity extends MapActivity {
 			items.add(mapPoints.getMarker(i));
 		}
 		
+		if(size == 0)
+		{
+			map.setVisibility(View.GONE);
+			TextView noPoints = (TextView)findViewById(R.id.nopoints);
+			noPoints.setVisibility(View.VISIBLE);
+		}else
+		{
+
+			map.setVisibility(View.VISIBLE);
+			TextView noPoints = (TextView)findViewById(R.id.nopoints);
+			noPoints.setVisibility(View.GONE);
+		}
+		
 		redrawLocationOverlay();
 		
 	}
@@ -146,7 +161,6 @@ public class MarkerMapActivity extends MapActivity {
             int minLon = Integer.MAX_VALUE;
             int maxLon = Integer.MIN_VALUE;
 
-
             for(MarkerType m : items)
     		{
     		
@@ -162,6 +176,19 @@ public class MarkerMapActivity extends MapActivity {
 	                  maxLon = Math.max(lon, maxLon);
 	                  minLon = Math.min(lon, minLon);
 
+	                  int bufLat = 10;
+	                  int bufLon = 5;
+	                  if(maxLat-minLat < bufLat)
+	                  {
+	                	  minLat -= bufLat;
+	                	  maxLat += bufLat;
+	                  }
+	                  if(maxLon-minLon < bufLon)
+	                  {
+	                	  minLon -= bufLon;
+	                	  maxLon += bufLon;
+	                  }
+
 	                  
 		    		OverlayItem markerPoint = new OverlayItem(loc, m.getTitle(), Integer.toString(m.getID()));
 		            markerCollection.addOverlay(markerPoint);
@@ -169,7 +196,6 @@ public class MarkerMapActivity extends MapActivity {
 
             map.getOverlays().add(markerCollection);
     		
-            	
 	            map.getController().zoomToSpan(Math.abs(maxLat - minLat), Math.abs(maxLon - minLon));
 	            map.getController().animateTo(new GeoPoint( (maxLat + minLat)/2, 
 	            (maxLon + minLon)/2 )); 

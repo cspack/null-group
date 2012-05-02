@@ -154,7 +154,7 @@ public class MarkerEditInfoActivity extends OrmLiteBaseActivity<DatabaseHelper> 
 		                             i++)
 		                        	addrStr += addresses.get(0).getAddressLine(i) + "\n";
 		                    }
-				 		 addr.setText(addrStr);
+					 		 addr.setText(addrStr);
 				 		 editItem.setAddress(addrStr);
 				 		 editItem.update();
 				 	 }
@@ -218,9 +218,11 @@ public class MarkerEditInfoActivity extends OrmLiteBaseActivity<DatabaseHelper> 
 		
  	   // Events before finishing with tab
 		try {
-	 	   EditText addr = (EditText)findViewById(R.id.editAddress);
+		 	   EditText addr = (EditText)findViewById(R.id.editAddress);
+		 	   EditText titl = (EditText)findViewById(R.id.editName);
 
 			editItem.setAddress(addr.getText().toString());
+			editItem.setTitle(titl.getText().toString());
 			editItem.update();
 						
 		} catch (Exception e) {
@@ -235,9 +237,13 @@ public class MarkerEditInfoActivity extends OrmLiteBaseActivity<DatabaseHelper> 
     public void refreshData()
     {
 		// i'm responsible for refreshing data here.
-  	   EditText addr = (EditText)findViewById(R.id.editAddress);
-  	   addr.setText(editItem.getAddress());
- 		
+   	   EditText addr = (EditText)findViewById(R.id.editAddress);
+   	   addr.setText(editItem.getAddress());
+
+		// i'm responsible for refreshing data here.
+  	   EditText nam = (EditText)findViewById(R.id.editName);
+  	   nam.setText(editItem.getTitle());
+
   	   // Refresh adapter
   	   Spinner subCatSpinner = (Spinner)findViewById(R.id.markerCategory);
   	   CategoryAdapter spinAdap = (CategoryAdapter)subCatSpinner.getAdapter();

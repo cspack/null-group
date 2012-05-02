@@ -90,14 +90,14 @@ public class MarkerMainActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
         intent = new Intent().setClass(this, MarkerListActivity.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("list").setIndicator("List",
+        spec = tabHost.newTabSpec("list").setIndicator("List of Markers",
                           res.getDrawable(R.drawable.checklist_32))
                       .setContent(intent);
         tabHost.addTab(spec);
 
         // Do the same for the other tabs
         intent = new Intent().setClass(this, MarkerMapActivity.class);
-        spec = tabHost.newTabSpec("map").setIndicator("Map",
+        spec = tabHost.newTabSpec("map").setIndicator("Map of Markers",
                           res.getDrawable(R.drawable.map_32))
                       .setContent(intent);
         tabHost.addTab(spec);

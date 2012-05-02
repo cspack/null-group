@@ -70,4 +70,10 @@
         android:layout_height="wrap_content"
         android:text="Christopher Spack" />
     
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jordan Wyatt" />
+    
 </LinearLayout>
