@@ -60,12 +60,9 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		Date compareTo = new Date(time);
 		Date nowDate = new Date();
 		long derivTime = compareTo.getTime() - nowDate.getTime();
-		Calendar cal = Calendar.getInstance();
-		Date derivDate = new Date(derivTime);
-		
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		// base on GMT
-		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
-		cal.setTime(derivDate);
+		cal.setTimeInMillis(derivTime);
 		StringBuilder build = new StringBuilder();
 		
 		long numDays = derivTime / (1000 * 60 * 60 * 24);
@@ -132,13 +129,13 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		boolean ret = false;
 		switch(weekday)
 		{
-		case 0:	ret = repeatSun;break;
-		case 1:	ret = repeatMon;break;
-		case 2:	ret = repeatTue;break;
-		case 3:	ret = repeatWed;break;
-		case 4:	ret = repeatThu;break;
-		case 5:	ret = repeatFri;break;
-		case 6:	ret = repeatSat;break;
+		case 1:	ret = repeatSun;break;
+		case 2:	ret = repeatMon;break;
+		case 3:	ret = repeatTue;break;
+		case 4:	ret = repeatWed;break;
+		case 5:	ret = repeatThu;break;
+		case 6:	ret = repeatFri;break;
+		case 7:	ret = repeatSat;break;
 		}
 		return ret;
 	}
@@ -237,9 +234,8 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 		long fire = this.nextFire;		
 
 		Date today = new Date();
-        Calendar todayCal = Calendar.getInstance();  
-        todayCal.setTime(today);
-		todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
+        Calendar todayCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));  
+        todayCal.setTimeInMillis(today.getTime());
         Date fireTime;
 		long temp = 0;
 		switch(this.reminderType)
@@ -251,7 +247,8 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 			// 		 fireTimeDay
 			
 			//Log.e("ReminderType", "This reminder is set to Quick, creating nextFireTime from it.");
-			fireTime = new Date(fireTimeYear - 1900, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
+			todayCal.set(fireTimeYear, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
+			fireTime = todayCal.getTime();
 			temp = fireTime.getTime();
 
 			break;
@@ -267,8 +264,9 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 				
 				// location is NOT THE SCOPE OF NEXTFIRETIME
 			}
-			
-			fireTime = new Date(fireTimeYear - 1900, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
+
+			todayCal.set(fireTimeYear, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
+			fireTime = todayCal.getTime();
 			temp = fireTime.getTime();
 			
 			// repeating?
@@ -278,19 +276,19 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 				// reset calendar
 				todayCal.setTime(today);  
 
+				Calendar localCal = Calendar.getInstance();
 				// test one week
 				for(int checkWeek = 0; checkWeek < 7; checkWeek++ )
 				{
-					todayCal.setTimeZone(TimeZone.getDefault());
-					int weekDay = todayCal.get(Calendar.DAY_OF_WEEK);
-					todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
+					localCal.setTimeInMillis(todayCal.getTimeInMillis());
+					int weekDay = localCal.get(Calendar.DAY_OF_WEEK);
 					if(getDayOfWeek(weekDay))
 					{
 						// found a day.. done.
 						todayCal.set(Calendar.HOUR_OF_DAY, fireTimeHour);
 						todayCal.set(Calendar.MINUTE, fireTimeMinute);
 						temp = todayCal.getTime().getTime();
-						break;
+						if(temp > today.getTime()) break; // found a time in the future.
 					}
 					
 					todayCal.add(Calendar.DAY_OF_MONTH, 1);

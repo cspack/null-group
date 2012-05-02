@@ -380,14 +380,16 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	Spinner rtype = (Spinner) findViewById(R.id.reminder_type);
 
 		// convert from gmt to locale
-		Calendar c = Calendar.getInstance();
-		c.setTimeZone(TimeZone.getTimeZone("GMT"));
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		c.set(Calendar.HOUR_OF_DAY, reminder.fireTimeHour);
 		c.set(Calendar.MINUTE, reminder.fireTimeMinute);
 		c.set(Calendar.YEAR, reminder.fireTimeYear);
 		c.set(Calendar.MONTH, reminder.fireTimeMonth);
 		c.set(Calendar.DAY_OF_MONTH, reminder.fireTimeDay);
-		c.setTimeZone(TimeZone.getDefault());
+		long seconds = c.getTimeInMillis();
+		// reset
+		c = Calendar.getInstance();
+		c.setTimeInMillis(seconds);
         
     	// first set category mode
     	switch(reminder.getReminderType())
@@ -527,12 +529,13 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	}
 
 		// set timezone last
-		todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
-		reminder.fireTimeDay = todayCal.get(Calendar.DAY_OF_MONTH);
-		reminder.fireTimeMonth = todayCal.get(Calendar.MONTH);
-		reminder.fireTimeYear = todayCal.get(Calendar.YEAR);
-		reminder.fireTimeHour = todayCal.get(Calendar.HOUR_OF_DAY);
-		reminder.fireTimeMinute = todayCal.get(Calendar.MINUTE);    	
+		Calendar gmtCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		gmtCal.setTimeInMillis(todayCal.getTimeInMillis());
+		reminder.fireTimeDay = gmtCal.get(Calendar.DAY_OF_MONTH);
+		reminder.fireTimeMonth = gmtCal.get(Calendar.MONTH);
+		reminder.fireTimeYear = gmtCal.get(Calendar.YEAR);
+		reminder.fireTimeHour = gmtCal.get(Calendar.HOUR_OF_DAY);
+		reminder.fireTimeMinute = gmtCal.get(Calendar.MINUTE);    	
     	// mode 2: repeating
 
 		if(rrep.isChecked())
@@ -640,14 +643,13 @@ public class ReminderEditActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     		}
 
     		// set it last
-    		todayCal.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-    		reminder.fireTimeDay = todayCal.get(Calendar.DAY_OF_MONTH);
-    		reminder.fireTimeMonth = todayCal.get(Calendar.MONTH);
-    		reminder.fireTimeYear = todayCal.get(Calendar.YEAR);
-    		reminder.fireTimeHour = todayCal.get(Calendar.HOUR_OF_DAY);
-    		reminder.fireTimeMinute = todayCal.get(Calendar.MINUTE);
-
+    		Calendar gmtCal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+    		gmtCal.setTimeInMillis(todayCal.getTimeInMillis());
+    		reminder.fireTimeDay = gmtCal.get(Calendar.DAY_OF_MONTH);
+    		reminder.fireTimeMonth = gmtCal.get(Calendar.MONTH);
+    		reminder.fireTimeYear = gmtCal.get(Calendar.YEAR);
+    		reminder.fireTimeHour = gmtCal.get(Calendar.HOUR_OF_DAY);
+    		reminder.fireTimeMinute = gmtCal.get(Calendar.MINUTE);    
     	}
     	if(0==spinType.compareToIgnoreCase("Advanced"))
     	{
