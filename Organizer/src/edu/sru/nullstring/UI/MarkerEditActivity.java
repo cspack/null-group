@@ -99,7 +99,7 @@ public class MarkerEditActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
 			}
 	       
 	       
-	       if(editItem != null)
+	       if (editItem != null)
 	       {
 	    	   if(editItem.getMarkerState() == MarkerType.MarkerState.Unset)
 	    	   {
@@ -114,7 +114,7 @@ public class MarkerEditActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
 	    	   
 	       }
 	       
-
+/*
 	       ImageButton editButton = (ImageButton) this.findViewById(R.id.addItem);
 	       final Drawable drawableTop = getResources().getDrawable(android.R.drawable.ic_menu_edit);
 	       editButton.setImageDrawable(drawableTop);
@@ -167,7 +167,7 @@ public class MarkerEditActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
 	    	   
 	       });
 
-	       
+	*/       
 	       refreshData();
 	       
 	       }
@@ -215,11 +215,11 @@ public class MarkerEditActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
    {
 	   if(editItem == null)
 		   return;
-	   
+	   /*
        // Edit UI of MarkerHeader
        TextView noteName = (TextView) this.findViewById(R.id.text1);
        noteName.setText(editItem.getTitle());
-       noteName.setTextSize(18.0f);
+       noteName.setTextSize(18.0f);*/
    }
    
 

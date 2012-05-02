@@ -17,12 +17,12 @@
          />
 
 
-    <edu.sru.nullstring.UI.MarkerHeaderView
+<!--     <edu.sru.nullstring.UI.MarkerHeaderView
         android:id="@+id/markerHeader"
         android:layout_width = "fill_parent"
         android:layout_height = "wrap_content"
     />
-    
+    -->
     
         <TabWidget
             android:id="@android:id/tabs"

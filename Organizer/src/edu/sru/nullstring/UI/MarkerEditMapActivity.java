@@ -235,6 +235,23 @@ public class MapGestureDetectorOverlay extends Overlay implements OnGestureListe
             markerCollection = new MapItemization(this, drawable);
             markerCollection.addOverlay(markerPoint);
     		map.getOverlays().add(markerCollection);
+    		
+            int lat = loc.getLatitudeE6();
+            int lon = loc.getLongitudeE6();
+            int minLat = lat, maxLat = lat, minLon = lon, maxLon = lon;
+
+            int bufLat = 10;
+            int bufLon = 10;
+      	  	minLat -= bufLat;
+	      	maxLat += bufLat;
+	
+	      	minLon -= bufLon;
+	      	maxLon += bufLon;
+
+      	  map.getController().zoomToSpan(Math.abs(maxLat - minLat), Math.abs(maxLon - minLon));
+            map.getController().animateTo(new GeoPoint( (maxLat + minLat)/2, 
+            (maxLon + minLon)/2 )); 
+
     	}
     	
     }

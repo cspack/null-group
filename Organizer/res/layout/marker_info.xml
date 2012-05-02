@@ -5,7 +5,20 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:padding="5dp">
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Marker name" />
 
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:lines="5"
+            android:inputType="text" />
+        
         <TextView
             android:id="@+id/tvCategory"
             android:layout_width="wrap_content"

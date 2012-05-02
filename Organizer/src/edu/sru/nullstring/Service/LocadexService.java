@@ -43,6 +43,7 @@ import edu.sru.nullstring.Data.MarkerType;
 import edu.sru.nullstring.Data.ReminderType;
 import edu.sru.nullstring.UI.HomeActivity;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -148,6 +149,9 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 		super.onCreate();
 
 	}
+
+	private AlarmManager alarmManager;
+	
 	private LocationListener locationListener = new LocationListener()
 	{
 
@@ -221,6 +225,8 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 
 	    locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 	    
+	    alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		
 
 		// 1: Create Reminder Refresher for every minute
     	// Setup UI Refresher
