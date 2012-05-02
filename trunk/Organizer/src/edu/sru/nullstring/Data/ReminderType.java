@@ -248,7 +248,7 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 			// 		 fireTimeMon
 			// 		 fireTimeDay
 			
-			Log.e("ReminderType", "This reminder is set to Quick, creating nextFireTime from it.");
+			//Log.e("ReminderType", "This reminder is set to Quick, creating nextFireTime from it.");
 			fireTime = new Date(fireTimeYear - 1900, fireTimeMonth, fireTimeDay, fireTimeHour, fireTimeMinute);
 			temp = fireTime.getTime();
 

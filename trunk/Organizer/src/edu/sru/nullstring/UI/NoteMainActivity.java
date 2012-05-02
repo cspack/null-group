@@ -328,10 +328,12 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		populateCatSpinner(catSpin);
 		
 		// Set the max length of a note's title to 40 characters
-		int maxLength = 40;
+		int maxLength = 20;
 		InputFilter[] FilterArr = new InputFilter[1];
 		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
 		input.setFilters(FilterArr);
+		input.setSingleLine(true);
+
 		
 		// Set the text to the current title and highlight it
 		input.setText(item.getTitle());
@@ -385,8 +387,8 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     {
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		alert.setTitle("Note");
-		alert.setMessage("Add item:");
+		alert.setTitle("Create a new Note");
+		alert.setMessage("Note title:");
 
 		LinearLayout alertLayout = new LinearLayout(this);
 		alertLayout.setOrientation(LinearLayout.VERTICAL);

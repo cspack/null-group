@@ -112,7 +112,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
         if(ignoreAllCategories)
         {
 
-            Log.d(LOG_TAG,"Ignoring all categories. Cat: "+currentSub.toString()+ "; Ignore: " +ignoreAllCategories+"; Position: " + position);
+            //Log.d(LOG_TAG,"Ignoring all categories. Cat: "+currentSub.toString()+ "; Ignore: " +ignoreAllCategories+"; Position: " + position);
         	
 	        // CASE 1: Looking for unsorted list.
 	        if(position >= items.size())
@@ -127,7 +127,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
         }
         else
         {
-            Log.d(LOG_TAG,"INCLUDING all categories. Cat: "+currentSub.toString()+ "; Ignore: " +ignoreAllCategories+"; Position: " + position);
+            //Log.d(LOG_TAG,"INCLUDING all categories. Cat: "+currentSub.toString()+ "; Ignore: " +ignoreAllCategories+"; Position: " + position);
         
         	// Case 2: All Categories
 	        if(position == 0)
@@ -156,14 +156,14 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
     	this.items.clear();
     	this.items = QueryItemList(categoryDao);
     	this.notifyDataSetChanged();
-    	Log.i(LOG_TAG, "Forcing redraw! Cur Cat: " + this.getSelectedIndex());
+    	//Log.i(LOG_TAG, "Forcing redraw! Cur Cat: " + this.getSelectedIndex());
     	
     }
 
     private void refreshStaticCategories()
     {
         // Get all categories field
-        Log.i(LOG_TAG, "Refreshing static cats, currentSub:" + currentSub.toString());
+        //Log.i(LOG_TAG, "Refreshing static cats, currentSub:" + currentSub.toString());
 
     	// ALL CATEGORIES will be null/hidden for sub items, ignore it.
         if(currentSub == SubCategoryType.MainCategory)
@@ -175,11 +175,11 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
 			if(item.size()>0)
 			{
 				allCategories = item.get(0);
-				Log.i(LOG_TAG, "All Categories pulled!!!");
+				//Log.i(LOG_TAG, "All Categories pulled!!!");
 			}
 			else{
 				
-				Log.i(LOG_TAG, "All Categories wasn't defined!!!");
+				//Log.i(LOG_TAG, "All Categories wasn't defined!!!");
 			}
 			
 		} catch (SQLException e) {
@@ -314,7 +314,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
     			
     			// If I get here, Category is either in a non existant category or 'All Categories'
     			// Move to Unsorted
-    			Log.i(LOG_TAG,"Item's Category is invalid. Resetting to Unknown.");
+    			//Log.i(LOG_TAG,"Item's Category is invalid. Resetting to Unknown.");
 
       			try {
 		 			if(currentItem instanceof ChecklistType)
@@ -349,7 +349,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryType> {
     	}
     	
     	
-    	Log.i(LOG_TAG,"Searching for currently selected item.");
+    	//Log.i(LOG_TAG,"Searching for currently selected item.");
     	int cur = 0;
 
 	    	// query for selected item

@@ -286,6 +286,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		int maxLength = 20;
 		InputFilter[] FilterArr = new InputFilter[1];
 		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
+		input.setSingleLine(true);
 		input.setFilters(FilterArr);
 		
 		// Set the text to the current title and highlight it
@@ -341,8 +342,8 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-		alert.setTitle("Checklist");
-		alert.setMessage("Add item:");
+		alert.setTitle("Create a Checklist");
+		alert.setMessage("Checklist Title:");
 
 		LinearLayout alertLayout = new LinearLayout(this);
 		alertLayout.setOrientation(LinearLayout.VERTICAL);
@@ -353,6 +354,7 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		populateCatSpinner(catSpin);
 		// Set the max length of a checklist to 19 characters
 		int maxLength = 20;
+		input.setSingleLine(true);
 		InputFilter[] FilterArr = new InputFilter[1];
 		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
 		input.setFilters(FilterArr);
