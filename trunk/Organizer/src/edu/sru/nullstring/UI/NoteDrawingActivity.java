@@ -196,7 +196,7 @@ public class NoteDrawingActivity extends GraphicsActivity
 				Log.i("NoteEditActivity:restoreView", "Using saved bitmap.");
 				//mBitmap = Bitmap.createBitmap(mBitmap);
 
-				mBitmap = Bitmap.createBitmap(d.getWidth(), d.getHeight(), Bitmap.Config.ARGB_8888);
+				mBitmap = Bitmap.createBitmap(Math.max(d.getWidth(), d.getHeight()), Math.max(d.getWidth(), d.getHeight()), Bitmap.Config.ARGB_8888);
 				mCanvas = new Canvas(mBitmap);
 				mCanvas.drawBitmap(b, 0, 0, null);
 			}
