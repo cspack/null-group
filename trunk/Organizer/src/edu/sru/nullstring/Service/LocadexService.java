@@ -124,21 +124,28 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 			if(operation != null) alarmManager.cancel(operation);
 		}
 		
+		
 		if(item != null)
 		{
+			long nowInMinutes = Math.round(c.getTimeInMillis() / 60000.0);
+			long itemInMinutes = Math.round(item.nextFire / 60000.0);
 
-
+			
+			Log.i("LocadexService", "Now: " + nowInMinutes + ", Item: " + itemInMinutes);
 
 			// i has result
-			if( (c.getTimeInMillis() / 60000L) == (item.nextFire / 60000L) )
+			// test, try forcing alarm intent every time.
+			if(false)
+			//if( nowInMinutes == itemInMinutes )
 			{
+				Log.i("LocadexService", "Not setting alarm, firing event NOW.");
 				// OMG its fire time!
 				DisplayReminderFire(item);
 			}
 			else
 			{
 				// clear
-				if(item.nextFire  / 60000L != nextAlarmTime  / 60000L)
+				if(itemInMinutes != nextAlarmTime )
 				{
 					Log.i("Locadex Service", "Next alarm time: " + nextAlarmTime + ", nextFire: " + item.nextFire);
 					if(operation != null)
@@ -150,7 +157,7 @@ public class LocadexService extends OrmLiteBaseService<DatabaseHelper> {
 					Intent intent = new Intent(this, AlarmReceiver.class);
 					intent.putExtra("edu.sru.nullstring.alarmId", item.getID());
 					operation = PendingIntent.getBroadcast(this, 0, intent, 0);
-					nextAlarmTime = item.nextFire;
+					nextAlarmTime = itemInMinutes;
 					alarmManager.set(AlarmManager.RTC_WAKEUP, item.nextFire, operation);
 				}
 			}

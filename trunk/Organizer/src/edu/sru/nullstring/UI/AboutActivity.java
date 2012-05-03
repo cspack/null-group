@@ -33,10 +33,12 @@ import edu.sru.nullstring.R.layout;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class AboutActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     /** Called when the activity is first created. **/
@@ -49,6 +51,15 @@ public class AboutActivity extends OrmLiteBaseActivity<DatabaseHelper> {
     	this.requestWindowFeature(Window.FEATURE_NO_TITLE);
     	
         setContentView(R.layout.about);
+        
+        try {
+			String versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			TextView aboutText = (TextView)findViewById(R.id.aboutVersion);
+	        aboutText.setText("Version "+versionName+" - Official Beta Release");
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
     }
 

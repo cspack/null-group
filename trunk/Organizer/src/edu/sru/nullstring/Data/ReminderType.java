@@ -100,7 +100,13 @@ public class ReminderType extends BaseDaoEnabled<ReminderType, Integer> {
 			hasContent = true;
 		}
 
+		if(numDays == 0 && hours == 0 && mins == 0)
+		{
+			build = new StringBuilder("a few seconds");
+		}
+		
 		build.insert(0, "In ");
+		
 		return build.toString();
 	}
 	
