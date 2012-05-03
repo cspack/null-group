@@ -36,6 +36,7 @@ import edu.sru.nullstring.R;
 import edu.sru.nullstring.Data.DatabaseHelper;
 import edu.sru.nullstring.Data.ReminderType;
 import edu.sru.nullstring.UI.HomeActivity;
+import edu.sru.nullstring.UI.ReminderEditActivity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -60,8 +61,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 		
 		CharSequence contentTitle = "Locadex Reminder Occured";
 		CharSequence contentText = "Reminding you: " + t.getTitle();
-		Intent notificationIntent = new Intent(context,HomeActivity.class);
+		Intent notificationIntent = new Intent(context,ReminderEditActivity.class);
+		notificationIntent.putExtra("edu.sru.nullstring.reminderId", t.getID());
+		
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+		
 		notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
@@ -108,7 +112,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		// 0: Set Globals
 	    databaseHelper  = OpenHelperManager.getHelper(context, DatabaseHelper.class);
 
-        int remId = intent.getIntExtra("edu.sru.nullstring.alarmmId", 0);
+        int remId = intent.getIntExtra("edu.sru.nullstring.alarmId", 0);
         
         if(databaseHelper==null)
         {
