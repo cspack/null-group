@@ -145,7 +145,7 @@ public class NoteDrawingActivity extends GraphicsActivity
 		private static final float MAXP = 0.75f;
 
 		public Bitmap	mBitmap;
-		private Canvas  mCanvas;
+		public Canvas  mCanvas;
 		private Path    mPath;
 		private Paint   mBitmapPaint;
 
@@ -277,7 +277,7 @@ public class NoteDrawingActivity extends GraphicsActivity
 	   private static final int EMBOSS_MENU_ID = Menu.FIRST + 2;
 	   private static final int BLUR_MENU_ID = Menu.FIRST + 3;
 	   private static final int ERASE_MENU_ID = Menu.FIRST + 4;
-	   private static final int SRCATOP_MENU_ID = Menu.FIRST + 5;
+	   private static final int CLEAR_MENU_ID = Menu.FIRST + 5;
 
 	   @Override
 	   public boolean onCreateOptionsMenu(Menu menu) {
@@ -287,8 +287,8 @@ public class NoteDrawingActivity extends GraphicsActivity
 	       menu.add(0, STROKE_MENU_ID, 0, "Width").setShortcut('4', 'w');
 	       menu.add(0, EMBOSS_MENU_ID, 0, "Emboss").setShortcut('5', 'e');
 	       menu.add(0, BLUR_MENU_ID, 0, "Blur").setShortcut('6', 'b');
-	       menu.add(0, ERASE_MENU_ID, 0, "Erase").setShortcut('7', 'z');
-	       menu.add(0, SRCATOP_MENU_ID, 0, "SrcATop").setShortcut('8', 't');
+	       menu.add(0, ERASE_MENU_ID, 0, "Eraser").setShortcut('7', 'z');
+	       menu.add(0, CLEAR_MENU_ID, 0, "Clear").setShortcut('8', 't');
 
 	       return true;
 	   }
@@ -375,13 +375,13 @@ public class NoteDrawingActivity extends GraphicsActivity
 	               }
 	               return true;
 	           case ERASE_MENU_ID:
-	               mPaint.setXfermode(new PorterDuffXfermode(
-	                                                       PorterDuff.Mode.CLEAR));
+	               mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 	               return true;
-	           case SRCATOP_MENU_ID:
-	               mPaint.setXfermode(new PorterDuffXfermode(
-	                                                   PorterDuff.Mode.SRC_ATOP));
-	               mPaint.setAlpha(0x80);
+	           case CLEAR_MENU_ID:
+	               mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+	               sketchRegion.mCanvas.drawPaint(mPaint);
+	               sketchRegion.invalidate();
+	               mPaint.setXfermode(null);
 	               return true;
 	       }
 	       return super.onOptionsItemSelected(item);

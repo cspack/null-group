@@ -56,8 +56,7 @@
      	
 		<activity android:name=".UI.NoteMainActivity"
 		    android:screenOrientation="portrait"/>
-		<activity android:name=".UI.NoteEditActivity"
-		    android:screenOrientation="portrait"/>
+		<activity android:name=".UI.NoteEditActivity"/>
 		<activity android:name=".UI.NoteTextActivity"/>
 		<activity android:name=".UI.NoteDrawingActivity"/>
 		
