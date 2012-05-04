@@ -37,6 +37,7 @@ import edu.sru.nullstring.Service.LocadexService;
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 public class LocadexApplication extends Application {
@@ -71,8 +72,8 @@ public class LocadexApplication extends Application {
         return mDatabaseHelper;
     }
 	
-	private CategoryType mCurrentCategory;
     public final synchronized CategoryType getCurrentCategory() {
+	private CategoryType mCurrentCategory;
         if (mCurrentCategory == null) {
         	List<CategoryType> sel;
 			try {
@@ -125,13 +126,28 @@ public class LocadexApplication extends Application {
 	    	Log.e("LocadexApplication", "Locadex Service already running.");
 	    }
 	    
+    	SharedPreferences myPrefs = this.getSharedPreferences(SHAREDPREF_TITLE, MODE_WORLD_READABLE);
+        useLocation = myPrefs.getBoolean("useLocation", false);
+	    
 	    
 	  }
 
+	  public void saveLocation()
+	  {
+	    	SharedPreferences myPrefs = this.getSharedPreferences(SHAREDPREF_TITLE, MODE_WORLD_READABLE);
+	        SharedPreferences.Editor prefsEditor = myPrefs.edit();
+	        prefsEditor.putBoolean("useLocation", useLocation);
+	        prefsEditor.commit();
+
+	  }
+	  public final String SHAREDPREF_TITLE = "LOCADEX_NOTES_PREFS";
+	  
 	  @Override
 	  public void onTerminate() {
 	    if (databaseHelper != null) {
-	      OpenHelperManager.releaseHelper();
+	    
+	        
+	        OpenHelperManager.releaseHelper();
 	      databaseHelper = null;
 	    }
 	    super.onTerminate();

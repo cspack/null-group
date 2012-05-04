@@ -16,16 +16,15 @@
         />
     
     
-        <Button 
+        <ImageButton 
         android:id="@+id/addItem"
-        android:drawableTop="@android:drawable/ic_input_add"
+        android:src="@android:drawable/ic_input_add" 
         android:layout_width="48dp"
         android:layout_height="48dp" 
+        android:scaleType="fitXY"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="1dip"
-        android:textColor="#000000"
          />
-        
-        
+
 </RelativeLayout>

@@ -113,7 +113,7 @@ public class ReminderMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
         
         
-    	Button addItem = (Button)findViewById(R.id.addItem);
+    	ImageButton addItem = (ImageButton)findViewById(R.id.addItem);
     	addItem.setOnClickListener(new OnClickListener() {
     		public void onClick(View v)
     		{
