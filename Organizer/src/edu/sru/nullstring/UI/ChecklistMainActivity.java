@@ -366,22 +366,27 @@ public class ChecklistMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
 		{
+			boolean allowCreate = true;
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				// set the id to the checklist
-				String value = input.getText().toString();
-				item.setTitle(value);
-				
-				CategoryAdapter catAdapt = (CategoryAdapter)catSpin.getAdapter();
-				CategoryType itm = catAdapt.getItem(catSpin.getSelectedItemPosition());
-				item.setCategory(itm.getID());
-				try
+				if (allowCreate == true)
 				{
-					item.create(); // add to database
-					((ChecklistAdapter)mListView.getAdapter()).refreshData();
-				} catch (SQLException e)
-				{
-					e.printStackTrace();	
+					allowCreate = false;
+					// set the id to the checklist
+					String value = input.getText().toString();
+					item.setTitle(value);
+					
+					CategoryAdapter catAdapt = (CategoryAdapter)catSpin.getAdapter();
+					CategoryType itm = catAdapt.getItem(catSpin.getSelectedItemPosition());
+					item.setCategory(itm.getID());
+					try
+					{
+						item.create(); // add to database
+						((ChecklistAdapter)mListView.getAdapter()).refreshData();
+					} catch (SQLException e)
+					{
+						e.printStackTrace();	
+					}
 				}
 			}
 		});
