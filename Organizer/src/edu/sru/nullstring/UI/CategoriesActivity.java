@@ -44,6 +44,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -295,6 +296,12 @@ public class CategoriesActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
+		
+		int maxLength = 50;
+		InputFilter[] FilterArr = new InputFilter[1];
+		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
+		input.setFilters(FilterArr);
+		input.setSingleLine(true);
 		// Set the text to the current title and highlight it
 		input.setText(item.getTitle());
 		input.setSelectAllOnFocus(true);
@@ -348,6 +355,11 @@ public class CategoriesActivity extends OrmLiteBaseActivity<DatabaseHelper> {
         // Set an EditText view to get user input  
 
         final EditText input = new EditText(v.getContext());
+		int maxLength = 50;
+		InputFilter[] FilterArr = new InputFilter[1];
+		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
+		input.setFilters(FilterArr);
+		input.setSingleLine(true);
         input.setText("");
         alert.setView(input);
 

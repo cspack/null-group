@@ -302,12 +302,12 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
 		
-		// Set the max length of a checklist to 19 characters
-		int maxLength = 20;
+		// Set the max length of a checklist to 50 characters
+		int maxLength = 50;
 		InputFilter[] FilterArr = new InputFilter[1];
 		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
 		input.setFilters(FilterArr);
-		
+		input.setSingleLine(true);
 		input.setText(item.getText());
 		input.setSelectAllOnFocus(true);
 		alert.setView(input);
@@ -346,7 +346,7 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
 		
-		// Set the max length of a checklist to 19 characters
+		// Set the max length of a checklist to 50 characters
 		int maxLength = 50;
 		InputFilter[] FilterArr = new InputFilter[1];
 		FilterArr[0] = new InputFilter.LengthFilter(maxLength);
