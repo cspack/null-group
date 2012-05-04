@@ -357,20 +357,25 @@ public class ChecklistItemActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
 		{
+			boolean allowCreate = true;
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				// set the id to the checklist
-				item.setListID(checklistID);
-				String value = input.getText().toString();
-				item.setText(value);
-				item.setChecked(false);
-				try
+				if (allowCreate == true)
 				{
-					item.create(); // add to database
-					((ChecklistItemAdapter)mListView.getAdapter()).refreshData();
-				} catch (SQLException e)
-				{
-					e.printStackTrace();	
+					allowCreate = false;
+					// set the id to the checklist
+					item.setListID(checklistID);
+					String value = input.getText().toString();
+					item.setText(value);
+					item.setChecked(false);
+					try
+					{
+						item.create(); // add to database
+						((ChecklistItemAdapter)mListView.getAdapter()).refreshData();
+					} catch (SQLException e)
+					{
+						e.printStackTrace();	
+					}
 				}
 			}
 		});

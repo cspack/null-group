@@ -405,22 +405,27 @@ public class NoteMainActivity extends OrmLiteBaseActivity<DatabaseHelper> {
 
 		alert.setPositiveButton("Ok", new DialogInterface.OnClickListener()
 		{
+			boolean allowCreate = true;
 			public void onClick(DialogInterface dialog, int whichButton)
 			{
-				// set the title of the note
-				String value = input.getText().toString();
-				data.setTitle(value);
-				
-				CategoryAdapter catAdapt = (CategoryAdapter)catSpin.getAdapter();
-				CategoryType itm = catAdapt.getItem(catSpin.getSelectedItemPosition());
-				data.setCategoryID(itm.getID());
-				try
+				if (allowCreate == true)
 				{
-					data.create(); // add to database
-					((NoteAdapter)mListView.getAdapter()).refreshData();
-				} catch (SQLException e)
-				{
-					e.printStackTrace();	
+					allowCreate = false;
+					// set the title of the note
+					String value = input.getText().toString();
+					data.setTitle(value);
+					
+					CategoryAdapter catAdapt = (CategoryAdapter)catSpin.getAdapter();
+					CategoryType itm = catAdapt.getItem(catSpin.getSelectedItemPosition());
+					data.setCategoryID(itm.getID());
+					try
+					{
+						data.create(); // add to database
+						((NoteAdapter)mListView.getAdapter()).refreshData();
+					} catch (SQLException e)
+					{
+						e.printStackTrace();	
+					}
 				}
 			}
 		});
