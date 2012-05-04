@@ -97,9 +97,10 @@ public class NoteEditActivity extends OrmLiteBaseTabActivity<DatabaseHelper> {
 				   Log.e("Locadex", "Failed to open item for editing");
 				   e.printStackTrace();
 			   }
+	           /*
 		       // Edit UI of NoteHeader
 		       TextView noteName = (TextView) this.findViewById(R.id.title);
-		       noteName.setText(editItem.getTitle());
+		       noteName.setText(editItem.getTitle());*/
 		       
 	       }
 	       else

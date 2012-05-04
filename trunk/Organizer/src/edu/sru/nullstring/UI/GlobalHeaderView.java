@@ -148,12 +148,14 @@ public class GlobalHeaderView extends LinearLayout {
 				            	{
 				            		// set true
 				            		app.useLocation = false;
+				            		app.saveLocation();
 				            		Toast.makeText(getContext(), "Locadex GPS Disabled", Toast.LENGTH_SHORT).show();
 				            	}
 				            	else
 				            	{
 				            		// set false
 				            		app.useLocation = true;
+				            		app.saveLocation();
 				            		Toast.makeText(getContext(), "Locadex GPS Enabled", Toast.LENGTH_SHORT).show();
 				            	}
 				            	

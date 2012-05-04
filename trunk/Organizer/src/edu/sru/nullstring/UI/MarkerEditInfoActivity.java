@@ -161,18 +161,18 @@ public class MarkerEditInfoActivity extends OrmLiteBaseActivity<DatabaseHelper> 
 				 	 else
 				 	 {
 				 		 // no results
-				 		 Toast.makeText(v.getContext().getApplicationContext(), "No Address Found.", Toast.LENGTH_SHORT);
+				 		 Toast.makeText(v.getContext(), "No Address Found.", Toast.LENGTH_SHORT);
 				 	 }
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();				 		 
-			 		Toast.makeText(v.getContext().getApplicationContext(), "Address Lookup Failed.", Toast.LENGTH_SHORT);
+			 		Toast.makeText(v.getContext(), "Address Lookup Failed.", Toast.LENGTH_SHORT);
 
 				}
 		 	  }
 		 	  else
 		 	  {
-			 		 Toast.makeText(v.getContext().getApplicationContext(), "No Location Current is Defined.", Toast.LENGTH_SHORT);
+			 		 Toast.makeText(v.getContext(), "No Location Current is Defined.", Toast.LENGTH_SHORT);
 		 	  }
 		}});
  	   
@@ -190,13 +190,14 @@ public class MarkerEditInfoActivity extends OrmLiteBaseActivity<DatabaseHelper> 
 				 	 {
 				 		 Address address = addresses.get(0);
 				 		 editItem.setLocation(address.getLatitude(), address.getLongitude());
-				 		 Toast.makeText(v.getContext().getApplicationContext(), "Success - Location set from Address!", Toast.LENGTH_SHORT);
+				 		 editItem.setMarkerState(MarkerState.Defined);
+				 		 Toast.makeText(v.getContext(), "Success - Location set from Address!", Toast.LENGTH_SHORT);
 				 		 editItem.update();
 				 	 }
 				 	 else
 				 	 {
 				 		 // no results
-				 		 Toast.makeText(v.getContext().getApplicationContext(), "No Address Found.", Toast.LENGTH_SHORT);
+				 		 Toast.makeText(v.getContext(), "No Address Found.", Toast.LENGTH_SHORT);
 				 	 }
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
