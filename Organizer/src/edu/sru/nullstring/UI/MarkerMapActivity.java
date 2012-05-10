@@ -176,8 +176,8 @@ public class MarkerMapActivity extends MapActivity {
 	                  maxLon = Math.max(lon, maxLon);
 	                  minLon = Math.min(lon, minLon);
 
-	                  int bufLat = 10;
-	                  int bufLon = 5;
+	                  int bufLat = 3000;
+	                  int bufLon = 3000;
 	                  if(maxLat-minLat < bufLat)
 	                  {
 	                	  minLat -= bufLat;
