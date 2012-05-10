@@ -240,8 +240,8 @@ public class MapGestureDetectorOverlay extends Overlay implements OnGestureListe
             int lon = loc.getLongitudeE6();
             int minLat = lat, maxLat = lat, minLon = lon, maxLon = lon;
 
-            int bufLat = 10;
-            int bufLon = 10;
+            int bufLat = 3000;
+            int bufLon = 3000;
       	  	minLat -= bufLat;
 	      	maxLat += bufLat;
 	
